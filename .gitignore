@@ -1,0 +1,50 @@
+# Archivos y carpetas de entornos virtuales
+# Si estás usando un entorno virtual (como `venv` o `env`), debes ignorarlo.
+venv/
+env/
+.venv/
+.env/
+
+# Archivos de compilación de Python
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+
+# Archivos de configuración de Django
+db.sqlite3          # Si usas SQLite (base de datos local)
+*.log               # Archivos de log
+*.pot               # Archivos de traducción de plantilla de Django
+
+# Archivos generados por Django
+*.sqlite3
+*.db
+*.bak
+
+# Archivos de dependencias
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Archivos de configuraciones y secretos
+.env                # Archivo de entorno (variable de configuración sensible como claves secretas)
+*.env
+*.ini
+
+# Archivos de configuración de IDE
+.idea/              # Configuración de JetBrains (PyCharm, WebStorm, etc.)
+.vscode/            # Configuración de VSCode
+*.swp               # Archivos temporales de vim
+
+# Archivos de Docker (si estás usando Docker)
+docker-compose.yml
+Dockerfile
+
+# Archivos de pruebas
+coverage.xml        # Informe de cobertura de pruebas
+*.cover             # Archivos generados por el paquete de cobertura
+
+# Dependencias de Python
+*.egg
+*.egg-info
+dist/
+build/
