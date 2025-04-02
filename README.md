@@ -1,3 +1,7 @@
+<div align="center">
+  <img src="xtekamx/statics/img/logo.png" width="300">
+</div>
+
 # xtekamx
 
 Travel local agency at San Luis Potosi.
