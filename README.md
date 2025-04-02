@@ -60,13 +60,7 @@ Si no existe un archivo `requirements.txt`, instala Django manualmente:
 pip install django
 ```
 
-### 5. Configurar la base de datos
-Aplica las migraciones para configurar la base de datos:
-```bash
-python manage.py migrate
-```
-
-### 6. Ejecutar el servidor de desarrollo
+### 5. Ejecutar el servidor de desarrollo
 Inicia el servidor de desarrollo de Django:
 ```bash
 python manage.py runserver
