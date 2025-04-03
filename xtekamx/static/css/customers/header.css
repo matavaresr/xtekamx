@@ -24,6 +24,30 @@ a{
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
+.nav-urls .text-logo-xteka{
+    font-size: 20px;
+    display: none;
+    padding-left: 10px;
+}
+
+.nav-urls .nav-logo a{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    text-transform: lowercase;
+}
+
+.nav-urls .btn-nav-vertical{
+    font-size: 30px;
+    justify-content: flex-end;
+    align-items: center;
+    display: none;
+}
+
+.nav-urls .btn-nav-vertical i{
+    margin-right: 30px;
+}
+
 .nav-urls img{
     width: 60px;
 }
@@ -38,7 +62,7 @@ a{
 }
 
 .nav-urls li:hover {
-    color: rgb(19, 163, 199);           /* Cambia el color del texto a blanco */
+    color: rgb(19, 163, 199);
 }
 
 .nav-min-contact ul, .nav-urls ul{
@@ -59,10 +83,30 @@ a{
     font-size: 20px;
 }
 
-
-
 @media (max-width: 768px) { 
     .nav-min-contact span{
         display: none;
+    }
+}
+
+@media (max-width: 1150px) { 
+    .nav-urls ul{
+        justify-content: space-between;
+    }
+
+    .nav-urls li:not(.nav-logo, .btn-nav-vertical){
+        display: none;
+    }
+
+    .nav-urls li:is(.nav-logo, .btn-nav-vertical){
+        width: 220px;
+    }
+
+    .nav-urls .btn-nav-vertical{
+        display: flex;
+    }
+
+    .nav-urls .text-logo-xteka{
+        display: block;
     }
 }
