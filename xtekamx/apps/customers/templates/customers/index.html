@@ -1,27 +1,10 @@
-<!-- filepath: c:\Users\matr1\Documents\github\xtekamx\xtekamx\apps\customers\templates\customers\index.html -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Customers</title>
-</head>
-<body>
-    <header>
-        <h1>Welcome to the Customers Page</h1>
-    </header>
-    <main>
-        <h2>Customer List</h2>
-        <ul>
-            {% for customer in customers %}
-                <li>{{ customer.name }} - {{ customer.email }}</li>
-            {% empty %}
-                <li>No customers available.</li>
-            {% endfor %}
-        </ul>
-    </main>
-    <footer>
-        <p>&copy; 2025 Your Company</p>
-    </footer>
-</body>
-</html>
+{% extends 'customers/base.html' %}
+
+{% block title %}Inicio - xtekamx{% endblock %}
+
+{% block content %}
+
+<h1>Bienvenido a xtekamx</h1>
+<p>Explora nuestros paquetes y actividades para disfrutar de San Luis Potosí.</p>
+
+{% endblock %}

@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="xtekamx/statics/img/logo.png" width="300">
+  <img src="xtekamx/static/img/logo.png" width="300">
 </div>
 
 # xtekamx

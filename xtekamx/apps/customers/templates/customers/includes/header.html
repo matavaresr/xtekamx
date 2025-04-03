@@ -1,0 +1,24 @@
+{% load static %}
+<header>
+    <nav>
+        <div class="nav-min-contact">
+            <ul>
+                <li><i class="fa-solid fa-envelope"></i><span>tekatours@outlook.com</span></li>
+                <li><i class="fa-brands fa-instagram"></i><span>@xteka.mx</span></li>
+                <li><i class="fa-solid fa-phone"></i><span>834 247 4449</span></li>
+            </ul>
+        </div>
+        
+        <div class="nav-urls">
+            <ul>
+                <li><a href="{% url 'actividades' %}">Actividades</a></li>
+                <li><a href="{% url 'paquetes' %}">Paquetes</a></li>
+                <li><a href="#">Promociones</a></li>
+                <li><a href="{% url 'inicio' %}"><img src="{% static 'img/logo.png' %}" alt="logo"></a></li>
+                <li><a href="{% url 'acerca_de' %}">Acerca de</a></li>
+                <li><a href="{% url 'como_llegar' %}">Cómo Llegar</a></li>
+                <li><a href="{% url 'contacto' %}">Contacto</a></li>
+            </ul>
+        </div>
+    </nav>
+</header>
