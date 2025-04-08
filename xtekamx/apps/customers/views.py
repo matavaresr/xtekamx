@@ -1,4 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login as auth_login
+from django.contrib.auth.forms import AuthenticationForm
+from .forms import CustomUserCreationForm
 
 # Página principal
 def home(request):
@@ -15,6 +18,30 @@ def como_llegar(request):
 # Página acerca de
 def acerca_de(request):
     return render(request, 'customers/acerca_de.html')
+
+# Vista para iniciar sesión
+def iniciar_sesion(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(data=request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            auth_login(request, user)
+            return redirect('inicio')  # Redirigir a la página de inicio
+    else:
+        form = AuthenticationForm()
+    return render(request, 'customers/iniciar_sesion.html', {'form': form})
+
+# Vista para crear cuenta
+def registro(request):
+    if request.method == 'POST':
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('iniciar_sesion')  # Redirigir al login después del registro
+    else:
+        form = CustomUserCreationForm()
+    return render(request, 'customers/registro.html', {'form': form})
+
 
 # Vista general de paquetes
 def paquetes(request):
