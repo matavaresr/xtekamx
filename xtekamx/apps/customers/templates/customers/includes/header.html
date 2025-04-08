@@ -24,6 +24,13 @@
                 <li><a href="{% url 'como_llegar' %}">Cómo Llegar</a></li>
                 <li><a href="{% url 'contacto' %}">Contacto</a></li>
                 <li class="btn-nav-vertical"><i class="fa-solid fa-bars"></i></li>
+                <li class="user-menu">
+                    <i class="fa-solid fa-user"></i>
+                    <div class="user-dropdown">
+                        <a href="{% url 'iniciar_sesion' %}">Iniciar sesión</a>
+                        <a href="{% url 'registro' %}">Crear cuenta</a>
+                    </div>
+                </li>
             </ul>
         </div>
     </nav>
