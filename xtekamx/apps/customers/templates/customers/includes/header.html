@@ -13,7 +13,7 @@
             <ul>
                 <li><a href="{% url 'actividades' %}">Actividades</a></li>
                 <li><a href="{% url 'paquetes' %}">Paquetes</a></li>
-                <li><a href="#">Promociones</a></li>
+                <li><a href="{% url 'como_llegar' %}">Cómo Llegar</a></li>
                 <li class="nav-logo">
                     <a href="{% url 'inicio' %}">
                         <img src="{% static 'img/logo.png' %}" alt="logo">
@@ -21,7 +21,6 @@
                     </a>
                 </li>
                 <li><a href="{% url 'acerca_de' %}">Acerca de</a></li>
-                <li><a href="{% url 'como_llegar' %}">Cómo Llegar</a></li>
                 <li><a href="{% url 'contacto' %}">Contacto</a></li>
                 <li class="btn-nav-vertical"><i class="fa-solid fa-bars"></i></li>
                 <li class="user-menu">
