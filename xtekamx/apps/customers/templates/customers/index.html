@@ -1,5 +1,10 @@
-{% extends 'customers/base.html' %} {% load static %} {% block title %}Inicio -
-xtekamx{% endblock %} {% block content %}
+{% extends 'customers/base.html' %} 
+{% load static %} 
+{% block title %}Inicio - xtekamx{% endblock %} 
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'css/customers/index.css' %}" />
+{% endblock %}
+{% block content %}
 <!-- Se asume que <body> ya está en la plantilla base -->
 <div class="banner-container">
   <img
