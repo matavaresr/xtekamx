@@ -1,10 +1,86 @@
-{% extends 'customers/base.html' %}
+{% extends 'customers/base.html' %} {% load static %} {% block title %}Inicio -
+xtekamx{% endblock %} {% block content %}
+<!-- Se asume que <body> ya está en la plantilla base -->
+<div class="banner-container">
+  <img
+    class="banner"
+    src="{% static 'img/ImagenBannerInicio.png' %}"
+    alt="Banner"
+  />
+  <div class="banner-text">
+    EXPLORA LA MAGIA DE LA <span>HUASTECA POTOSINA</span><br />
+    UN PARAÍSO LLENO DE CASCADAS, RÍOS Y CULTURA VIBRANTE
+    <p>#xtekamx</p>
+  </div>
+  <div class="banner-buttons">
+    <a href="#precios">Precios y Más</a>
+    <a href="#contacto">Contáctanos</a>
+  </div>
+</div>
 
-{% block title %}Inicio - xtekamx{% endblock %}
+<div class="acercaDe">
+  <div>Quienes Somos</div>
+  <div>
+    Somos una agencia de ecoturismo 100% huasteca con un fuerte compromiso en
+    ofrecer experiencias únicas en cada uno de nuestros servicios, destacando
+    nuestros esfuerzos en promover la cultura, la economía y el cuidado
+    ambiental de nuestra comunidad.
+  </div>
+</div>
 
-{% block content %}
+<div class="actividades">
+  <div class="img1">
+    <a href="#paquetes">
+      <h2>Paquetes</h2>
+    </a>
+  </div>
+  <div class="img2">
+    <a href="#actividades">
+      <h2>Actividades</h2>
+    </a>
+  </div>
+</div>
 
-<h1>Bienvenido a xtekamx</h1>
-<p>Explora nuestros paquetes y actividades para disfrutar de San Luis Potosí.</p>
+<div class="opiniones">
+  <div class="opiniones-contenido">
+    <div class="opiniones-texto">
+      <h2>
+        Estamos disponibles <span>todos los días del año.</span> Planea tus
+        vacaciones con nosotros
+      </h2>
+    </div>
+    <div class="opiniones-imagen">
+      <img src="{% static 'img/opiniones.png' %}" alt="Opiniones" />
+    </div>
+  </div>
+  <div class="opiniones-clientes">
+    <h3>Nuestros Clientes</h3>
+    <div class="cliente">
+      <img src="{% static 'img/opiniones2.png' %}" alt="Cascada" />
+      <blockquote>
+        "Mi reciente viaje a la Huasteca Potosina fue una experiencia realmente
+        inolvidable. Cada rincón de este paraíso natural me dejó sin palabras."
+        <p class="autor">@MATR192001</p>
+      </blockquote>
+    </div>
+  </div>
+</div>
 
+<div class="instrucciones">
+  <div>
+    <h3>Paso 1</h3>
+    <img src="{% static 'img/paso1.png' %}" alt="Paso 1" />
+    <p>ELIGE TU PAQUETE <span class="config">PREFERIDO</span></p>
+  </div>
+  <div>
+    <h3>Paso 2</h3>
+    <img class="imgPaso2" src="{% static 'img/paso2.png' %}" alt="Paso 2" />
+    <p>COMPLETA EL <span class="config">REGISTRO</span> CORRESPONDIENTE</p>
+  </div>
+  <div>
+    <h3>Paso 3</h3>
+    <img src="{% static 'img/paso3.png' %}" alt="Paso 3" />
+    <p>LISTO, ERES <span class="config">PARTE DE LA FAMILIA XTEKA</span></p>
+  </div>
+</div>
 {% endblock %}
