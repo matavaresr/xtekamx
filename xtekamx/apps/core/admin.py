@@ -1,27 +1,26 @@
 from django.contrib import admin
 from .models import (
-    Usuario, Permiso, UsuarioPermiso,
-    TipoPaquete, Hotel, Paquete,
-    Ubicacion, ImagenUbicacion,
-    Actividad, ImagenActividad,
-    PaqueteActividad, Amenidad,
-    PaqueteAmenidad, Reserva,
-    ConfiguracionSitio
+    Usuario, Cliente, Hotel, TipoPaquete, Paquete,
+    ImagenPaquete, Ubicacion, Actividad, Amenidad,
+    Reservacion, ConfiguracionSitio, ClienteReservacion,
+    PaqueteUbicacion, PaqueteActividad, PaqueteAmenidad,
+    Itinerario, Faq
 )
 
-# Regístralos en el panel de administración
 admin.site.register(Usuario)
-admin.site.register(Permiso)
-admin.site.register(UsuarioPermiso)
-admin.site.register(TipoPaquete)
+admin.site.register(Cliente)
 admin.site.register(Hotel)
+admin.site.register(TipoPaquete)
 admin.site.register(Paquete)
+admin.site.register(ImagenPaquete)
 admin.site.register(Ubicacion)
-admin.site.register(ImagenUbicacion)
 admin.site.register(Actividad)
-admin.site.register(ImagenActividad)
-admin.site.register(PaqueteActividad)
 admin.site.register(Amenidad)
-admin.site.register(PaqueteAmenidad)
-admin.site.register(Reserva)
+admin.site.register(Reservacion)
 admin.site.register(ConfiguracionSitio)
+admin.site.register(ClienteReservacion)
+admin.site.register(PaqueteUbicacion)
+admin.site.register(PaqueteActividad)
+admin.site.register(PaqueteAmenidad)
+admin.site.register(Itinerario)
+admin.site.register(Faq)

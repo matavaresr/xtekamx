@@ -2,14 +2,14 @@
 {% load static %} 
 {% block title %}Inicio - xtekamx{% endblock %} 
 {% block extra_css %}
-  <link rel="stylesheet" href="{% static 'css/customers/index.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/customers/index.css' %}?v=2" />
 {% endblock %}
 {% block content %}
 <!-- Se asume que <body> ya está en la plantilla base -->
 <div class="banner-container">
   <img
     class="banner"
-    src="{% static 'img/ImagenBannerInicio.png' %}"
+    src="{% static 'img/customers/index/index-header.jpg' %}"
     alt="Banner"
   />
   <div class="banner-text">
