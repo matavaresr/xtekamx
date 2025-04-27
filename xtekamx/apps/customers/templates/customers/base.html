@@ -24,4 +24,6 @@
 
     {% include 'customers/includes/footer.html' %}
   </body>
+  {% block extra_js %}{% endblock %}
+  <script src="{% static 'js/customers/header.js' %}"></script>
 </html>

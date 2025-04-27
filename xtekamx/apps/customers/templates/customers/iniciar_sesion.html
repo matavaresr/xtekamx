@@ -72,11 +72,6 @@
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const video = document.getElementById("miVideo");
-            video.load(); 
-        });
-
         function togglePassword() {
             var passwordField = document.querySelector('input[name="password"]');
             var passwordButton = document.querySelector('.show-password');
@@ -89,6 +84,20 @@
                 passwordButton.innerHTML = '<i class="fas fa-eye"></i>'; // Cambia a ícono de ojo abierto
             }
         }
+
+        const video = document.getElementById('miVideo');
+
+        video.addEventListener('timeupdate', function() {
+            localStorage.setItem('videoTime', video.currentTime);
+        });
+
+        // Al cargar la página
+        window.addEventListener('load', function() {
+        const savedTime = localStorage.getItem('videoTime');
+            if (savedTime) {
+                video.currentTime = savedTime;
+            }
+        });
     </script>
 </body>
 </html>
