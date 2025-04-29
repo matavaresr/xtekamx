@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Iniciar sesión</title>
+    <link rel="stylesheet" href="{% static 'css/admin/auth.css' %}?v=2" />
+</head>
+<body>
+    <div class="login-container">
+        <div class="content-img">
+                <a href="{% url 'inicio' %}">
+                    <img src="{% static 'img/logo.png' %}" alt="Logo">
+                    <h1>xteka.mx</h1>
+                    <h3>Tu mejor opción en actividades y tours</h3>
+                </a>
+            </div>
+
+        <div class="login-form">
+            <div class="form-box">
+                <h2>Iniciar sesión</h2>
+                <form method="POST">
+                    {% csrf_token %}
+                    {{ form.non_field_errors }}
+                    {% for field in form %}
+                        <div class="form-field">
+                            {{ field.errors }}
+                            {{ field.label_tag }}
+                            {{ field }}
+                        </div>
+                    {% endfor %}
+                    <button class="btnSubmit" type="submit">Iniciar sesión</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

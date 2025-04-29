@@ -1,0 +1,61 @@
+
+{% load static %}
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'css/admin/header.css' %}?v=4" />
+  <!-- Aquí puedes agregar los estilos adicionales si es necesario -->
+{% endblock %}
+
+<header>
+    <nav id="nav-header">
+        <div id="nav-urls">
+            <ul>
+                <li id="nav-logo">
+                    <a class="a-tags" href="{% url 'inicio' %}">
+                        <img src="{% static 'img/logo.png' %}" alt="logo">
+                        <span class="text-logo-xteka">xteka.mx</span>
+                    </a>
+                </li>
+                <li><a class="a-tags" href="{% url 'dashboard' %}">Dashboard</a></li>
+                <li><a class="a-tags" href="{% url 'crud' 'reservaciones' %}">Reservaciones</a></li>
+                <li><a class="a-tags" href="{% url 'crud' 'paquetes' %}">Paquetes</a></li>
+                <li><a class="a-tags" href="{% url 'crud' 'actividades' %}">Actividades</a></li>
+                <li><a class="a-tags" href="{% url 'crud' 'clientes' %}">Clientes</a></li>
+                <li><a class="a-tags" href="{% url 'crud' 'usuarios' %}">Usuarios</a></li>
+                <li id="li-nav-vertical">
+                    <div id="btn-nav-vertical">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </li>                
+                <li class="user-menu">
+                    <div class="user-drop">
+                        <form method="POST" action="{% url 'logout' %}">
+                            {% csrf_token %}
+                            <button type="submit" class="logout">
+                                <i class="fa-solid fa-right-from-bracket"></i>
+                            </button>
+                        </form>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+
+<div id="menu-expanded">
+    <a class="a-tags" href="{% url 'dashboard' %}">Dashboard</a>
+    <a class="a-tags" href="{% url 'crud' 'reservaciones' %}">Reservaciones</a>
+    <a class="a-tags" href="{% url 'crud' 'paquetes' %}">Paquetes</a>
+    <a class="a-tags" href="{% url 'crud' 'actividades' %}">Actividades</a>
+    <a class="a-tags" href="{% url 'crud' 'clientes' %}">Clientes</a>
+    <a class="a-tags" href="{% url 'crud' 'usuarios' %}">Usuarios</a>
+    <div class="user-drop">
+        <form method="POST" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit" class="logout">
+                <i class="fa-solid fa-right-from-bracket"></i>
+            </button>
+        </form>
+    </div>
+</div>

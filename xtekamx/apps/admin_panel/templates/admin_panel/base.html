@@ -1,0 +1,27 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %} xtekamx {% endblock %}</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{% static 'css/base.css' %}" />
+    {% block extra_css %}{% endblock %}
+  </head>
+  <div class="toast-container" id="toastContainer"></div>
+  <body>
+    {% include 'admin_panel/includes/header.html' %}
+
+    <main>
+      {% block content %}
+      <!-- Aquí irá el contenido específico de cada página -->
+      {% endblock %}
+    </main>
+  </body>
+  <script src="{% static 'js/customers/header.js' %}"></script>
+  {% block extra_js %}{% endblock %}
+</html>

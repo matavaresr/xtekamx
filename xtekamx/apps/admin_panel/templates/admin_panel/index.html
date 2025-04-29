@@ -1,30 +1,177 @@
-<!-- filepath: c:\Users\matr1\Documents\github\xtekamx\xtekamx\apps\admin_panel\templates\admin_panel\index.html -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
-</head>
-<body>
-    <header>
-        <h1>Admin Dashboard</h1>
-    </header>
-    <main>
-        <h2>Overview</h2>
-        <p>Welcome to the admin dashboard. Use the navigation menu to manage the application.</p>
+{% extends 'admin_panel/base.html' %} 
+{% load static %} 
+{% block title %}Admin - xtekamx{% endblock %} 
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'css/admin/index.css' %}?v=3" />
+  <!-- Aquí puedes agregar los estilos adicionales si es necesario -->
+{% endblock %}
+
+{% block content %}
+<main class="dashboard">
+    <!-- Top Cards Section -->
+    <section class="top-cards">
+        <div class="card balance">
+            <h3>Balance</h3>
+            <p>$5,250.50</p> <!-- Balance de ejemplo -->
+        </div>
+        <div class="card ingresos">
+            <h3>Ingresos</h3>
+            <div class="chart-placeholder">
+                <canvas id="ingresosChart"></canvas> <!-- Gráfico de ingresos -->
+            </div>
+        </div>
+        <div class="card gastos">
+            <h3>Gastos</h3>
+            <div class="chart-placeholder">
+                <canvas id="gastosChart"></canvas> <!-- Gráfico de gastos -->
+            </div>
+        </div>
+    </section>
+    <!-- Sales Summary Section -->
+    <section class="sales-summary">
+        <div class="sales-chart">
+            <h3>Total de Ventas (7 días)</h3>
+            <p><strong>1,200</strong> <span class="growth" style="color: green;">+5%</span></p>
+            <div class="chart-placeholder">
+                <canvas id="ventasChart"></canvas>
+            </div>
+        </div>
         
-        <h3>Statistics</h3>
-        <ul>
-            {% for stat in stats %}
-                <li>{{ stat.name }}: {{ stat.value }}</li>
-            {% empty %}
-                <li>No statistics available.</li>
-            {% endfor %}
-        </ul>
-    </main>
-    <footer>
-        <p>&copy; 2025 Your Company</p>
-    </footer>
-</body>
-</html>
+        <div class="sales-stats">
+            <div class="stat-card ventas">
+                Reservas Totales<br><strong>2,300</strong>
+            </div>
+            <div class="stat-card entradas">
+                Completadas<br><strong>12,000</strong>
+            </div>
+            <div class="stat-card pendientes">
+                Pendientes<br><strong>12,000</strong>
+            </div>
+            <div class="stat-card salidas">
+                Canceladas<br><strong>23</strong>
+            </div>
+        </div>
+    </section>
+</main>
+
+<!-- Script para Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+// Gráfico de Ingresos
+const ingresosCtx = document.getElementById('ingresosChart').getContext('2d');
+const ingresosChart = new Chart(ingresosCtx, {
+    type: 'line',
+    data: {
+        labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo'],
+        datasets: [{
+            label: 'Ingresos',
+            data: [5000, 2000, 7000, 6000, 8500],
+            borderColor: '#4cbd66',
+            backgroundColor: '#4cbd667a',
+            fill: true,
+            tension: 0.3
+        }]
+    },
+    options: {
+        responsive: true,
+        scales: {
+            x: {
+                grid: {
+                    display: false
+                }
+            },
+            y: {
+                beginAtZero: true,
+                grid: {
+                    display: false
+                }
+            }
+        },
+        plugins: {
+            legend: {
+                display: false
+            }
+        }
+    }
+});
+
+// Gráfico de Gastos
+const gastosCtx = document.getElementById('gastosChart').getContext('2d');
+const gastosChart = new Chart(gastosCtx, {
+    type: 'bar',
+    data: {
+        labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo'],
+        datasets: [{
+            label: 'Gastos',
+            data: [2000, 2500, 3000, 3200, 3250],
+            backgroundColor: '#d00238',
+            borderRadius: 10
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            x: {
+                grid: {
+                    display: false
+                }
+            },
+            y: {
+                beginAtZero: true,
+                grid: {
+                    display: false
+                }
+            }
+        },
+        plugins: {
+            legend: {
+                display: false
+            }
+        }
+    }
+});
+
+// Gráfico de Ventas
+const ctx = document.getElementById('ventasChart').getContext('2d');
+new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'],
+        datasets: [{
+            label: 'Ventas',
+            data: [120, 150, 170, 140, 180, 200, 240],
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            borderColor: 'rgba(75, 192, 192, 1)',
+            borderWidth: 4,
+            fill: true,
+            tension: 0.3
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            x: {
+                grid: {
+                    display: false
+                }
+            },
+            y: {
+                beginAtZero: true,
+                grid: {
+                    display: false
+                }
+            }
+        },
+        plugins: {
+            legend: {
+                display: false
+            }
+        }
+    }
+});
+
+</script>
+
+{% endblock %}
