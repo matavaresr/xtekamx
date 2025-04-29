@@ -11,11 +11,18 @@ a{
     outline: none;  
 }
 
+#nav-header{
+    position: fixed;
+    top: 0px;
+    width: 100%;
+    z-index: 4;
+}
+
 .nav-min-contact{
     width: 100%;
     height: 40px;
     color: white;
-    background-color: rgb(0, 0, 0);
+    background-color: #262626;
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -27,12 +34,23 @@ a{
     display: flex;
     justify-content: space-around;
     align-items: center;
-    text-transform: uppercase;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     background-color: white;
+    position: sticky;
+    z-index: 3;
+    transition: .5s;
 }
 
-.nav-urls .text-logo-xteka{
+#nav-urls.scroll-down{
+    position: fixed;
+    top: 0;
+}
+
+#nav-urls.remove-shadow{
+    box-shadow: 0 0px 0px rgba(0, 0, 0, 0);
+}
+
+#nav-urls .text-logo-xteka{
     font-size: 20px;
     display: none;
     padding-left: 10px;
@@ -66,10 +84,11 @@ a{
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    font-size: var(--font-text-small);
+    transition: .5s ease;
 }
 
-.nav-urls li:hover {
+#nav-urls li:hover {
     color: rgb(19, 163, 199);
 }
 
@@ -153,3 +172,69 @@ a{
     display: block;
 }
 
+/* Menu expanded */
+
+#menu-expanded{
+    z-index: 1;
+    position: fixed;
+    top: 0px;
+    opacity: 0;
+    visibility: hidden;
+    width: calc(100vw - 15px);
+    height: 100vh;
+    background-color: white;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+#menu-expanded.visible {
+    width: 100vw;
+    opacity: 1;
+    visibility: visible;
+
+}
+
+#li-nav-vertical{
+    display: none !important;
+    justify-content: flex-end !important;
+    margin-right: 30px;
+    cursor: auto;
+}
+
+#btn-nav-vertical {
+    width: 30px;
+    height: 20px;
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+#btn-nav-vertical span {
+    display: block;
+    height: 4px;
+    width: 100%;
+    background: black;
+    border-radius: 2px;
+    transition: 0.4s ease;
+}
+
+#btn-nav-vertical:hover span {
+    background: rgb(19, 163, 199);
+}
+
+#btn-nav-vertical.open span:nth-child(1) {
+    transform: rotate(45deg) translate(6px, 6px);
+}
+  
+#btn-nav-vertical.open span:nth-child(2) {
+    opacity: 0;
+}
+  
+#btn-nav-vertical.open span:nth-child(3) {
+    transform: rotate(-45deg) translate(6px, -6px);
+}
+
+#menu-expanded img{
+    width: 10px;
+}

@@ -1,0 +1,49 @@
+{% load static %}
+<div class="banner-section" style="background-image: url('{% static imagen %}');">
+    <div class="banner-overlay">
+      <h1 class="banner-title gradient-xteka">{{ titulo }}</h1>
+      <p class="banner-breadcrumb">{{ breadcrumb }}</p>
+    </div>
+  </div>
+  
+  <style>
+  .banner-section {
+    background-size: cover;
+    background-position: center;
+    height: 40vh;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-align: center;
+  }
+  
+  .banner-overlay {
+    padding: 2rem;
+    border-radius: 12px;
+    max-width: 90%;
+  }
+  
+  .banner-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #33e0ff;
+    margin: 0;
+  }
+  
+  .banner-breadcrumb {
+    font-size: 1.2rem;
+    margin-top: 0.5rem;
+  }
+  
+  @media (max-width: 768px) {
+    .banner-title {
+      font-size: 1.8rem;
+    }
+    .banner-breadcrumb {
+      font-size: 1rem;
+    }
+  }
+  </style>
+  

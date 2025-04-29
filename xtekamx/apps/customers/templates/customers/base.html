@@ -5,13 +5,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %} xtekamx {% endblock %}</title>
+    <link rel="icon" type="image/png" href="{% static 'img/logo.png' %}">
     <link
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="{% static 'css/base.css' %}" />
-    <link rel="stylesheet" href="{% static 'css/customers/header.css' %}?v=3" />
-    <link rel="stylesheet" href="{% static 'css/customers/footer.css' %}?v=2" />
+    <link rel="stylesheet" href="{% static 'css/customers/header.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/customers/footer.css' %}" />
     {% block extra_css %}{% endblock %}
   </head>
   <body>
@@ -27,4 +28,5 @@
   </body>
   {% block extra_js %}{% endblock %}
   <script src="{% static 'js/customers/header.js' %}"></script>
+  <script src="{% static 'js/customers/base.js' %}"></script>
 </html>
