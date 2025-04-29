@@ -10,19 +10,16 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="{% static 'css/base.css' %}" />
-    <link rel="stylesheet" href="{% static 'css/customers/header.css' %}?v=3" />
-    <link rel="stylesheet" href="{% static 'css/customers/footer.css' %}?v=2" />
     {% block extra_css %}{% endblock %}
   </head>
+  <div class="toast-container" id="toastContainer"></div>
   <body>
-    {% include 'customers/includes/header.html' %}
+    {% include 'admin_panel/includes/header.html' %}
 
     <main>
       {% block content %}
       <!-- Aquí irá el contenido específico de cada página -->
       {% endblock %}
     </main>
-
-    {% include 'customers/includes/footer.html' %}
   </body>
 </html>

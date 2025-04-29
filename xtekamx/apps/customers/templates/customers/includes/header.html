@@ -1,14 +1,6 @@
 {% load static %}
 <header>
     <nav>
-        <div class="nav-min-contact">
-            <ul>
-                <li><i class="fa-solid fa-envelope"></i><span>tekatours@outlook.com</span></li>
-                <li><i class="fa-brands fa-instagram"></i><span>@xteka.mx</span></li>
-                <li><i class="fa-solid fa-phone"></i><span>834 247 4449</span></li>
-            </ul>
-        </div>
-        
         <div class="nav-urls">
             <ul>
                 <li><a href="{% url 'actividades' %}">Actividades</a></li>
@@ -23,12 +15,7 @@
                 <li><a href="{% url 'acerca_de' %}">Acerca de</a></li>
                 <li><a href="{% url 'contacto' %}">Contacto</a></li>
                 <li class="btn-nav-vertical"><i class="fa-solid fa-bars"></i></li>
-                <li class="user-menu">
-                    <i class="fa-solid fa-user"></i>
-                    <div class="user-dropdown">
-                        <a href="{% url 'iniciar_sesion' %}">Iniciar sesión</a>
-                        <a href="{% url 'registro' %}">Crear cuenta</a>
-                    </div>
+                <li><a href="{% url 'login' %}"><i class="fa-solid fa-user"></i></a></li>
                 </li>
             </ul>
         </div>

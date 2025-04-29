@@ -1,10 +1,17 @@
 from django.db import models
 
 class Usuario(models.Model):
+    
+    TIPO_CHOICES = [
+        (1, 'Administrador'),
+        (2, 'Supervisor'),
+        (3, 'Empleado'),
+    ]
+    
     usuario = models.CharField(max_length=100)
     email = models.EmailField(unique=True)
     contrasena = models.CharField(max_length=255)
-    tipo = models.SmallIntegerField()
+    tipo = models.SmallIntegerField(choices=TIPO_CHOICES)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

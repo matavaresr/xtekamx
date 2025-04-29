@@ -1,0 +1,370 @@
+{% extends 'admin_panel/base.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block title %}Admin Panel - xteka{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/admin/crud.css' %}?v=8" />
+{% endblock %}
+
+{% block content %}
+<div class="title-container">
+    <h2 class="main-title">{{ titulo }}</h2>
+</div>
+<div class="container">
+    <div class="header">
+        <div class="headerbtn-container">
+            <button class="btn primary" onclick="openCreateModal()">
+                <i class="fas fa-plus"></i> Crear Nuevo
+            </button>
+            {% if modelo == 'usuarios' %}
+                <button class="btn secondary" onclick="openEditModalUsuarioActual()">
+                    <i class="fas fa-user"></i> Mi Información
+                </button>
+            {% endif %}    
+        </div>
+
+        <div class="pagination">
+            <div class="step-links">
+                {% if objetos.has_previous %}
+                    <a href="?page=1" class="pagination-btn first"><i class="fa fa-angles-left"></i></a>
+                    <a href="?page={{ objetos.previous_page_number }}" class="pagination-btn prev"><i class="fa fa-angle-left"></i></a>
+                {% endif %}
+        
+                <div class="current">
+                    {{ objetos.number }} de {{ objetos.paginator.num_pages }}
+                </div>
+        
+                {% if objetos.has_next %}
+                    <a href="?page={{ objetos.next_page_number }}" class="pagination-btn next"><i class="fa fa-angle-right"></i></a>
+                    <a href="?page={{ objetos.paginator.num_pages }}" class="pagination-btn last"><i class="fa fa-angles-right"></i></a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="crud-table">
+            <thead>
+                <tr>
+                    {% for columna in columnas %}
+                        {% if columna == 'contrasena' %}
+                        {% else %}
+                            <th>{{ columna|capfirst }}</th>
+                        {% endif %}
+                    {% endfor %}
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% include 'admin_panel/includes/tabla_contenido.html' %}
+            </tbody>
+        </table>
+    </div>
+    <div class="object-count">
+        <label class="count-lbl">Total de registros: {{ objetos.paginator.count }}</label>
+    </div>
+</div>
+
+<div class="modal" id="createmodal">
+    <div class="modal-content">
+        <form method="POST" id="crearForm">
+            {% csrf_token %}
+            <h3>Crear Nuevo {{ modelo|capfirst }}</h3>
+            {% for campo in columnas %}
+                <div class="form-group">
+                    <label>{{ campo|capfirst }}</label>
+                    {% if campo == 'tipo' %}
+                        <select name="{{ campo }}" required>
+                            {% for value, label in tipo_choices %}
+                                <option value="{{ value }}">{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    {% else %}
+                        {% if campo == 'contrasena' %}
+                            <input type="password" name="{{ campo }}" required>
+                        {% else %}
+                            <input type="text" name="{{ campo }}" required>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            {% endfor %}
+            <div class="modal-buttons">
+                <button type="button" class="btn cancel" onclick="closeCreateModal()">Cancelar</button>
+                <button type="submit" class="btn primary">Guardar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal para Editar Registro -->
+<div class="modal" id="editmodal">
+    <div class="modal-content">
+        <form method="POST" id="editarForm">
+            {% csrf_token %}
+            <h3>Editar {{ modelo|capfirst }}</h3>
+            {% for campo in columnas %}
+            <div class="form-group">
+                <label>{{ campo|capfirst }}</label>
+                {% if campo == 'tipo' %}
+                    <select name="{{ campo }}" required>
+                    {% for value, label in tipo_choices %}
+                        <option value="{{ value }}">{{ label }}</option>
+                    {% endfor %}
+                </select>
+                {% else %}
+                    {% if campo == 'contrasena' %}
+                        <input type="password" name="{{ campo }}" required>
+                    {% else %}
+                        <input type="text" name="{{ campo }}" required>
+                    {% endif %}
+                {% endif %}
+            </div>
+            {% endfor %}
+            <div class="modal-buttons">
+                <button type="button" class="btn cancel" onclick="closeEditModal()">Cancelar</button>
+                <button type="submit" class="btn primary">Guardar Cambios</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+
+    function openEditModalUsuarioActual() {
+        const modal = document.getElementById('editmodal');
+        const form = document.getElementById('editarForm');
+    
+        if (modal && form) {
+            modal.style.display = 'block';
+            form.dataset.id = "{{ usuario_actual.id }}";  // poner su ID para usarlo en editar
+    
+            // Llenar los campos
+            {% for campo in columnas %}
+                var input = form.querySelector('[name="{{ campo }}"]');
+                if (input) {
+                    input.value = "{{ usuario_actual|default_if_none:''|attr:campo }}";
+                }
+            {% endfor %}
+        }
+    }
+
+    function changePage(page) {
+        const url = "{% url 'crud' modelo %}?page=" + page;
+
+        fetch(url, {
+            method: 'GET',
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Actualiza el contenido de la tabla
+            document.getElementById('tabla-contenido').innerHTML = data.html;
+            // Actualiza la paginación
+            document.getElementById('pagination').innerHTML = generatePagination(data.page, data.total);
+        })
+        .catch(error => console.log(error));
+    }
+
+    function generatePagination(currentPage, totalPages) {
+        let paginationHTML = '';
+
+        if (currentPage > 1) {
+            paginationHTML += `<a href="#" onclick="changePage(${currentPage - 1})">Anterior</a>`;
+        }
+        paginationHTML += `<span>Página ${currentPage} de ${totalPages}</span>`;
+        if (currentPage < totalPages) {
+            paginationHTML += `<a href="#" onclick="changePage(${currentPage + 1})">Siguiente</a>`;
+        }
+
+        return paginationHTML;
+    }
+
+    function openEditModal(id, data) {
+        const modal = document.getElementById('editmodal');
+        const form = document.getElementById('editarForm');
+    
+        if (modal && form) {
+            modal.style.display = 'block';
+            form.dataset.id = id; // Guardar el id en el formulario para usarlo al enviar
+    
+            // Llenar los inputs del formulario con los valores actuales
+            Object.keys(data).forEach(key => {
+                const input = form.querySelector(`[name="${key}"]`);
+                if (input) {
+                    input.value = data[key];
+                }
+            });
+        }
+    }
+    
+    function closeEditModal() {
+        const modal = document.getElementById('editmodal');
+        if (modal) {
+            modal.style.display = 'none';
+        }
+    }
+
+    function closeCreateModal() {
+        const modal = document.getElementById('createmodal');
+        if (modal) {
+            modal.style.display = 'none';  // Ocultar modal crear
+        }
+    }
+
+    function openCreateModal() {
+        const modal = document.getElementById('createmodal');
+        if (modal) {
+            modal.style.display = 'block';  // Mostrar modal crear
+        }
+    }
+
+    function openDeleteModal(id) {
+        const modal = document.getElementById('deleteModal' + id);
+        if (modal) {
+            modal.style.display = 'block';  // Mostrar modal eliminar
+        }
+    }
+
+    function closeDeleteModal(id) {
+        const modal = document.getElementById('deleteModal' + id);
+        if (modal) {
+            modal.style.display = 'none';  // Ocultar modal eliminar
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const deleteButtons = document.querySelectorAll('.confirm-delete-btn');
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', async function () {
+                const id = this.getAttribute('data-id');
+                const modelo = this.getAttribute('data-modelo');
+    
+                if (!id || !modelo) {
+                    console.error('Faltan datos para eliminar.');
+                    return;
+                }
+    
+                try {
+                    const response = await fetch(`/admin_panel/crud/${modelo}/eliminar/${id}/`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': getCookie('csrftoken'),
+                            'Content-Type': 'application/json',
+                        },
+                    });
+    
+                    if (response.ok) {
+                        const row = document.querySelector(`button[data-id="${id}"]`).closest('tr');
+                        if (row) {
+                            row.remove();
+                        }
+                        closeDeleteModal(id);
+                        location.reload();
+                    } else {
+                        alert('Error al eliminar. Intenta de nuevo.');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Error de red.');
+                }
+            });
+        });
+
+        const crearForm = document.getElementById('crearForm');
+        crearForm.addEventListener('submit', async function (event) {
+            event.preventDefault(); // Evitar que recargue la página
+    
+            const formData = new FormData(crearForm);
+            const data = {};
+    
+            formData.forEach((value, key) => {
+                if (key !== 'csrfmiddlewaretoken') { // Ignora el csrfmiddlewaretoken
+                    data[key] = value;
+                }
+            });
+    
+            const modelo = "{{ modelo }}"; // Django te pasa el modelo en el template
+            const csrfToken = getCookie('csrftoken');
+    
+            try {
+                const response = await fetch(`/admin_panel/crud/${modelo}/crear/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrfToken,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                });
+    
+                if (response.ok) {
+                    // Cerrar modal y recargar tabla
+                    closeCreateModal();
+                    location.reload(); // Esto actualiza toda la página para ver el nuevo registro
+                } else {
+                    alert('Error al guardar. Revisa los datos.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error de red.');
+            }
+        });
+
+        const editarForm = document.getElementById('editarForm');
+        editarForm.addEventListener('submit', async function (event) {
+            event.preventDefault();
+        
+            const formData = new FormData(editarForm);
+            const data = {};
+        
+            formData.forEach((value, key) => {
+                if (key !== 'csrfmiddlewaretoken') {
+                    data[key] = value;
+                }
+            });
+        
+            const modelo = "{{ modelo }}";
+            const id = editarForm.dataset.id; // Recuperar el id guardado
+            const csrfToken = getCookie('csrftoken');
+        
+            try {
+                const response = await fetch(`/admin_panel/crud/${modelo}/editar/${id}/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrfToken,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                });
+        
+                if (response.ok) {
+                    closeEditModal();
+                    location.reload();
+                } else {
+                    alert('Error al editar. Revisa los datos.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error de red.');
+            }
+        });    
+
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    });
+</script>
+
+
+{% endblock %}

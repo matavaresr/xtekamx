@@ -1,0 +1,58 @@
+
+{% load static %}
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'css/admin/header.css' %}?v=4" />
+  <!-- Aquí puedes agregar los estilos adicionales si es necesario -->
+{% endblock %}
+
+<header>
+    <nav>
+        <!-- <div class="nav-min-contact">
+            <ul>
+                <li><i class="fa-solid fa-envelope"></i><span>tekatours@outlook.com</span></li>
+                <li><i class="fa-brands fa-instagram"></i><span>@xteka.mx</span></li>
+                <li><i class="fa-solid fa-phone"></i><span>834 247 4449</span></li>
+            </ul>
+        </div> -->
+        
+        <div class="nav-urls">
+            <ul>
+                <li class="nav-logo">
+                    <a class="a-tags" href="{% url 'inicio' %}">
+                        <img src="{% static 'img/logo.png' %}" alt="logo">
+                        <span class="text-logo-xteka">xteka.mx</span>
+                    </a>
+                </li>
+               
+                <li><a class="a-tags" href="{% url 'dashboard' %}">Dashboard</a></li>
+                <li><a class="a-tags" href="{% url 'crud' 'reservaciones' %}">Reservaciones</a></li>
+                <li><a class="a-tags" href="{% url 'crud' 'paquetes' %}">Paquetes</a></li>
+                <li><a class="a-tags" href="{% url 'crud' 'actividades' %}">Actividades</a></li>
+                <li><a class="a-tags" href="{% url 'crud' 'clientes' %}">Clientes</a></li>
+                <li><a class="a-tags" href="{% url 'crud' 'usuarios' %}">Usuarios</a></li>
+                
+                <!-- <li class="nav-logo">
+                    <a href="{% url 'inicio' %}">
+                        <img src="{% static 'img/logo.png' %}" alt="logo">
+                        <span class="text-logo-xteka">xteka.mx</span>
+                    </a>
+                </li> -->
+
+                <li class="btn-nav-vertical"><i class="fa-solid fa-bars"></i></li>
+                <li class="user-menu">
+                    <div class="user">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <div class="user-drop">
+                        <form method="POST" action="{% url 'logout' %}">
+                            {% csrf_token %}
+                            <button type="submit" class="logout">
+                                <i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión
+                            </button>
+                        </form>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>

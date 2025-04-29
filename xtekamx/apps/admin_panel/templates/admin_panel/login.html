@@ -3,8 +3,8 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Registro</title>
-    <link rel="stylesheet" href="{% static 'css/customers/auth.css' %}">
+    <title>Iniciar sesión</title>
+    <link rel="stylesheet" href="{% static 'css/admin/auth.css' %}?v=2" />
 
     <style>
         video {
@@ -20,15 +20,12 @@
 </head>
 <body>
     <div class="login-container">
-
         <div class="login-image">
             <video id="miVideo" autoplay muted loop>
                 <source src="{% static 'video/back-vid.mp4' %}" type="video/mp4">
                 Tu navegador no soporta el video.
             </video>
-
             <div class="overlay"></div>
-
             <div class="video-content">
                 <a href="{% url 'inicio' %}">
                     <img src="{% static 'img/logo.png' %}" alt="Logo">
@@ -40,20 +37,19 @@
 
         <div class="login-form">
             <div class="form-box">
-                <h2>Crear Cuenta</h2>
+                <h2>Iniciar sesión</h2>
                 <form method="POST">
                     {% csrf_token %}
                     {{ form.non_field_errors }}
                     {% for field in form %}
-                        {{ field.errors }}
-                        {{ field.label_tag }}
-                        {{ field }}
+                        <div class="form-field">
+                            {{ field.errors }}
+                            {{ field.label_tag }}
+                            {{ field }}
+                        </div>
                     {% endfor %}
-                    <button class="btnSubmit" type="submit">Registrarme</button>
+                    <button class="btnSubmit" type="submit">Iniciar sesión</button>
                 </form>
-                <div class="extra-links">
-                    ¿Ya tienes cuenta? <a href="{% url 'iniciar_sesion' %}">Inicia sesion aqui</a>
-                </div>
             </div>
         </div>
     </div>
@@ -65,4 +61,3 @@
     </script>
 </body>
 </html>
-

@@ -1,0 +1,61 @@
+{% load custom_filters %}
+<tbody>
+    {% for objeto in objetos %}
+    <tr>
+        {% for campo in columnas %}
+            {% if campo == 'contrasena' %}
+            {% elif campo == 'tipo' %}
+                {% if objeto.tipo == 1 %}
+                    <td>
+                        <span class="badge badge-admin">
+                            <i class="fas fa-user-shield"></i> Administrador
+                        </span>
+                    </td>
+                {% elif objeto.tipo == 2 %}
+                    <td>
+                        <span class="badge badge-supervisor">
+                            <i class="fas fa-user-tie"></i> Supervisor
+                        </span>
+                    </td>
+                {% elif objeto.tipo == 3 %}
+                    <td>
+                        <span class="badge badge-usuario">
+                            <i class="fas fa-user"></i> Usuario
+                        </span>
+                    </td>
+                {% else %}
+                    <td>
+                        <span class="badge badge-otro">
+                            <i class="fas fa-question-circle"></i> Desconocido
+                        </span>
+                    </td>
+                {% endif %}
+            {% else %}
+                <td>{{ objeto|get_attr:campo }}</td>
+            {% endif %}
+        {% endfor %}
+        <td>
+            <button type="button" class="btn warning small" onclick='openEditModal({{ objeto.id }}, {{ objeto|get_objeto_json:columnas|safe }})'>
+                <i class="fas fa-edit"></i> Editar
+            </button>
+            <button class="btn danger small" onclick="openDeleteModal({{ objeto.id }})">
+                <i class="fas fa-trash"></i> Eliminar
+            </button>
+        </td>
+    </tr>
+
+    <!-- Modal de Confirmación de Eliminación -->
+    <div class="modal" id="deleteModal{{ objeto.id }}">
+        <div class="modal-content">
+            <h3>Confirmar eliminación</h3>
+            <p>¿Seguro que quieres eliminar este registro?</p>
+            <div class="modal-buttons">
+                <button type="button" class="btn cancel" onclick="closeDeleteModal({{ objeto.id }})">Cancelar</button>
+                <button class="btn danger confirm-delete-btn" data-id="{{ objeto.id }}" data-modelo="{{ modelo }}">Sí, eliminar</button>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+        <tr><td colspan="999">No hay registros</td></tr>
+    {% endfor %}
+</tbody>

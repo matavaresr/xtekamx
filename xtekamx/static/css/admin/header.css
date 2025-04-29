@@ -5,17 +5,19 @@ header{
     z-index: 1000;
 }
 
-a{
+.a-tags{
     text-decoration: none;
     color: inherit;
     outline: none;  
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
 }
 
 .nav-min-contact{
     width: 100%;
     height: 40px;
     color: white;
-    background-color: rgb(0, 0, 0);
+    background-color: black;
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -29,11 +31,11 @@ a{
     align-items: center;
     text-transform: uppercase;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    background-color: white;
+    background-color: rgb(255, 255, 255)	;
 }
 
 .nav-urls .text-logo-xteka{
-    font-size: 20px;
+    font-size: 20px ;
     display: none;
     padding-left: 10px;
 }
@@ -46,7 +48,7 @@ a{
 }
 
 .nav-urls .btn-nav-vertical{
-    font-size: 30px;
+    font-size: 90px;
     justify-content: flex-end;
     align-items: center;
     display: none;
@@ -75,6 +77,7 @@ a{
 
 .nav-min-contact ul, .nav-urls ul{
     width: 100%;
+    height: 80px;
     display: inline-flex;
     justify-content: space-around;
     list-style: none;
@@ -121,35 +124,61 @@ a{
 
 .user-menu {
     position: relative;
-    cursor: pointer;
 }
 
-.user-dropdown {
+.user {
+    cursor: pointer;
+    padding: 10px;
+    color: #333;
+}
+
+.user:hover{
+    color: #008599;
+}
+
+.user-drop {
     display: none;
     position: absolute;
-    top: 100%; /* justo debajo del icono */
-    right: 0;
+    right: 0px;
+    top: 80%;
+    margin-top: 0px;
     background-color: white;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 6px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    width: 160px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    z-index: 100;
     padding: 10px;
-    min-width: 150px;
-    z-index: 1000;
 }
 
-.user-dropdown a {
-    display: block;
-    padding: 8px;
-    color: #333;
-    text-decoration: none;
-    border-radius: 4px;
+.user-drop form {
+    margin: 0;
 }
 
-.user-dropdown a:hover {
-    background-color: #f0f0f0;
+.logout {
+    background: none;
+    border: none;
+    color: #d32f2f;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+    padding: 5px 10px;
+    font-size: 14px;
+    text-align: center;
 }
 
-.user-menu:hover .user-dropdown {
+.logout i {
+    margin-right: 5px;
+}
+
+.logout:hover {
+    background-color: #f8d7da;
+    border-radius: 5px;
+}
+
+/* Mostrar dropdown al hacer hover */
+.user-menu:hover .user-drop {
     display: block;
 }
 
