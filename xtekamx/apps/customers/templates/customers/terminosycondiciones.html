@@ -1,0 +1,135 @@
+{% extends 'customers/base.html' %} 
+{% load static %} 
+{% block title %}Terminos y Condiciones - xtekamx{% endblock %} 
+{% block extra_css %}
+{% endblock %}
+{% block content %}
+
+{% include "customers/components/breadcrumb.html" with titulo="TERMINOS Y CONDICIONES" breadcrumb="Inicio > Terminos y Condiciones" imagen="img/customers/terminosycondiciones-breadcrumb.png" %}
+
+<section class="terminos-condiciones">
+    <div class="container">
+      <p>Estos Términos y Condiciones regulan el uso de los servicios ofrecidos por XTEKA I Huasteca Potosina. Al contratar cualquier servicio, el cliente acepta expresamente estas condiciones.</p>
+  
+      <h2>1.1 Condiciones Generales</h2>
+      <p>Al contratar servicios, el cliente declara que:</p>
+      <ul>
+        <li>Es mayor de edad</li>
+        <li>Acepta estas condiciones</li>
+        <li>Posee capacidad legal para contratar</li>
+        <li>Actúa en su nombre o autorizado para otros</li>
+      </ul>
+      <p>XTEKA I Huasteca Potosina se reserva el derecho de admisión.</p>
+  
+      <h2>1.2 Seguridad e Integridad</h2>
+      <ul>
+        <li>Uso obligatorio de chalecos salvavidas</li>
+        <li>Aceptación de riesgos inherentes a actividades turísticas</li>
+        <li>Deslinde de responsabilidades por accidentes</li>
+        <li>Prohibido dañar o ensuciar el transporte</li>
+        <li>Respeto a itinerarios y condiciones imprevistas</li>
+        <li>Documentación personal en regla</li>
+        <li>Consentimiento para uso de imagen con derecho a solicitar su retiro</li>
+      </ul>
+  
+      <h2>1.3 Tarifas y Pagos</h2>
+      <ul>
+        <li>Tarifas sujetas a cambios sin aviso</li>
+        <li>Cancelación y reembolsos sujetos a condiciones</li>
+        <li>Tarifas adicionales informadas previamente</li>
+        <li>Cambios sujetos a disponibilidad y cargos</li>
+        <li>No presentación puede implicar pérdida de reserva</li>
+        <li>Promociones sujetas a condiciones y vigencias</li>
+        <li>Precios sin IVA y sujetos a variaciones</li>
+      </ul>
+  
+      <h2>1.4 Reservaciones</h2>
+      <ul>
+        <li>Reservas con al menos 2 semanas de anticipación</li>
+        <li>Sujetas a disponibilidad</li>
+        <li>Pago requerido para confirmar la reserva</li>
+        <li>Cancelaciones deben comunicarse con 14 días de anticipación</li>
+        <li>Modificaciones sujetas a cargos</li>
+        <li>Confirmación enviada por el medio de contacto indicado</li>
+        <li>Cliente responsable por información correcta</li>
+      </ul>
+  
+      <h2>1.5 Reembolsos</h2>
+      <ul>
+        <li>Solicitud con al menos 3 semanas de anticipación</li>
+        <li>Reembolso en un plazo de hasta 21 días</li>
+        <li>Formulario con datos completos obligatorio</li>
+        <li>Cancelaciones tardías podrían no aplicar</li>
+        <li>Reembolso por el mismo método de pago</li>
+        <li>Notificación del estado del reembolso</li>
+      </ul>
+  
+      <h2>1.6 Facturación</h2>
+      <ul>
+        <li>Facturas solicitadas dentro de los 2 días hábiles</li>
+        <li>Trámite válido solo por medios oficiales</li>
+        <li>Cumplimiento de normativas fiscales vigentes</li>
+        <li>Cliente responsable por la veracidad de datos fiscales</li>
+      </ul>
+  
+      <h2>1.7 Cancelaciones</h2>
+      <ul>
+        <li>< 1 semana de anticipación: no hay reembolso</li>
+        <li>Entre 1 y 3 semanas: reembolso menos 16%</li>
+        <li>Ausencia sin previo aviso: no reembolsable</li>
+      </ul>
+  
+      <h2>1.8 Restricciones y Recomendaciones</h2>
+      <ul>
+        <li>Calzado adecuado requerido</li>
+        <li>Ropa sin mezclilla y apropiada al clima</li>
+        <li>Prohibido portar objetos de valor, joyas, alcohol o drogas</li>
+        <li>Recomendado portar protección solar y repelente</li>
+        <li>Precaución con objetos personales</li>
+        <li>Botiquín personal sugerido</li>
+        <li>Cambio de ropa seco recomendado</li>
+      </ul>
+    </div>
+  </section>
+  
+  <style>
+  .terminos-condiciones .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+    line-height: 1.7;
+    color: #333;
+    font-size: var(--font-text-medium);
+    text-align: justify;
+  }
+  
+  .terminos-condiciones h2 {
+    margin-top: 2rem;
+    font-size: var(--font-text-large);
+    color: #262626;
+    text-align: left;
+  }
+  
+  .terminos-condiciones ul {
+    list-style-type: disc;
+    padding-left: 1.5rem;
+  }
+  
+  .terminos-condiciones ul li {
+    margin-bottom: 0.5rem;
+  }
+  
+  @media (max-width: 768px) {
+    .terminos-condiciones .container {
+      padding: 1rem;
+    }
+  
+    .terminos-condiciones h1 {
+      font-size: 1.5rem;
+    }
+  }
+  </style>
+  
+
+
+{% endblock %}

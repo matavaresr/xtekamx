@@ -1,0 +1,29 @@
+<div class="header-lined" style="color: {{ color }}">
+    <hr class="line" style="border-top: 2px solid {{ color }}">
+    <span class="text">{{ text }}</span>
+    <hr class="line" style="border-top: 2px solid {{ color }}">
+  </div>
+  
+  <style>
+  .header-lined {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    margin: 20px 0;
+    padding: 0px 40px;
+  }
+  
+  .header-lined .line {
+    flex: 1;
+    border: none;
+  }
+  
+  .header-lined .text {
+    padding: 0 10px;
+    font-weight: bold;
+    font-size: var(--font-subtitle);
+    text-align: center;
+  }
+  </style>
+  

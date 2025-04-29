@@ -1,23 +1,43 @@
 {% load static %}
 <header>
-    <nav>
-        <div class="nav-urls">
+    <nav id="nav-header">
+        <div class="nav-min-contact">
             <ul>
-                <li><a href="{% url 'actividades' %}">Actividades</a></li>
-                <li><a href="{% url 'paquetes' %}">Paquetes</a></li>
-                <li><a href="{% url 'como_llegar' %}">Cómo Llegar</a></li>
-                <li class="nav-logo">
+                <li>📸<span>tekatours@outlook.com</span></li>
+                <li>✉️<span>@xteka.mx</span></li>
+                <li>📞<span>834 247 4449</span></li>
+            </ul>
+        </div>
+        
+        <div id="nav-urls">
+            <ul>
+                <li id="nav-logo">
                     <a href="{% url 'inicio' %}">
                         <img src="{% static 'img/logo.png' %}" alt="logo">
                         <span class="text-logo-xteka">xteka.mx</span>
                     </a>
                 </li>
+                <li><a href="{% url 'actividades' %}">Actividades</a></li>
+                <li><a href="{% url 'paquetes' %}">Paquetes</a></li>
+                <li><a href="{% url 'como_llegar' %}">Cómo Llegar</a></li>
                 <li><a href="{% url 'acerca_de' %}">Acerca de</a></li>
                 <li><a href="{% url 'contacto' %}">Contacto</a></li>
-                <li class="btn-nav-vertical"><i class="fa-solid fa-bars"></i></li>
-                <li><a href="{% url 'login' %}"><i class="fa-solid fa-user"></i></a></li>
+                <li id="li-nav-vertical">
+                    <div id="btn-nav-vertical">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
                 </li>
             </ul>
         </div>
     </nav>
 </header>
+
+<div id="menu-expanded">
+    <a href="{% url 'actividades' %}">Actividades</a>
+    <a href="{% url 'paquetes' %}">Paquetes</a>
+    <a href="{% url 'como_llegar' %}">Cómo Llegar</a>
+    <a href="{% url 'acerca_de' %}">Acerca de</a>
+    <a href="{% url 'contacto' %}">Contacto</a>
+</div>

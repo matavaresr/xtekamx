@@ -8,5 +8,6 @@ urlpatterns = [
     path('acerca_de', views.acerca_de, name='acerca_de'), 
     path('paquetes', views.paquetes, name='paquetes'),  # Vista general de paquetes
     path('paquetes/<int:id>/', views.paquete_unico, name='paquete_unico'),  # Paquete específico
-    path('actividades', views.actividades, name='actividades'), 
+    path('actividades', views.actividades, name='actividades'),  
+    path('terminosycondiciones', views.terminosycondiciones, name='terminosycondiciones'), 
 ]

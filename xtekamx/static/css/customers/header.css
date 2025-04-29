@@ -11,69 +11,76 @@ a{
     outline: none;  
 }
 
+#nav-header{
+    position: fixed;
+    top: 0px;
+    width: 100%;
+    z-index: 4;
+}
+
 .nav-min-contact{
     width: 100%;
     height: 40px;
     color: white;
-    background-color: rgb(0, 0, 0);
+    background-color: #262626;
     display: flex;
     justify-content: space-around;
     align-items: center;
 }
 
-.nav-urls{
+#nav-urls{
     width: 100%;
     height: 80px;
     display: flex;
     justify-content: space-around;
     align-items: center;
-    text-transform: uppercase;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     background-color: white;
+    z-index: 3;
 }
 
-.nav-urls .text-logo-xteka{
+#nav-urls.scroll-down{
+    position: fixed;
+    top: 0;
+}
+
+#nav-urls.remove-shadow{
+    box-shadow: 0 0px 0px rgba(0, 0, 0, 0);
+}
+
+#nav-urls .text-logo-xteka{
     font-size: 20px;
     display: none;
     padding-left: 10px;
 }
 
-.nav-urls .nav-logo a{
+#nav-urls #nav-logo a{
     display: flex;
     flex-direction: row;
     align-items: center;
     text-transform: lowercase;
 }
 
-.nav-urls .btn-nav-vertical{
-    font-size: 30px;
-    justify-content: flex-end;
-    align-items: center;
-    display: none;
-}
-
-.nav-urls .btn-nav-vertical i{
-    margin-right: 30px;
-}
-
-.nav-urls img{
+#nav-urls img{
     width: 60px;
 }
 
-.nav-urls li{
+#nav-urls li{
     width: 130px;
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    font-size: var(--font-text-small);
+    transition: .5s ease;
 }
 
-.nav-urls li:hover {
+#nav-urls li:hover {
+    transform: scale(1.1);
     color: rgb(19, 163, 199);
 }
 
-.nav-min-contact ul, .nav-urls ul{
+.nav-min-contact ul, #nav-urls ul{
     width: 100%;
     display: inline-flex;
     justify-content: space-around;
@@ -98,23 +105,23 @@ a{
 }
 
 @media (max-width: 1150px) { 
-    .nav-urls ul{
+    #nav-urls ul{
         justify-content: space-between;
     }
 
-    .nav-urls li:not(.nav-logo, .btn-nav-vertical){
+    #nav-urls li:not(#nav-logo, #li-nav-vertical){
         display: none;
     }
 
-    .nav-urls li:is(.nav-logo, .btn-nav-vertical){
+    #nav-urls li:is(#nav-logo, #li-nav-vertical){
         width: 220px;
     }
 
-    .nav-urls .btn-nav-vertical{
-        display: flex;
+    #nav-urls #li-nav-vertical{
+        display: flex !important;
     }
 
-    .nav-urls .text-logo-xteka{
+    #nav-urls .text-logo-xteka{
         display: block;
     }
 }
@@ -153,3 +160,84 @@ a{
     display: block;
 }
 
+/* Menu expanded */
+
+#menu-expanded{
+    z-index: 1;
+    position: fixed;
+    top: 0px;
+    opacity: 0;
+    visibility: hidden;
+    width: calc(100vw - 15px);
+    height: 100vh;
+    background-color: white;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-size: var(--font-subtitle);
+}
+
+#menu-expanded a{
+    margin-bottom: 20px;
+    transition: .5s;
+}
+
+#menu-expanded a:hover{
+    transform: scale(1.1);
+    color: rgb(19, 163, 199);
+}
+
+#menu-expanded.visible {
+    width: 100vw;
+    opacity: 1;
+    visibility: visible;
+
+}
+
+#li-nav-vertical{
+    display: none !important;
+    justify-content: flex-end !important;
+    margin-right: 30px;
+    cursor: auto;
+}
+
+#btn-nav-vertical {
+    width: 30px;
+    height: 20px;
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+#btn-nav-vertical span {
+    display: block;
+    height: 4px;
+    width: 100%;
+    background: black;
+    border-radius: 2px;
+    transition: 0.4s ease;
+}
+
+#btn-nav-vertical:hover span {
+    background: rgb(19, 163, 199);
+}
+
+#btn-nav-vertical.open span:nth-child(1) {
+    transform: rotate(45deg) translate(6px, 6px);
+}
+  
+#btn-nav-vertical.open span:nth-child(2) {
+    opacity: 0;
+}
+  
+#btn-nav-vertical.open span:nth-child(3) {
+    transform: rotate(-45deg) translate(6px, -6px);
+}
+
+#menu-expanded img{
+    width: 10px;
+}

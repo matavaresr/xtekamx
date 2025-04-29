@@ -1,0 +1,213 @@
+<div class="slider">
+  
+    <!-- Botones de navegación -->
+    <button class="nav-button prev" onclick="moveSlide(-1)">❮</button>
+    <button class="nav-button next" onclick="moveSlide(1)">❯</button>
+  
+    <div class="slides">
+      {% for testimonio in testimonios %}
+        <div class="slide {% if forloop.first %}active{% endif %}">
+          <div class="content">
+            <div class="text">
+              <h2>{{ testimonio.titulo }}</h2>
+              <p>{{ testimonio.descripcion }}</p>
+              <p><strong>{{ testimonio.instagram }}</strong></p>
+              <p><em>{{ testimonio.ubicacion }}</em></p>
+            </div>
+            <div class="image-container">
+              <img src="{{ testimonio.imagen }}" alt="Imagen de {{ testimonio.titulo }}">
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  
+    <div class="pagination">
+      {% for testimonio in testimonios %}
+        <span class="dot {% if forloop.first %}active{% endif %}"></span>
+      {% endfor %}
+    </div>
+  </div>
+
+  <style>
+    .slider {
+      width: 100%;
+      overflow: hidden;
+      position: relative;
+      padding: 0px 0px 20px 0px;
+    }
+    
+    .slides {
+      display: flex;
+      transition: transform 0.5s ease-in-out;
+    }
+    
+    .slide {
+      width: 100%;
+      flex-shrink: 0;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+    
+    .content {
+      display: flex;
+      flex-direction: row;
+      max-width: 1400px;
+      width: 100%;
+      padding: 0px 0px 20px 0px;
+      gap: 40px;
+      align-items: center;
+    }
+    
+    .text {
+        padding: 20px 20px 0px 20px;
+        flex: 1;
+    }
+    
+    .text h2 {
+      font-size: var(--font-text-large);
+      margin-bottom: 10px;
+      text-transform: uppercase;
+    }
+    
+    .text p:first-of-type {
+      font-size: var(--font-text-large);
+      text-align: justify;
+    }
+    
+    .text p:nth-of-type(2),
+    .text p:nth-of-type(3) {
+      font-size: var(--font-text-medium);
+      margin: 8px 0;
+    }
+    
+    .image-container {
+      display: flex;
+      justify-content: center;
+    }
+    
+    .image-container img {
+      width: 300px;
+      height: 300px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+    
+    /* Botones de navegación (flechas) */
+    .nav-button {
+        position: absolute;
+        top: calc(50% - 20px);
+        transform: translateY(-50%);
+        background-color: transparent;
+        color: #4caadb;
+        border: none;
+        font-size: var(--font-text-medium);
+        cursor: pointer;
+        border-radius: 100%;
+        z-index: 10;
+        transition: background-color 0.3s, transform 0.3s;
+        width: 40px;
+        height: 40px;
+        border: 2px solid rgb(47 158 216);
+    }
+    
+    .nav-button:hover {
+      background-color: white;
+      transform: translateY(-50%) scale(1.1);
+    }
+    
+    .prev {
+      left: 20px;
+    }
+    
+    .next {
+      right: 20px;
+    }
+    
+    /* Dots abajo */
+    .pagination {
+      text-align: center;
+      margin-top: 20px;
+    }
+    
+    .dot {
+      height: 15px;
+      width: 15px;
+      margin: 0 5px;
+      background-color: #bbb;
+      border-radius: 50%;
+      display: inline-block;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    
+    .dot.active {
+      background-color: #4CAF50;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .content {
+        flex-direction: column;
+        text-align: center;
+      }
+    
+      .image-container img {
+        width: 80%;
+        height: auto;
+      }
+    
+      .nav-button {
+        top: calc(60% - 20px);
+      }
+    }
+    </style>
+    
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelector('.slides');
+        const dots = document.querySelectorAll('.dot');
+        const totalSlides = dots.length;
+        let autoSlideInterval;
+        
+        // Mover al slide indicado
+        function goToSlide(n) {
+          if (n >= totalSlides) {
+            currentSlide = 0;
+          } else if (n < 0) {
+            currentSlide = totalSlides - 1;
+          } else {
+            currentSlide = n;
+          }
+        
+          slides.style.transform = 'translateX(' + (-currentSlide * 100) + '%)';
+        
+          dots.forEach(dot => dot.classList.remove('active'));
+          dots[currentSlide].classList.add('active');
+        }
+        
+        // Mover con flechas
+        function moveSlide(direction) {
+          goToSlide(currentSlide + direction);
+          resetAutoSlide();
+        }
+        
+        // Auto cambiar slide cada 7 segundos
+        function startAutoSlide() {
+          autoSlideInterval = setInterval(() => {
+            goToSlide(currentSlide + 1);
+          }, 7000);
+        }
+        
+        function resetAutoSlide() {
+          clearInterval(autoSlideInterval);
+          startAutoSlide();
+        }
+        
+        // Iniciar
+        document.addEventListener('DOMContentLoaded', () => {
+          startAutoSlide();
+        });
+        </script>
+        

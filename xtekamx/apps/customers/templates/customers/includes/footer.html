@@ -1,9 +1,38 @@
-<footer>
-    <div class="nav-min-contact">
-        <ul>
-            <li><i class="fa-solid fa-envelope"></i><span>tekatours@outlook.com</span></li>
-            <li><i class="fa-brands fa-instagram"></i><span>@xteka.mx</span></li>
-            <li><i class="fa-solid fa-phone"></i><span>834 247 4449</span></li>
-        </ul>
+{% load static %}
+<footer class="footer">
+    <div class="footer-container">
+
+        <div class="footer-logo">
+            <img src="{% static 'img/logo.png' %}" alt="Logo Empresa">
+            <div class="footer-socials">
+                <a href="https://www.instagram.com/tuempresa" target="_blank">📸</a>
+                <a href="mailto:contacto@tuempresa.com">✉️</a>
+                <a href="tel:+521234567890">📞</a>
+            </div>
+        </div>
+
+        <div class="footer-links">
+            <h3>Enlaces Legales</h3>
+            <ul>
+                <li><a href="#">Aviso de Privacidad</a></li>
+                <li><a href="{% url 'terminosycondiciones' %}">Términos y Condiciones</a></li>
+                <li><a href="#">Contacto</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-contact">
+            <h3>Contáctanos</h3>
+            <ul>
+                <li>Instagram: <a href="https://www.instagram.com/xteka.mx/" target="_blank">@xteka.mx</a></li>
+                <li>Correo: <a href="mailto:tekatoursmx@outlook.com">tekatoursmx@outlook.com</a></li>
+                <li>Teléfono: <a href="tel:+528342474449">+52 834 247 4449</a></li>
+                <li>Dirección: <br> 79314 Col. el Meco, S.L.P.</li>
+            </ul>
+        </div>
+
+    </div>
+
+    <div class="footer-bottom">
+        © 2025 xteka.mx. Todos los derechos reservados.
     </div>
 </footer>
