@@ -6,42 +6,55 @@
 {% endblock %}
 {% block content %}
 <!-- Se asume que <body> ya está en la plantilla base -->
-<div class="banner-container">
-  <img
-    class="banner"
-    src="{% static 'img/customers/index/index-header.jpg' %}"
-    alt="Banner"
-  />
+<div id="loader">
+  <img src="{% static 'img/logo.png' %}" alt="Logo">
+  <div class="spinner"></div>
+</div>
+
+<div class="banner">
+  <div id="video-container">
+    <video id="background-video" muted loop>
+      <source src="{% static 'video/back-vid.mp4' %}" type="video/mp4">
+      Tu navegador no soporta el video.
+    </video>
+  </div>
   <div class="banner-text">
-    EXPLORA LA MAGIA DE LA <span>HUASTECA POTOSINA</span><br />
-    UN PARAÍSO LLENO DE CASCADAS, RÍOS Y CULTURA VIBRANTE
-    <p>#xtekamx</p>
+    <p class="first-line">EXPLORA LA MAGIA DE LA <span class="gradient-xteka">HUASTECA POTOSINA</span></p>
+    <p class="second-line">UN PARAÍSO LLENO DE CASCADAS, RÍOS Y CULTURA VIBRANTE</p>
+    <p class="third-line">#xtekamx</p>
   </div>
   <div class="banner-buttons">
-    <a href="#precios">Precios y Más</a>
-    <a href="#contacto">Contáctanos</a>
+    <a href="#precios">
+      <img src="{% static 'icons/money-recive.svg' %}" alt="Icono">
+      <span>PRECIOS Y MÁS</span>
+    </a>
+    <img src="{% static 'icons/arrow-down.svg' %}" alt="Icono">
+    <a href="https://wa.me/5218342474449?text=Hola%2C%20me%20gustaría%20obtener%20más%20información" target="_blank"><img src="{% static 'icons/whatsapp.svg' %}" alt="Icono">
+      <span>CONTÁCTANOS</span>
+    </a>
   </div>
 </div>
 
-<div class="acercaDe">
-  <div>Quienes Somos</div>
+<div id="acerca-de">
+  <div>¿Quiénes somos?</div>
   <div>
-    Somos una agencia de ecoturismo 100% huasteca con un fuerte compromiso en
+    <span>Somos una agencia de ecoturismo <span class="gradient-xteka">100% huasteca</span>, con un fuerte compromiso de
     ofrecer experiencias únicas en cada uno de nuestros servicios, destacando
     nuestros esfuerzos en promover la cultura, la economía y el cuidado
     ambiental de nuestra comunidad.
+    </span>
   </div>
 </div>
 
-<div class="actividades">
-  <div class="img1">
+<div id="actividades">
+  <div>
     <a href="#paquetes">
-      <h2>Paquetes</h2>
+      <span>Paquetes</span>
     </a>
   </div>
-  <div class="img2">
+  <div>
     <a href="#actividades">
-      <h2>Actividades</h2>
+      <span>Actividades</span>
     </a>
   </div>
 </div>
@@ -88,4 +101,7 @@
     <p>LISTO, ERES <span class="config">PARTE DE LA FAMILIA XTEKA</span></p>
   </div>
 </div>
+{% endblock %}
+{% block extra_js %}
+  <script src="{% static 'js/customers/index.js' %}"></script>
 {% endblock %}
