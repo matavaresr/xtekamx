@@ -5,12 +5,23 @@
   width: calc(100vw - 15px);
   height: calc(100vh - 120px);
   background-image: url("/static/img/customers/index/header.png");
-  background-position: top;
+  background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.cursor-text-banner {
+  display: inline-block;
+  animation: blink 0.7s steps(1) infinite;
+  font-weight: 400;
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
 }
 
 .banner-text{
@@ -25,7 +36,7 @@
 }
 
 .first-line{
-  font-size: 32px;
+  font-size: var(--font-title);
   font-weight: bold;
 }
 
@@ -35,7 +46,7 @@
 }
 
 .third-line{
-  font-size: 20px;
+  font-size: var(--font-text-medium);
 }
 
 .banner-buttons{
@@ -66,13 +77,6 @@
 
 .banner-buttons a img{
    padding: 0px 10px 0px 0px;
-}
-
-.gradient-xteka{
-  font-weight: bold;
-  background: linear-gradient(to right, #72ED39, #52D0A0, #34B6FF);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
 }
 
 #video-container {
@@ -142,8 +146,6 @@
   grid-column-gap: 0px;
   grid-row-gap: 0px;
   padding: 20px 40px;
-  text-transform: uppercase;
-  font-size: 18px;
 }
 
 #acerca-de div{
@@ -156,9 +158,14 @@
 
 #acerca-de div:first-of-type{
   font-weight: bold;
-  font-size: 24px;
+  font-size: var(--font-subtitle);
+  text-transform: uppercase;
   border-right: 1px solid black;
   text-align: center !important;
+}
+
+#acerca-de div:last-of-type{
+  font-size: var(--font-text-large);
 }
 
 #actividades{
@@ -168,7 +175,7 @@
   grid-column-gap: 0px;
   grid-row-gap: 0px;
   text-transform: uppercase;
-  font-size: 18px;
+  font-size: var(--font-text-small);
 }
 
 #actividades div{
@@ -185,7 +192,7 @@
 
 #actividades div a{
   text-align: center;
-  font-size: 18px;
+  font-size: var(--font-text-small);
   border: 1px solid white;
   width: 150px;
   padding: 10px 20px;
@@ -199,6 +206,135 @@
   background-image: url("/static/img/customers/index/paquete_index.png");
 }
 
+#invitacion{
+  display: grid;
+  grid-template-columns: 1.25fr .75fr;
+  grid-template-rows: 1fr;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+  text-transform: uppercase;
+  font-weight: bold;
+  margin-top: 20px;
+}
+
+#img-invitacion img{
+  width: 100%;
+}
+
+#text-invitacion{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: var(--font-subtitle);
+}
+
+#text-invitacion span{
+  padding: 0px 20px 60px 0px;
+}
+
+#instrucciones{
+  display: grid;
+  grid-template-columns: 1fr .25fr 1fr .25fr 1fr;
+  gap: 10px;
+  color: white;
+  text-transform: uppercase;
+  padding: 25px 40px 0px 50px;
+}
+
+#instrucciones > div{
+  border: 1px solid white;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: center;
+  flex-direction: column;
+  font-size: var(--font-text-medium);
+  position: relative;
+  padding: 20px;
+} 
+
+#instrucciones div img{
+  width: 70px;
+  height: auto;
+} 
+
+#instrucciones > span {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+} 
+
+#instrucciones > span > hr{
+  border: none; 
+  border-top: 2px dotted white;
+  width: 100%;
+} 
+
+#container-instrucciones{
+  background-image: url("/static/img/customers/index/cascade-horizontal.png");
+  padding: 40px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+.circle-gradient{
+  position: absolute;
+  top: -15px;
+  left: -15px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50px;
+  background: linear-gradient(to right, #72ED39, #52D0A0, #34B6FF);
+}
+
+@media (max-width: 1375px) { 
+  #text-invitacion{
+    font-size: var(--font-text-large);
+  }
+
+  #acerca-de div:last-of-type{
+    font-size: var(--font-text-small);
+  }
+
+  #acerca-de div:first-of-type{
+    font-size: var(--font-text-large);
+  }
+}
+
+@media (max-width: 1000px) { 
+  #text-invitacion{
+    font-size: var(--font-text-medium);
+  }
+
+  #text-invitacion span{
+    padding: 0px 20px 40px 0px;
+  }
+
+  #instrucciones{
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr .25fr 1fr .25fr 1fr;;
+  }
+
+  #instrucciones > span > hr{
+    border: none; 
+    border-left: 2px dotted white;
+    width: 1px;
+    height: 100%;
+  } 
+
+  #container-instrucciones{
+    padding: 20px 0px 40px 0px;
+    background-image: url("/static/img/customers/index/cascade-vertical.png");
+  }
+}
+@media (max-width: 900px) { 
+  #invitacion{
+    grid-template-columns: 1.10fr .90fr;
+  }
+}
+
 @media (max-width: 800px) { 
   #video-container {
     display: block;
@@ -207,6 +343,20 @@
   #acerca-de{
     display: flex;
     flex-direction: column;
+  }
+
+  #text-invitacion{
+    font-size: var(--font-text-large);
+    padding-left: 20px;
+  }
+
+  #text-invitacion span{
+    padding: 0px 0px 10px 0px;
+  }
+
+  #invitacion{
+    display: flex;
+    flex-direction: column-reverse;
   }
   
   #acerca-de div:first-of-type{

@@ -19,8 +19,13 @@
     </video>
   </div>
   <div class="banner-text">
-    <p class="first-line">EXPLORA LA MAGIA DE LA <span class="gradient-xteka">HUASTECA POTOSINA</span></p>
-    <p class="second-line">UN PARAÍSO LLENO DE CASCADAS, RÍOS Y CULTURA VIBRANTE</p>
+    <p class="first-line">EXPLORA LA MAGIA DE LA 
+      <span id="text-change-title" class="gradient-xteka">
+        HUASTECA POTOSINA
+      </span>
+      <span class="cursor-text-banner">|</span>
+    </p>
+    <p class="second-line">UN PARAÍSO LLENO DE AVENTURAS, LUGARES Y CULTURA VIBRANTE</p>
     <p class="third-line">#xtekamx</p>
   </div>
   <div class="banner-buttons">
@@ -35,7 +40,7 @@
   </div>
 </div>
 
-<div id="acerca-de">
+<div id="acerca-de" class="fade-in-on-scroll">
   <div>¿Quiénes somos?</div>
   <div>
     <span>Somos una agencia de ecoturismo <span class="gradient-xteka">100% huasteca</span>, con un fuerte compromiso de
@@ -46,7 +51,7 @@
   </div>
 </div>
 
-<div id="actividades">
+<div id="actividades" class="fade-in-on-scroll">
   <div>
     <a href="#paquetes">
       <span>Paquetes</span>
@@ -59,48 +64,52 @@
   </div>
 </div>
 
-<div class="opiniones">
-  <div class="opiniones-contenido">
-    <div class="opiniones-texto">
-      <h2>
-        Estamos disponibles <span>todos los días del año.</span> Planea tus
-        vacaciones con nosotros
-      </h2>
-    </div>
-    <div class="opiniones-imagen">
-      <img src="{% static 'img/opiniones.png' %}" alt="Opiniones" />
-    </div>
+<div id="invitacion" class="fade-in-on-scroll">
+  <div id="img-invitacion">
+    <img src="{% static 'img/customers/index/invitacion_img.png' %}" alt="invitacion-img">
   </div>
-  <div class="opiniones-clientes">
-    <h3>Nuestros Clientes</h3>
-    <div class="cliente">
-      <img src="{% static 'img/opiniones2.png' %}" alt="Cascada" />
-      <blockquote>
-        "Mi reciente viaje a la Huasteca Potosina fue una experiencia realmente
-        inolvidable. Cada rincón de este paraíso natural me dejó sin palabras."
-        <p class="autor">@MATR192001</p>
-      </blockquote>
+  <div id="text-invitacion">
+    <span>
+      Estamos disponibles <br><span class="gradient-xteka">todos los días del año.</span><br> 
+      Planea tus vacaciones con nosotros
+    </span>    
+  </div>
+</div>
+
+<div id="opiniones" class="fade-in-on-scroll">
+  <div>
+    {% include "customers/components/header_lined.html" with text="NUESTROS CLIENTES" color="black" %}
+  </div>
+</div>
+
+{% include "customers/components/testimonial_slider.html" with testimonios=testimonios %}
+
+<div id="container-instrucciones" class="fade-in-on-scroll">
+  {% include "customers/components/header_lined.html" with text="PASO A PASO" color="white" %}
+  <div id="instrucciones">
+    <div>
+      <h3>Paso 1</h3>
+      <img src="{% static 'icons/brush.png' %}" alt="Paso 1" />
+      <p>ELIGE TU PAQUETE <span class="gradient-xteka">PREFERIDO</span></p>
+      <div class="circle-gradient"></div>
+    </div>
+    <span><hr></span>
+    <div>
+      <h3>Paso 2</h3>
+      <img class="imgPaso2" src="{% static 'icons/open-book.png' %}" alt="Paso 2" />
+      <p>COMPLETA EL <span class="gradient-xteka">REGISTRO</span> CORRESPONDIENTE</p>
+      <div class="circle-gradient"></div>
+    </div>
+    <span><hr></span>
+    <div>
+      <h3>Paso 3</h3>
+      <img src="{% static 'icons/wallet.png' %}" alt="Paso 3" />
+      <p>LISTO, ERES <span class="gradient-xteka">PARTE DE LA FAMILIA XTEKA</span></p>
+      <div class="circle-gradient"></div>
     </div>
   </div>
 </div>
 
-<div class="instrucciones">
-  <div>
-    <h3>Paso 1</h3>
-    <img src="{% static 'img/paso1.png' %}" alt="Paso 1" />
-    <p>ELIGE TU PAQUETE <span class="config">PREFERIDO</span></p>
-  </div>
-  <div>
-    <h3>Paso 2</h3>
-    <img class="imgPaso2" src="{% static 'img/paso2.png' %}" alt="Paso 2" />
-    <p>COMPLETA EL <span class="config">REGISTRO</span> CORRESPONDIENTE</p>
-  </div>
-  <div>
-    <h3>Paso 3</h3>
-    <img src="{% static 'img/paso3.png' %}" alt="Paso 3" />
-    <p>LISTO, ERES <span class="config">PARTE DE LA FAMILIA XTEKA</span></p>
-  </div>
-</div>
 {% endblock %}
 {% block extra_js %}
   <script src="{% static 'js/customers/index.js' %}"></script>

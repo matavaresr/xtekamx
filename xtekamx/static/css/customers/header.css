@@ -4,11 +4,18 @@ a{
     outline: none;  
 }
 
+#nav-header{
+    position: fixed;
+    top: 0px;
+    width: 100%;
+    z-index: 4;
+}
+
 .nav-min-contact{
     width: 100%;
     height: 40px;
     color: white;
-    background-color: black;
+    background-color: #262626;
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -20,12 +27,9 @@ a{
     display: flex;
     justify-content: space-around;
     align-items: center;
-    text-transform: uppercase;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     background-color: white;
-    position: sticky;
     z-index: 3;
-    transition: .5s;
 }
 
 #nav-urls.scroll-down{
@@ -60,10 +64,12 @@ a{
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    font-size: var(--font-text-small);
+    transition: .5s ease;
 }
 
 #nav-urls li:hover {
+    transform: scale(1.1);
     color: rgb(19, 163, 199);
 }
 
@@ -159,6 +165,21 @@ a{
     height: 100vh;
     background-color: white;
     transition: opacity 0.5s ease, visibility 0.5s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-size: var(--font-subtitle);
+}
+
+#menu-expanded a{
+    margin-bottom: 20px;
+    transition: .5s;
+}
+
+#menu-expanded a:hover{
+    transform: scale(1.1);
+    color: rgb(19, 163, 199);
 }
 
 #menu-expanded.visible {

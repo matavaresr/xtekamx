@@ -1,25 +1,25 @@
 {% load static %}
 <header>
-    <nav>
+    <nav id="nav-header">
         <div class="nav-min-contact">
             <ul>
-                <li><i class="fa-solid fa-envelope"></i><span>tekatours@outlook.com</span></li>
-                <li><i class="fa-brands fa-instagram"></i><span>@xteka.mx</span></li>
-                <li><i class="fa-solid fa-phone"></i><span>834 247 4449</span></li>
+                <li>📸<span>tekatours@outlook.com</span></li>
+                <li>✉️<span>@xteka.mx</span></li>
+                <li>📞<span>834 247 4449</span></li>
             </ul>
         </div>
         
         <div id="nav-urls">
             <ul>
-                <li><a href="{% url 'actividades' %}">Actividades</a></li>
-                <li><a href="{% url 'paquetes' %}">Paquetes</a></li>
-                <li><a href="{% url 'como_llegar' %}">Cómo Llegar</a></li>
                 <li id="nav-logo">
                     <a href="{% url 'inicio' %}">
                         <img src="{% static 'img/logo.png' %}" alt="logo">
                         <span class="text-logo-xteka">xteka.mx</span>
                     </a>
                 </li>
+                <li><a href="{% url 'actividades' %}">Actividades</a></li>
+                <li><a href="{% url 'paquetes' %}">Paquetes</a></li>
+                <li><a href="{% url 'como_llegar' %}">Cómo Llegar</a></li>
                 <li><a href="{% url 'acerca_de' %}">Acerca de</a></li>
                 <li><a href="{% url 'contacto' %}">Contacto</a></li>
                 <li id="li-nav-vertical">
@@ -29,24 +29,15 @@
                         <span></span>
                     </div>
                 </li>
-                <li class="user-menu">
-                    <i class="fa-solid fa-user"></i>
-                    <div class="user-dropdown">
-                        <a href="{% url 'iniciar_sesion' %}">Iniciar sesión</a>
-                        <a href="{% url 'registro' %}">Crear cuenta</a>
-                    </div>
-                </li>
             </ul>
         </div>
     </nav>
 </header>
 
 <div id="menu-expanded">
-    <div class="menu-nav-urls">
-        <a href="{% url 'actividades' %}">Actividades</a>
-        <a href="{% url 'paquetes' %}">Paquetes</a>
-        <a href="{% url 'como_llegar' %}">Cómo Llegar</a>
-        <a href="{% url 'acerca_de' %}">Acerca de</a>
-        <a href="{% url 'contacto' %}">Contacto</a>
-    </div>
+    <a href="{% url 'actividades' %}">Actividades</a>
+    <a href="{% url 'paquetes' %}">Paquetes</a>
+    <a href="{% url 'como_llegar' %}">Cómo Llegar</a>
+    <a href="{% url 'acerca_de' %}">Acerca de</a>
+    <a href="{% url 'contacto' %}">Contacto</a>
 </div>
