@@ -29,7 +29,7 @@
     <p class="third-line">#xtekamx</p>
   </div>
   <div class="banner-buttons">
-    <a href="#precios">
+    <a href="{% url 'paquetes' %}">
       <img src="{% static 'icons/money-recive.svg' %}" alt="Icono">
       <span>PRECIOS Y MÁS</span>
     </a>
@@ -53,12 +53,12 @@
 
 <div id="actividades" class="fade-in-on-scroll">
   <div>
-    <a href="#paquetes">
+    <a href="{% url 'paquetes' %}">
       <span>Paquetes</span>
     </a>
   </div>
   <div>
-    <a href="#actividades">
+    <a href="{% url 'actividades' %}">
       <span>Actividades</span>
     </a>
   </div>

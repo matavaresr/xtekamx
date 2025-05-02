@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Nuevo mensaje de contacto</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 600px;
+      background-color: #ffffff;
+      margin: 40px auto;
+      border-radius: 6px;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+    }
+    .header {
+      border-bottom: 2px solid #4CAF50;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+    }
+    .header h1 {
+      font-size: 22px;
+      color: #333;
+      margin: 0;
+    }
+    .content {
+      font-size: 16px;
+      color: #444;
+      line-height: 1.6;
+    }
+    .content p {
+      margin: 8px 0;
+    }
+    .footer {
+      margin-top: 30px;
+      font-size: 13px;
+      color: #999;
+      border-top: 1px solid #ddd;
+      padding-top: 15px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Nuevo mensaje de contacto</h1>
+    </div>
+    <div class="content">
+      <p><strong>Nombre:</strong> {{ name }} {{ last_name }}</p>
+      <p><strong>Correo electrónico:</strong> {{ email }}</p>
+      <p><strong>Teléfono:</strong> {{ telefono }}</p>
+      <p><strong>Mensaje:</strong></p>
+      <p>{{ mensaje|linebreaks }}</p>
+    </div>
+    <div class="footer">
+      <p>Este mensaje fue enviado automáticamente desde tu sitio web.</p>
+      <p>No respondas a este correo.</p>
+    </div>
+  </div>
+</body>
+</html>
