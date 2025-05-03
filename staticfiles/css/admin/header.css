@@ -1,0 +1,265 @@
+header{
+    position: sticky;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+a{
+    text-decoration: none;
+    color: inherit;
+    outline: none;  
+}
+
+#nav-header{
+    position: fixed;
+    top: 0px;
+    width: 100%;
+    z-index: 4;
+}
+
+.nav-min-contact{
+    width: 100%;
+    height: 40px;
+    color: white;
+    background-color: #262626;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+#nav-urls{
+    width: 100%;
+    height: 80px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    background-color: white;
+    z-index: 3;
+}
+
+#nav-urls.scroll-down{
+    position: fixed;
+    top: 0;
+}
+
+#nav-urls.remove-shadow{
+    box-shadow: 0 0px 0px rgba(0, 0, 0, 0);
+}
+
+#nav-urls .text-logo-xteka{
+    font-size: 20px;
+    display: none;
+    padding-left: 10px;
+}
+
+#nav-urls #nav-logo a{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    text-transform: lowercase;
+}
+
+#nav-urls img{
+    width: 60px;
+}
+
+#nav-urls li{
+    width: 130px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    font-size: var(--font-text-small);
+    transition: .5s ease;
+}
+
+#nav-urls li:hover:not(#li-nav-vertical){
+    transform: scale(1.1);
+    color: rgb(19, 163, 199);
+}
+
+.nav-min-contact ul, #nav-urls ul{
+    width: 100%;
+    display: inline-flex;
+    justify-content: space-around;
+    list-style: none;
+    padding: 0px;
+}
+
+.nav-min-contact li{
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.nav-min-contact i{
+    font-size: 20px;
+}
+
+#menu-expanded .user-drop{
+    position: absolute;
+    bottom: 40px;
+    right: 30px;
+}
+
+.user-drop button{
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    outline: none;
+    cursor: pointer; /* opcional */
+    color: red;
+    font-size: inherit;
+    transition: 1s;
+}
+
+.user-drop button:hover{
+    color: #772929;
+}
+
+@media (max-width: 768px) { 
+    .nav-min-contact span{
+        display: none;
+    }rgb(63, 52, 52)rgb(63, 52, 52)rgb(100, 24, 24)
+}
+
+@media (max-width: 1150px) { 
+    #nav-urls ul{
+        justify-content: space-between;
+    }
+
+    #nav-urls li:not(#nav-logo, #li-nav-vertical){
+        display: none;
+    }
+
+    #nav-urls li:is(#nav-logo, #li-nav-vertical){
+        width: 220px;
+    }
+
+    #nav-urls #li-nav-vertical{
+        display: flex !important;
+    }
+
+    #nav-urls .text-logo-xteka{
+        display: block;
+    }
+}
+
+.user-menu {
+    position: relative;
+    cursor: pointer;
+}
+
+.user-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%; /* justo debajo del icono */
+    right: 0;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+    padding: 10px;
+    min-width: 150px;
+    z-index: 1000;
+}
+
+.user-dropdown a {
+    display: block;
+    padding: 8px;
+    color: #333;
+    text-decoration: none;
+    border-radius: 4px;
+}
+
+.user-dropdown a:hover {
+    background-color: #f0f0f0;
+}
+
+.user-menu:hover .user-dropdown {
+    display: block;
+}
+
+/* Menu expanded */
+
+#menu-expanded{
+    z-index: 1;
+    position: fixed;
+    top: 0px;
+    opacity: 0;
+    visibility: hidden;
+    width: calc(100vw - 15px);
+    height: 100vh;
+    background-color: white;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-size: var(--font-subtitle);
+}
+
+#menu-expanded a{
+    margin-bottom: 20px;
+    transition: .5s;
+}
+
+#menu-expanded a:hover{
+    transform: scale(1.1);
+    color: rgb(19, 163, 199);
+}
+
+#menu-expanded.visible {
+    width: 100vw;
+    opacity: 1;
+    visibility: visible;
+
+}
+
+#li-nav-vertical{
+    display: none !important;
+    justify-content: flex-end !important;
+    margin-right: 30px;
+    cursor: auto;
+}
+
+#btn-nav-vertical {
+    width: 30px;
+    height: 20px;
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+#btn-nav-vertical span {
+    display: block;
+    height: 4px;
+    width: 100%;
+    background: black;
+    border-radius: 2px;
+    transition: 0.4s ease;
+}
+
+#btn-nav-vertical:hover span {
+    background: rgb(19, 163, 199);
+}
+
+#btn-nav-vertical.open span:nth-child(1) {
+    transform: rotate(45deg) translate(6px, 6px);
+}
+  
+#btn-nav-vertical.open span:nth-child(2) {
+    opacity: 0;
+}
+  
+#btn-nav-vertical.open span:nth-child(3) {
+    transform: rotate(-45deg) translate(6px, -6px);
+}
+
+#menu-expanded img{
+    width: 10px;
+}

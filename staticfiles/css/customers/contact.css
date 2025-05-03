@@ -1,0 +1,179 @@
+#contact-container{
+    padding: 40px 10%;
+}
+
+#contact-container button{
+    width: 200px;
+    height: 40px;
+    border: 0px;
+    color: white;
+    background-color: #52D0A0;
+    font-size: var(--font-text-small);
+    cursor: pointer;
+    transition: .5s;
+}
+
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid transparent;
+  border-top: 2px solid white;
+  border-right: 2px solid white;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+#preonatare-text a{
+    width: 200px;
+    height: 40px;
+    border: 0px;
+    color: white;
+    background-color: #34B6FF;
+    font-size: var(--font-text-small);
+    cursor: pointer;
+    transition: .5s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#preonatare-text a:hover{
+    background-color: #0078bd;
+    transform: scale(1.05);
+}
+
+#contact-container button:hover{
+    background-color: #1d9265;
+    transform: scale(1.05);
+}
+
+#div-form-contact{
+    margin-bottom: 40px;
+}
+
+#div-form-contact p{
+    font-size: var(--font-title);
+    font-weight: bold;
+    text-align: center;
+}
+
+.form-group label{
+    font-size: var(--font-text-small);
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.form-group input{
+    border: 1px solid gray;
+    background-color: transparent;
+    height: 30px;
+    padding: 5px;
+}
+
+.form-group textarea{
+    border: 1px solid gray;
+    background-color: transparent;
+    min-height: 100px;
+    height: 100px;
+    padding: 5px;
+    resize: vertical;
+}
+
+#forms-contact{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem
+}
+
+#forms-contact .form-group{
+    display: flex;
+    flex-direction: column;
+}
+
+div.full-width{
+    grid-column: 2 span;
+}
+
+#div-prenotare{
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: 1fr 1fr;
+}
+
+#div-prenotare img{    
+    width: 100%;
+}
+
+#preonatare-text{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#preonatare-text p:first-of-type{
+    font-size: var(--font-title);
+    font-weight: bold;
+    text-align: center;
+    margin: 0px;
+}
+
+#preonatare-text p:last-of-type{
+    font-size: var(--font-text-medium);
+    text-align: justify;
+}
+
+#hour-atencion{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#hour-atencion p:first-of-type{
+    margin: 0px 0px 10px 0px;
+    font-size: var(--font-text-large);
+}
+
+#hour-atencion p:last-of-type{
+    margin: 0px 0px 0px 0px;
+    font-size: var(--font-text-large);
+}
+
+
+@media (max-width: 1024px) and (min-width: 768px) {
+    #div-form-contact p, #preonatare-text p:first-of-type{
+        font-size: var(--font-subtitle);
+    }
+
+    #preonatare-text p:last-of-type, #hour-atencion p:last-of-type{
+        font-size: var(--font-text-medium);
+    }
+}
+  
+  /* Móviles (hasta 767px) */
+@media (max-width: 767px) {
+    #div-form-contact p, #preonatare-text p:first-of-type{
+        font-size: var(--font-text-large);
+    }
+
+    #preonatare-text p:last-of-type{
+        font-size: var(--font-text-small);
+    }
+
+    #forms-contact, #div-prenotare{
+        grid-template-columns: 1fr;
+    }
+
+    div.full-width{
+        grid-column: 1 span;
+    }
+}
