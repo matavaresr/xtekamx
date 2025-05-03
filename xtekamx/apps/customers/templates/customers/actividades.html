@@ -2,9 +2,30 @@
 {% load static %} 
 {% block title %}Actividades - xtekamx{% endblock %} 
 {% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/customers/actividades.css' %}">
 {% endblock %}
 {% block content %}
 
 {% include "customers/components/breadcrumb.html" with titulo="ACTIVIDADES" breadcrumb="Inicio > Actividades" imagen="img/customers/actividades-breadcrumb.png" %}
-
+<section class="timeline-section">
+    <p>Descubre experiencias únicas en la Huasteca Potosina. Estas actividades están pensadas para conectar contigo, la naturaleza y la aventura.</p>
+    <div class="timeline">
+        {% for actividad in actividades %}
+        <div class="timeline-item {% if forloop.counter|divisibleby:2 %}right{% else %}left{% endif %} fade-in-on-scroll">
+          <div class="content">
+            <img src="{{ actividad.url_portada }}" alt="Imagen de {{ actividad.nombre }}">
+            <div class="text">
+              <h3>{{ actividad.nombre }}</h3>
+              <p>{{ actividad.descripcion }}</p>
+            </div>
+          </div>
+        </div>
+      {% endfor %}      
+    </div>
+  </section>
+  
+  
+{% endblock %}
+{% block extra_js %}
+<script src="{% static 'js/customers/actividades.js' %}"></script>
 {% endblock %}

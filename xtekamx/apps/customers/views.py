@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login as auth_login
 from django.contrib.auth.forms import AuthenticationForm
 from .forms import CustomUserCreationForm
+from apps.core.models import Actividad
+from django.core.cache import cache
 
 # Página principal
 def home(request):
@@ -61,13 +63,9 @@ def paquete_unico(request, id):
 
 # Página de actividades
 def actividades(request):
-    # Aquí podrías pasar una lista de actividades desde la base de datos
-    actividades_list = [
-        {"id": 1, "nombre": "Actividad 1"},
-        {"id": 2, "nombre": "Actividad 2"},
-        {"id": 3, "nombre": "Actividad 3"},
-    ]
-    return render(request, 'customers/actividades.html', {'actividades': actividades_list})
+    actividades_all = Actividad.objects.all()
+    cache.set('actividades_lista', actividades, 60 * 15)  # 15 minutos
+    return render(request, 'customers/actividades.html', {'actividades': actividades_all})
 
 # Página acerca de
 def terminosycondiciones(request):
