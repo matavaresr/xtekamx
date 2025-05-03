@@ -1,10 +1,161 @@
-{% extends 'customers/base.html' %} 
-{% load static %} 
-{% block title %}¿Cómo Llegar? - xtekamx{% endblock %} 
+{% extends 'customers/base.html' %}
+{% load static %}
+{% block title %}¿Cómo llegar? - xtekamx{% endblock %}
 {% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/customers/como_llegar.css' %}?v=1" />
 {% endblock %}
 {% block content %}
 
-{% include "customers/components/breadcrumb.html" with titulo="¿CÓMO LLEGAR?" breadcrumb="Inicio > ¿Cómo Llegar?" imagen="img/customers/comollegar-breadcrumb.png" %}
+{% include "customers/components/breadcrumb.html" with titulo="¿Cómo llegar?" breadcrumb="Inicio > ¿Cómo llegar?" imagen="img/customers/comollegar-breadcrumb.png" %}
 
+<div class="como-llegar-container">
+  <p class="text-plain">
+    <b>Nota:</b>
+    Para nuestros paquetes <span style="color: rgb(48, 165, 153); font-weight: bold;">Turquesa</span>,
+    <span style="color: orange; font-weight: bold;">Naranja</span> y
+    <span style="color: red; font-weight: bold;">Tour mochilero</span>, deberás llegar al municipio de El Naranjo,
+    S.L.P., ubicado a 1:30 hrs de Ciudad Valles, S.L.P. (ninguno de los 3 paquetes mencionados incluye traslados; en caso
+    de requerirse, contáctanos para cotizar).
+  </p>
+
+  <div class="tabs-wrapper">
+    <div class="tabs">
+      <div class="tab active" data-tab="auto">Automóvil</div>
+      <div class="tab" data-tab="bus">Autobús</div>
+      <div class="tab" data-tab="plane">Avión</div>
+    </div>
+
+    <div class="tab-content active" id="auto">
+      <p class="text-plain-tabs">Si viajas en automóvil, estas son las rutas que te recomendamos para llegar a Ciudad Valles:</p>
+      <div class="type-maps">
+        <div class="type-maps-groups">
+          <p>CDMX a Cd. Valles</p>
+          <img src="{% static 'img/customers/como_llegar/cdmx-valles.png' %}" alt="">
+          <div class="type-maps-content">
+            <p><b>Te recomendamos seguir la ruta:</b> Querétaro - San Luis Potosí - Río Verde</p>
+            <div class="type-maps-content-stats">
+              <p><b>Tiempo aproximado:</b> 8 hrs</p>
+              <p><b>Distancia aproximada:</b> 678 km</p>
+            </div>
+          </div>
+        </div>
+        <div class="type-maps-groups">
+          <p>Guadalajara a Cd. Valles</p>
+          <img src="{% static 'img/customers/como_llegar/gdl-valles.png' %}" alt="">
+          <div class="type-maps-content">
+            <p><b>Te recomendamos seguir la ruta:</b> San Juan de los Lagos - San Luis Potosí - Río Verde</p>
+            <div class="type-maps-content-stats">
+              <p><b>Tiempo aproximado:</b> 7:30 hrs</p>
+              <p><b>Distancia aproximada:</b> 629 km</p>
+            </div>
+          </div>
+        </div>
+        <div class="type-maps-groups">
+          <p>Monterrey a Cd. Valles</p>
+          <img src="{% static 'img/customers/como_llegar/mty-valles.png' %}" alt="">
+          <div class="type-maps-content">
+            <p><b>Te recomendamos seguir la ruta:</b> Linares - Ciudad Victoria - Ciudad Mante</p>
+            <div class="type-maps-content-stats">
+              <p><b>Tiempo aproximado:</b> 7 hrs</p>
+              <p><b>Distancia aproximada:</b> 516 km</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="automovil-any-place">
+        <img src="{% static 'icons/world.svg' %}" alt="">
+        <div>
+          <b>Desde cualquier país:</b>
+          <a href="https://maps.app.goo.gl/75Yc7R4F4jSWmu979">https://maps.app.goo.gl/75Yc7R4F4jSWmu979</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-content" id="bus">
+      <p class="text-plain-tabs">Si viajas en autobús, estas son las líneas y horarios que te recomendamos para llegar a Ciudad Valles, el centro de distribución hacia todos los destinos turísticos de la Huasteca Potosina:</p>
+      <div class="bus-group-container">
+        <p class="bus-title">CDMX a Cd. Valles</p>
+        <div>
+          <p>Las líneas más cómodas para viajar son: Turistar Ejecutivo de ETN y Ómnibus de México Servicio Plus.</p>
+          <p>Los asientos son más confortables, cuentan con una fila de asientos individuales, descansapiernas y se reclinan como cama para un viaje más placentero.</p>
+        </div>
+        <div>
+          <p><b>Salida:</b> Las salidas son desde la Central del Norte por la noche, llegando a Ciudad Valles aproximadamente a las 7 a.m.</p>
+          <p><b>Regreso:</b> El regreso es desde la terminal de autobuses de Cd. Valles (ambas líneas ofrecen salidas por la noche). Te recomendamos comprar tu boleto de regreso en un horario posterior a las 21:00 hrs.</p>
+        </div>
+        <div class="bus-price-hour">
+          <div class="bus-price">
+            <p><b>Precio aproximado:</b> $1000 MXN</p>
+            <p><b>Tiempo estimado de viaje:</b> 9 hrs</p>
+          </div>
+          <div class="bus-hour">
+            <p><b>Horarios:</b></p>
+            <p><b>Ida:</b> 21:45 hrs</p>
+            <p><b>Vuelta:</b> 21:45 hrs</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bus-group-container">
+        <p class="bus-title">Monterrey a Cd. Valles</p>
+        <div>
+          <p>Las líneas más cómodas para viajar son: Transpais y Transportes Frontera.</p>
+        </div>
+        <div>
+          <p>Los asientos son más confortables, cuentan con una fila de asientos individuales, descansapiernas y se reclinan como cama para un viaje más placentero.</p>
+        </div>
+        <div class="bus-price-hour">
+          <div class="bus-price">
+            <p><b>Precio aproximado:</b> $1000 MXN</p>
+            <p><b>Tiempo estimado de viaje:</b> 8 hrs</p>
+          </div>
+          <div class="bus-hour">
+            <p><b>Horarios:</b></p>
+            <p><b>Ida:</b> 12:30, 13:30, 21:30 y 22:30 hrs</p>
+            <p><b>Vuelta:</b> 21:25, 22:25, 23:15 y 23:59 hrs</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bus-group-container">
+        <p class="bus-title">Guadalajara a Cd. Valles</p>
+        <div class="bus-price-hour">
+          <div class="bus-price">
+            <p><b>Precio aproximado:</b> $1000 MXN</p>
+            <p><b>Tiempo estimado de viaje:</b> 8 hrs</p>
+          </div>
+          <div class="bus-hour">
+            <p><b>Horarios:</b></p>
+            <p><b>Ida:</b> 12:30, 13:30, 21:30 y 22:30 hrs</p>
+            <p><b>Vuelta:</b> 21:25, 22:25, 23:15 y 23:59 hrs</p>
+          </div>
+        </div>
+      </div>
+      <p class="text-plain-tabs">Si estos horarios no se acomodan a tu itinerario de viaje, puedes trasladarte a San Luis Potosí capital; hay salidas a Ciudad Valles cada hora por la línea Transportes Vencedor.</p>
+      <p class="text-plain-tabs"><b>Importante:</b> Si tu llegada es el mismo día del inicio de tu recorrido, asegúrate de estar a las 8 a.m. en Ciudad Valles y encontrarnos en el lugar de encuentro.</p>
+    </div>
+
+    <div class="tab-content" id="plane">
+      <div class="avion-container">
+        <div class="avion-group-container">
+          <p class="bus-title">Aeropuerto de Tampico, Tamaulipas</p>
+          <p>Este aeropuerto se encuentra a 2 horas 30 minutos de Ciudad Valles.</p>
+          <p>TAM, Adolfo López Mateos 1001, 89339 Tampico, Tamps.</p>
+          <a href="https://www.oma.aero/es/pasajeros/tampico">www.oma.aero/es/pasajeros/tampico</a>
+        </div>
+        <div class="avion-group-container">
+          <p class="bus-title">Aeropuerto de San Luis Potosí, S.L.P.</p>
+          <p>Este aeropuerto se encuentra aproximadamente a 4 horas de distancia de la Huasteca Potosina.</p>
+          <p>SLP, Carr. a Matehuala Km 9.5, 78341 San Luis, S.L.P.</p>
+          <a href="https://www.oma.aero/es/pasajeros/san-luis-potosi">www.oma.aero/es/pasajeros/san-luis-potosi</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/customers/como_llegar.js' %}?v=1"></script>
 {% endblock %}

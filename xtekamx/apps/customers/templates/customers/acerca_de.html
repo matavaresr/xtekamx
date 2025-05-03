@@ -2,9 +2,56 @@
 {% load static %} 
 {% block title %}Acerca De - xtekamx{% endblock %} 
 {% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/customers/acerca_de.css' %}?v=3" />
 {% endblock %}
 {% block content %}
 
 {% include "customers/components/breadcrumb.html" with titulo="ACERCA DE" breadcrumb="Inicio > Acerca De" imagen="img/customers/acercade-breadcrumb.png" %}
+
+<div id="acerca-de-container">
+  <section class="section-block fade-in-on-scroll">
+    <h2>Nuestra historia</h2>
+    <p>
+      En <span class="gradient-xteka">xteka.mx</span> nos especializamos en crear experiencias turísticas inolvidables en la hermosa región de San Luis Potosí. Desde nuestros inicios, nos hemos comprometido con la calidad, la seguridad y la satisfacción total de cada uno de nuestros viajeros.
+    </p>
+  </section>
+
+  <section class="section-block fade-in-on-scroll">
+    <h2>Misión</h2>
+    <p>
+      Brindar <span class="gradient-xteka">servicios turísticos de excelencia</span> que conecten a nuestros clientes con la cultura, la naturaleza y las tradiciones de la Huasteca Potosina, promoviendo un turismo responsable y sustentable.
+    </p>
+  </section>
+
+  <section class="section-block fade-in-on-scroll">
+    <h2>Visión</h2>
+    <p>
+      Ser la <span class="gradient-xteka">empresa líder</span> en turismo local, reconocida por su innovación, profesionalismo y compromiso con el desarrollo turístico sostenible.
+    </p>
+  </section>
+
+  <section class="section-block fade-in-on-scroll">
+    <h2>Valores</h2>
+    <div id="valores">
+      <p>Pasión por el turismo.</p>
+      <p>Compromiso con el cliente.</p>
+      <p>Respeto por la naturaleza y la cultura.</p>
+      <p>Transparencia y ética en cada servicio.</p>
+    </div>
+  </section>
+
+  <section class="section-block founder fade-in-on-scroll">
+    <h2>Fundador</h2>
+    <div class="founder-profile">
+      <img src="{% static 'img/customers/acerca_de/founder.jpg' %}" alt="Foto del fundador">
+      <div class="founder-info">
+        <h3>Olaff Olguin</h3>
+        <p>
+          Fundador y visionario detrás de <span class="highlight">xteka.mx</span>. Apasionado por mostrar al mundo las maravillas de San Luis Potosí, enfoca su labor en el turismo responsable, el desarrollo local y la creación de experiencias auténticas. Cree firmemente que cada viaje transforma a quien se atreve a vivirlo.
+        </p>
+      </div>
+    </div>
+  </section>
+</div>
 
 {% endblock %}

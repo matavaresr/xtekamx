@@ -2,9 +2,52 @@
 {% load static %} 
 {% block title %}Paquetes - xtekamx{% endblock %} 
 {% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/customers/paquetes.css' %}?v=1" />
 {% endblock %}
 {% block content %}
 
 {% include "customers/components/breadcrumb.html" with titulo="PAQUETES" breadcrumb="Inicio > Paquetes" imagen="img/customers/paquetes-breadcrumb.png" %}
+
+<h2 class="fade-in-on-scroll">TODOS NUESTROS PAQUETES INCLUYEN</h2>
+<div id="includes" class="fade-in-on-scroll">
+    <div class="includes-group">
+        <div class="img-wrapper">
+            <img src="{% static 'icons/medical-bag.svg' %}" alt="">
+        </div>
+        <p>BOTIQUÍN DE PRIMEROS AUXILIOS</p>
+    </div>
+    <div class="includes-group">
+        <div class="img-wrapper">
+            <img src="{% static 'icons/snorkel.svg' %}" alt="">
+        </div>
+        <p>ACTIVIDADES</p>
+    </div>
+    <div class="includes-group">
+        <div class="img-wrapper">
+            <img src="{% static 'icons/ticket.svg' %}" alt="">
+        </div>
+        <p>ACCESOS</p>
+    </div>
+    <div class="includes-group">
+        <div class="img-wrapper">
+            <img src="{% static 'icons/people.svg' %}" alt="">
+        </div>
+        <p>GUÍA ESPECIALIZADA</p>
+    </div>
+    <div class="includes-group">
+        <div class="img-wrapper">
+            <img src="{% static 'icons/health.svg' %}" alt="">
+        </div>
+        <p>EQUIPO DE SEGURIDAD</p>
+    </div>
+    <div class="includes-group">
+        <div class="img-wrapper">
+            <img src="{% static 'icons/camera.svg' %}" alt="">
+        </div>
+        <p>FOTOGRAFÍAS DEL VIAJE</p>
+    </div>
+</div>
+
+<h2 class="border-text fade-in-on-scroll">TODOS LOS PAQUETES ESTÁN DISPONIBLES A PARTIR DE 2 PERSONAS</h2>
 
 {% endblock %}

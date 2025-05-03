@@ -9,7 +9,7 @@
 {% include "customers/components/breadcrumb.html" with titulo="CONTACTO" breadcrumb="Inicio > Contacto" imagen="img/customers/contacto-breadcrumb.png" %}
 
 <div id="contact-container">
-    <div id="div-form-contact">
+    <div id="div-form-contact" class="fade-in-on-scroll">
         <p>CONTÁCTANOS Y COMPARTE ESTA EXPERIENCIA CON NOSOTROS</p>
         <form id="forms-contact">
             {% csrf_token %}
@@ -46,7 +46,7 @@
 
     {% include "customers/components/header_lined.html" with text="O" color="black" %}
 
-    <div id="div-prenotare">
+    <div id="div-prenotare" class="fade-in-on-scroll">
         <img src="{% static 'img/customers/contacto/contact-prenotare.png' %}" alt="Imagen de reservación">
         <div id="preonatare-text">
             <p>RESERVA TU <span class="gradient-xteka">PAQUETE</span> CON NOSOTROS</p>
