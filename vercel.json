@@ -1,11 +1,18 @@
 {
   "builds": [
-    { "src": "xtekamx/wsgi.py", "use": "@vercel/python" }
+    {
+      "src": "manage.py",
+      "use": "@vercel/python"
+    }
   ],
   "routes": [
     {
+      "src": "/static/(.*)",
+      "dest": "static/$1"
+    },
+    {
       "src": "/(.*)",
-      "dest": "xtekamx/wsgi.py"
+      "dest": "manage.py"
     }
   ]
 }
