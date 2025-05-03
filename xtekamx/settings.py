@@ -1,6 +1,7 @@
 from pathlib import Path
 from decouple import config
 import os
+import sys
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -19,7 +20,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # nuestras apps
+    # Nuestras apps
     'apps.admin_panel',
     'apps.customers',
     'apps.core',
@@ -67,12 +68,15 @@ DATABASES = {
         'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
         }
-    },
-    'local': {
+    }
+}
+
+# Opcional: usar SQLite local si estás corriendo localmente con runserver
+if DEBUG and 'runserver' in sys.argv:
+    DATABASES['default'] = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
-}
 
 # Cache
 CACHES = {
@@ -98,14 +102,10 @@ USE_TZ = True
 
 # Static files
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Para producción
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]  # Para desarrollo
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),  # carpeta donde desarrollas CSS/JS
-]
-
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # carpeta donde se recolecta todo para producción
-
-# Producción en Vercel
+# En producción, usar almacenamiento adecuado
 if not DEBUG:
     STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
 
