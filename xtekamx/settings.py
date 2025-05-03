@@ -9,7 +9,7 @@ SECRET_KEY = config("SECRET_KEY")
 
 DEBUG = config("DEBUG", cast=bool)
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['.vercel.app', 'localhost','127.0.0.1']
 
 # Application definition
 INSTALLED_APPS = [
@@ -28,6 +28,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -54,7 +55,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'xtekamx.wsgi.application'
+WSGI_APPLICATION = 'xtekamx.wsgi.app'
 
 # Database
 DATABASES = {
@@ -70,13 +71,6 @@ DATABASES = {
         }
     }
 }
-
-# Opcional: usar SQLite local si estás corriendo localmente con runserver
-if DEBUG and 'runserver' in sys.argv:
-    DATABASES['default'] = {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
 
 # Cache
 CACHES = {
@@ -103,11 +97,11 @@ USE_TZ = True
 # Static files
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Para producción
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]  # Para desarrollo
+
 
 # En producción, usar almacenamiento adecuado
 if not DEBUG:
-    STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Primary key field
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
