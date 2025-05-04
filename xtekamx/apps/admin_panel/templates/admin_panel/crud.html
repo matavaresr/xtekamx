@@ -9,6 +9,8 @@
 {% endblock %}
 
 {% block content %}
+{% include "admin_panel/components/banco_imagenes.html" %}
+
 <div class="title-container">
     <h2 class="main-title">{{ titulo }}</h2>
 </div>
@@ -81,12 +83,14 @@
                                 <option value="{{ value }}">{{ label }}</option>
                             {% endfor %}
                         </select>
+                    {% elif campo == 'contrasena' %}
+                        <input type="password" name="{{ campo }}" required>
+                    {% elif campo == 'url_portada' %}
+                        <!-- Input externo donde se colocará la imagen -->
+                        <input type="text" name="{{ campo }}" id="imagenSeleccionada" placeholder="URL de la imagen"required>
+                        <button type="button" onclick="abrirModalBanco()">Seleccionar imagen</button>
                     {% else %}
-                        {% if campo == 'contrasena' %}
-                            <input type="password" name="{{ campo }}" required>
-                        {% else %}
-                            <input type="text" name="{{ campo }}" required>
-                        {% endif %}
+                        <input type="text" name="{{ campo }}" required>
                     {% endif %}
                 </div>
             {% endfor %}
@@ -108,17 +112,19 @@
             <div class="form-group">
                 <label>{{ campo|capfirst }}</label>
                 {% if campo == 'tipo' %}
-                    <select name="{{ campo }}" required>
+                <select name="{{ campo }}" required>
                     {% for value, label in tipo_choices %}
                         <option value="{{ value }}">{{ label }}</option>
                     {% endfor %}
                 </select>
+                {% elif campo == 'contrasena' %}
+                    <input type="password" name="{{ campo }}" required>
+                {% elif campo == 'url_portada' %}
+                    <!-- Input externo donde se colocará la imagen -->
+                    <input type="text" name="{{ campo }}" id="imagenSeleccionada" placeholder="URL de la imagen"required>
+                    <button type="button" onclick="abrirModalBanco()">Seleccionar imagen</button>
                 {% else %}
-                    {% if campo == 'contrasena' %}
-                        <input type="password" name="{{ campo }}" required>
-                    {% else %}
-                        <input type="text" name="{{ campo }}" required>
-                    {% endif %}
+                    <input type="text" name="{{ campo }}" required>
                 {% endif %}
             </div>
             {% endfor %}
@@ -215,7 +221,7 @@
     function openCreateModal() {
         const modal = document.getElementById('createmodal');
         if (modal) {
-            modal.style.display = 'block';  // Mostrar modal crear
+            modal.style.display = 'flex';  // Mostrar modal crear
         }
     }
 

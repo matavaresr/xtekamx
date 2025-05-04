@@ -1,0 +1,568 @@
+{% extends 'admin_panel/base.html' %}
+
+{% load static %}
+
+{% block title %}Admin Panel - Paquetes{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/admin/crud.css' %}?v=14" />
+{% endblock %}
+
+{% block content %}
+{% include "admin_panel/components/banco_imagenes.html" %}
+<div class="title-container">
+    <h2 class="main-title">Paquetes</h2>
+</div>
+<div class="container">
+
+    <div class="header">
+        <div>
+            <button class="btn primary" onclick="openPaqueteModal()">
+                <i class="fas fa-plus"></i> Crear Paquete
+            </button>
+        </div>
+        <div>
+            <a class="btn secondary" href="{% url 'crud' 'actividad' %}"><i class="fas fa-person-hiking"></i> Actividades</a>
+            <a class="btn secondary" href="{% url 'crud' 'amenidad' %}"><i class="fas fa-couch"></i> Amenidades</a>
+            <a class="btn secondary" href="{% url 'crud' 'hotel' %}"><i class="fas fa-hotel"></i> Hoteles</a>
+            <a class="btn secondary" href="{% url 'crud' 'ubicacion' %}"><i class="fas fa-location-dot"></i> Ubicaciones</a>
+            <a class="btn secondary" href="{% url 'crud' 'tipopaquete' %}"><i class="fas fa-cube"></i> Tipos</a>
+        </div>
+    </div>
+    <div class="carousel-wrapper">
+        <button class="scroll-btn left" onclick="scrollPaquetes('left')">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+      
+        <div id="paquetes-container">
+            {% if paquetes %}
+                {% for paquete in paquetes %}
+                    <div class="paquete-card" id="paquete-{{ paquete.id }}">
+                        <div class="card-body">
+
+                            <div class="card-header">
+                                <h3>{{ paquete.nombre }}</h3>
+                            </div>
+                            
+                            <div class="card-info">
+                                <p>{{ paquete.descripcion }}</p>
+
+                                <div style="display: flex; justify-content: center; align-items: center;">
+                                    {% if paquete.tipo_paquete.nombre == "Tour" %}
+                                    <span class="badge badge-tour">
+                                        <i class="fas fa-map"></i> Tour
+                                    </span>
+                                    {% elif paquete.tipo_paquete.nombre == "Aventura" %}
+                                        <span class="badge badge-aventura">
+                                            <i class="fas fa-person-hiking"></i> Aventura
+                                        </span>
+                                    {% else %}
+                                        <span class="badge badge-eco">
+                                            <i class="fas fa-leaf"></i> Ecoturismo
+                                        </span>
+                                    {% endif %}
+                                </div>
+
+                                <div>
+                                    <span class="badge badge-otro">
+                                        <i class="fas fa-calendar-days"></i> Dias
+                                    </span>
+                                    <label>{{ paquete.duracion_dias }}</label>
+                                </div>
+
+                                <div>
+                                    <span class="badge badge-otro">
+                                        <i class="fas fa-dollar-sign"></i> 
+                                        <i class="fas fa-user"></i> Adultos
+                                    </span>
+                                    <label>${{ paquete.precio_adulto }}</label>
+                                </div>
+                                
+                                <div>
+                                    <span class="badge badge-otro">
+                                        <i class="fas fa-dollar-sign"></i> 
+                                        <i class="fas fa-baby"></i> Niños
+                                    </span>
+                                    <label>${{ paquete.precio_nino }}</label>
+                                </div>
+
+                                <div>
+                                    <span class="badge badge-otro">
+                                        <i class="fas fa-users"></i> Capacidad
+                                    </span>
+                                    <label>{{ paquete.minimo_personas }} - {{ paquete.maximo_personas }}</label>
+                                </div>
+
+                                <div>
+                                    <span class="badge badge-otro">
+                                        <i class="fas fa-hotel"></i> Hotel
+                                    </span>
+                                    <label>{{ paquete.hotel.nombre }}</label>
+                                </div>
+                                <div class="actions">
+                                    <button onclick="verPaquete({{ paquete.id }})" class="btn warning small"><i class="fas fa-eye"></i> Ver</button>
+                                    <button onclick="deletePaquete({{ paquete.id }})" class="btn danger small"><i class="fas fa-trash"></i> Eliminar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="no-paquetes-msg">No hay paquetes disponibles actualmente.</p>
+            {% endif %}
+        </div>
+      
+        <button class="scroll-btn right" onclick="scrollPaquetes('right')">
+          <i class="fas fa-chevron-right"></i>
+        </button>
+    </div>
+
+
+    
+
+<!-- Modal Crear Paquete -->
+<div id="paqueteModal" class="modal">
+    <div class="modal-content">
+        <h3>Nuevo Paquete</h3>
+        <form id="paqueteForm" enctype="multipart/form-data">
+            {% csrf_token %}
+            <style>
+                .modal-content { width: 80%; max-width: 900px; margin: 0 auto; } 
+                .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; } 
+                .form-group { display: flex; flex-direction: column; } 
+                .form-group label { margin-bottom: 5px; font-weight: bold; } 
+                .form-group input, .form-group select, .form-group textarea { padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 1rem; } 
+                @media (max-width: 768px) { .form-row { grid-template-columns: 1fr; } }
+            </style>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Nombre:</label>
+                    <input type="text" name="nombre" required>                
+                </div>
+
+                <div class="form-group">
+                    <label>Descripción:</label>
+                    <textarea name="descripcion" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Días de duración:</label>
+                    <input type="number" name="duracion_dias" min="1" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Precio Adulto:</label>
+                    <input type="number" step="0.01" name="precio_adulto" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Precio Niño:</label>
+                    <input type="number" step="0.01" name="precio_nino" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Mínimo Personas:</label>
+                    <input type="number" name="minimo_personas" min="1" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Máximo Personas:</label>
+                    <input type="number" name="maximo_personas" min="1" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Hotel:</label>
+                    <select name="hotel" required>
+                        {% for hotel in hoteles %}
+                            <option value="{{ hotel.id }}">{{ hotel.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Tipo de Paquete:</label>
+                    <select name="tipo_paquete" required>
+                        {% for tipo in tipos_paquete %}
+                            <option value="{{ tipo.id }}">{{ tipo.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div style="width: 100%; justify-content: center; display: flex;align-items: center;">
+                <button type="button" class="btn cancel" onclick="closePaqueteModal()">Cancelar</button>                 
+                <button type="submit" class="btn primary">Crear Paquete</button>
+            </div>
+
+        </form>
+
+
+    </div>
+</div>
+
+<div id="modal-paquete" class="modal">
+    <div class="modal-content">
+      <form id="form-paquete">
+        <div class="modal-body">
+          <div class="modal-layout">
+            <!-- Izquierda: datos del paquete -->
+            <div class="modal-left">
+              <div class="info-section">
+                <div class="card-header">
+                  <h3 id="nombre_paquete_text"></h3>
+                </div>
+  
+                <div class="form-group">
+                  <span id="descripcion_paquete_text" class="descripcion"></span>
+                </div>
+  
+                <div class="form-group">
+                  <label><strong>Duración:</strong></label>
+                  <span id="duracion_dias_text"></span>
+                </div>
+  
+                <div class="form-group">
+                  <label><strong>Precio Por Adulto:</strong></label>
+                  <span id="precio_adulto_text"></span>
+                </div>
+  
+                <div class="form-group">
+                  <label><strong>Precio Por Niño:</strong></label>
+                  <span id="precio_nino_text"></span>
+                </div>
+  
+                <div class="form-group">
+                  <label><strong>Mínimo Personas:</strong></label>
+                  <span id="minimo_personas_text"></span>
+                </div>
+  
+                <div class="form-group">
+                  <label><strong>Máximo Personas:</strong></label>
+                  <span id="maximo_personas_text"></span>
+                </div>
+  
+                <div style="width: 100%; justify-content: center; display: flex; align-items: center;">
+                  <button type="button" class="btn cancel" onclick="closeVerModal()">Cancelar</button>
+                </div>
+              </div>
+            </div>
+  
+            <!-- Centro: actividades / amenidades / ubicaciones -->
+            <div class="modal-center">
+              <div class="actividades-section">
+                <h3>Actividades</h3>
+                <div class="checkboxes-grid" id="checkboxes-actividades"></div>
+                <button type="button" class="btn primary" onclick="guardarActividades()">Guardar Actividades</button>
+              </div>
+  
+              <div class="actividades-section">
+                <h3>Amenidades</h3>
+                <div class="checkboxes-grid" id="checkboxes-amenidades"></div>
+                <button type="button" class="btn primary" onclick="guardarAmenidades()">Guardar Amenidades</button>
+              </div>
+  
+              <div class="actividades-section">
+                <h3>Ubicaciones</h3>
+                <div class="checkboxes-grid" id="checkboxes-ubicaciones"></div>
+                <button type="button" class="btn primary" onclick="guardarUbicaciones()">Guardar Ubicaciones</button>
+              </div>
+            </div>
+  
+            <!-- Derecha: imágenes -->
+            <div class="modal-right">
+              <div class="actividades-section">
+                <h3>Subir Imagen</h3>
+                <div class="form-group">
+                  <input type="text" id="imagenSeleccionada" placeholder="URL de la imagen" required>
+                  <button type="button" class="btn secondary small" onclick="abrirModalBanco()">Seleccionar Imagen</button>
+                </div>
+                <button type="button" class="btn primary" onclick="guardarImagen()">Subir Imagen</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  
+  
+<script>
+
+    document.getElementById('paqueteForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+    
+        const form = e.target;
+        const formData = new FormData(form);
+    
+        fetch('{% url "crear_paquete" %}', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCSRFToken()
+            },
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.id) {
+                closePaqueteModal(); 
+                setTimeout(() => location.reload(), 300); 
+            } else {
+                alert('Error al crear el paquete.');
+            }
+        })
+        .catch(error => {
+            console.error(error);
+            alert('Error de red al crear el paquete.');
+        });
+    });
+
+    function deletePaquete(id) {
+        if (!confirm("¿Estás seguro de que deseas eliminar este paquete?")) {
+            return;
+        }
+    
+        fetch(`/admin_panel/eliminar-paquete/${id}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCSRFToken()
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const card = document.getElementById(`paquete-${id}`);
+                card.classList.add('removing');
+                setTimeout(() => card.remove(), 300);  // Tiempo igual al del transition
+            } else {
+                alert('Error: ' + data.error);
+            }
+        })
+        .catch(error => {
+            console.error('Error al eliminar el paquete:', error);
+            alert('Error de red al eliminar el paquete.');
+        });
+    }
+    
+    
+    function openPaqueteModal() {
+        document.getElementById('paqueteModal').style.display = 'block';
+    }
+    
+    function closePaqueteModal() {
+        document.getElementById('paqueteModal').style.display = 'none';
+    }
+
+    function closeVerModal() {
+        document.getElementById('modal-paquete').style.display = 'none';
+    }
+
+    function verPaquete(paqueteId) {
+        fetch(`/admin_panel/paquete-detalle/${paqueteId}/`)  // Ajusta la URL si es necesario
+          .then(response => response.json())
+          .then(data => {
+
+            // Llenar campos del paquete
+            document.getElementById('nombre_paquete_text').textContent = data.paquete.nombre;
+            document.getElementById('descripcion_paquete_text').textContent = data.paquete.descripcion;
+            document.getElementById('duracion_dias_text').textContent = data.paquete.duracion_dias;
+            document.getElementById('precio_adulto_text').textContent = `$${data.paquete.precio_adulto}`;
+            document.getElementById('precio_nino_text').textContent = `$${data.paquete.precio_nino}`;
+            document.getElementById('minimo_personas_text').textContent = data.paquete.minimo_personas;
+            document.getElementById('maximo_personas_text').textContent = data.paquete.maximo_personas;    
+      
+            // Crear checkboxes de actividades
+            const contenedor = document.getElementById('checkboxes-actividades');
+            contenedor.innerHTML = '';  // Limpiar antes
+            data.actividades.forEach(act => {
+              const checkbox = document.createElement('input');
+              checkbox.type = 'checkbox';
+              checkbox.name = 'actividades';
+              checkbox.value = act.id;
+              if (act.seleccionada) checkbox.checked = true;
+      
+              const label = document.createElement('label');
+              label.textContent = act.nombre;
+              label.prepend(checkbox);
+      
+              const div = document.createElement('div');
+              div.appendChild(label);
+              contenedor.appendChild(div);
+            });
+
+            const amenidadesContenedor = document.getElementById('checkboxes-amenidades');
+            amenidadesContenedor.innerHTML = '';
+            data.amenidades.forEach(am => {
+              const checkbox = document.createElement('input');
+              checkbox.type = 'checkbox';
+              checkbox.name = 'amenidades';
+              checkbox.value = am.id;
+              if (am.seleccionada) checkbox.checked = true;
+            
+              const label = document.createElement('label');
+              label.textContent = am.nombre;
+              label.prepend(checkbox);
+            
+              const div = document.createElement('div');
+              div.appendChild(label);
+              amenidadesContenedor.appendChild(div);
+            });           
+      
+            // Crear checkboxes de ubicaciones
+            const contenedorUbicaciones = document.getElementById('checkboxes-ubicaciones');
+            contenedorUbicaciones.innerHTML = '';
+            data.ubicaciones.forEach(ub => {
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.name = 'ubicaciones';
+                checkbox.value = ub.id;
+                if (ub.seleccionada) checkbox.checked = true;
+
+                const label = document.createElement('label');
+                label.textContent = ub.nombre;
+                label.prepend(checkbox);
+
+                const div = document.createElement('div');
+                div.appendChild(label);
+                contenedorUbicaciones.appendChild(div);
+            });
+
+            // Mostrar modal
+            document.getElementById('modal-paquete').style.display = 'block';
+            document.getElementById('form-paquete').dataset.paqueteId = paqueteId;
+        });
+    }
+
+    function guardarActividades() {
+        const paqueteId = document.getElementById('form-paquete').dataset.paqueteId;
+        const checkboxes = document.querySelectorAll('input[name="actividades"]:checked');
+        const actividadesSeleccionadas = Array.from(checkboxes).map(cb => cb.value);
+      
+        fetch(`/admin_panel/guardar-actividades/${paqueteId}/`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')
+          },
+          body: JSON.stringify({ actividades: actividadesSeleccionadas })
+        })
+        .then(response => response.json())
+        .then(data => {
+          alert('Actividades guardadas correctamente');
+          document.getElementById('modal-paquete').style.display = 'none';
+        });
+    }
+
+    function guardarAmenidades() {
+        const paqueteId = document.getElementById('form-paquete').dataset.paqueteId;
+        const checkboxes = document.querySelectorAll('input[name="amenidades"]:checked');
+        const amenidadesSeleccionadas = Array.from(checkboxes).map(cb => cb.value);
+      
+        fetch(`/admin_panel/guardar-amenidades/${paqueteId}/`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')
+          },
+          body: JSON.stringify({ amenidades: amenidadesSeleccionadas })
+        })
+        .then(response => response.json())
+        .then(data => {
+          alert('Amenidades guardadas correctamente');
+          document.getElementById('modal-paquete').style.display = 'none';
+        });
+    }
+
+    function guardarUbicaciones() {
+        const paqueteId = document.getElementById('form-paquete').dataset.paqueteId;
+        const checkboxes = document.querySelectorAll('input[name="ubicaciones"]:checked');
+        const ubicacionesSeleccionadas = Array.from(checkboxes).map(cb => cb.value);
+      
+        fetch(`/admin_panel/guardar-ubicaciones/${paqueteId}/`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')
+          },
+          body: JSON.stringify({ ubicaciones: ubicacionesSeleccionadas })
+        })
+        .then(response => response.json())
+        .then(data => {
+          alert('Ubicaciones guardadas correctamente');
+          document.getElementById('modal-paquete').style.display = 'none';
+        });
+    }
+    
+    function cerrarVerPaqueteModal() {
+        document.getElementById("verPaqueteModal").style.display = "none";
+    }
+
+    function scrollPaquetes(direction) {
+        const container = document.getElementById('paquetes-container');
+        const scrollAmount = 320;  // ajusta según el ancho de la tarjeta + padding
+      
+        if (direction === 'left') {
+          container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+        } else {
+          container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+        }
+    }
+
+    function guardarImagen() {
+        const url = document.getElementById('imagenSeleccionada').value;
+        const paqueteId = document.getElementById('form-paquete').dataset.paqueteId;
+      
+        if (!url || !paqueteId) {
+          alert("URL o Paquete no disponible");
+          return;
+        }
+      
+        fetch('/admin_panel/guardar-imagen/', {
+          method: 'POST',
+          headers: {
+            'X-CSRFToken': getCookie('csrftoken'),
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: new URLSearchParams({
+            url_imagen: url,
+            paquete_id: paqueteId,
+          })
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.id) {
+            alert('Imagen guardada correctamente');
+            document.getElementById("imagenSeleccionada").value = ""; 
+          } else {
+            alert('Error al guardar imagen');
+          }
+        });
+    }
+      
+    function getCSRFToken() {
+        const name = 'csrftoken';
+        const cookies = document.cookie.split(';');
+        for (let cookie of cookies) {
+            let [key, value] = cookie.trim().split('=');
+            if (key === name) return decodeURIComponent(value);
+        }
+        return '';
+    }
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // ¿Esta cookie comienza con el nombre que buscamos?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    </script>
+    
+{% endblock %}

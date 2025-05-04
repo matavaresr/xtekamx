@@ -28,7 +28,7 @@ a{
     align-items: center;
 }
 
-.nav-urls{
+#nav-urls{
     width: 100%;
     height: 80px;
     display: flex;
@@ -36,9 +36,7 @@ a{
     align-items: center;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     background-color: white;
-    position: sticky;
     z-index: 3;
-    transition: .5s;
 }
 
 #nav-urls.scroll-down{
@@ -56,29 +54,18 @@ a{
     padding-left: 10px;
 }
 
-.nav-urls .nav-logo a{
+#nav-urls #nav-logo a{
     display: flex;
     flex-direction: row;
     align-items: center;
     text-transform: lowercase;
 }
 
-.nav-urls .btn-nav-vertical{
-    font-size: 30px;
-    justify-content: flex-end;
-    align-items: center;
-    display: none;
-}
-
-.nav-urls .btn-nav-vertical i{
-    margin-right: 30px;
-}
-
-.nav-urls img{
+#nav-urls img{
     width: 60px;
 }
 
-.nav-urls li{
+#nav-urls li{
     width: 130px;
     display: flex;
     justify-content: center;
@@ -88,11 +75,12 @@ a{
     transition: .5s ease;
 }
 
-#nav-urls li:hover {
+#nav-urls li:hover:not(#li-nav-vertical){
+    transform: scale(1.1);
     color: rgb(19, 163, 199);
 }
 
-.nav-min-contact ul, .nav-urls ul{
+.nav-min-contact ul, #nav-urls ul{
     width: 100%;
     display: inline-flex;
     justify-content: space-around;
@@ -110,30 +98,52 @@ a{
     font-size: 20px;
 }
 
+#menu-expanded .user-drop{
+    position: absolute;
+    bottom: 40px;
+    right: 30px;
+}
+
+.user-drop button{
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    outline: none;
+    cursor: pointer; /* opcional */
+    color: red;
+    font-size: inherit;
+    transition: 1s;
+}
+
+.user-drop button:hover{
+    color: #772929;
+}
+
 @media (max-width: 768px) { 
     .nav-min-contact span{
         display: none;
-    }
+    }rgb(63, 52, 52)rgb(63, 52, 52)rgb(100, 24, 24)
 }
 
 @media (max-width: 1150px) { 
-    .nav-urls ul{
+    #nav-urls ul{
         justify-content: space-between;
     }
 
-    .nav-urls li:not(.nav-logo, .btn-nav-vertical){
+    #nav-urls li:not(#nav-logo, #li-nav-vertical){
         display: none;
     }
 
-    .nav-urls li:is(.nav-logo, .btn-nav-vertical){
+    #nav-urls li:is(#nav-logo, #li-nav-vertical){
         width: 220px;
     }
 
-    .nav-urls .btn-nav-vertical{
-        display: flex;
+    #nav-urls #li-nav-vertical{
+        display: flex !important;
     }
 
-    .nav-urls .text-logo-xteka{
+    #nav-urls .text-logo-xteka{
         display: block;
     }
 }
@@ -184,6 +194,21 @@ a{
     height: 100vh;
     background-color: white;
     transition: opacity 0.5s ease, visibility 0.5s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-size: var(--font-subtitle);
+}
+
+#menu-expanded a{
+    margin-bottom: 20px;
+    transition: .5s;
+}
+
+#menu-expanded a:hover{
+    transform: scale(1.1);
+    color: rgb(19, 163, 199);
 }
 
 #menu-expanded.visible {
