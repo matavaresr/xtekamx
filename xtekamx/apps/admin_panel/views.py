@@ -12,10 +12,60 @@ from django.views.decorators.csrf import csrf_protect
 from django.core.paginator import Paginator
 from django.http import JsonResponse
 from django.template.loader import render_to_string
+from django.shortcuts import render
+from django.db.models import Count, Sum
+from datetime import timedelta, date
+from django.db.models.functions import TruncDate
+from datetime import datetime, timedelta, date
+import json
 
 # Create your views here.
 def dashboard(request):
-    return render(request, 'admin_panel/index.html')
+    hoy = date.today()
+    hace_7_dias = datetime.combine(hoy - timedelta(days=6), datetime.min.time())
+
+    total_reservas = Reservacion.objects.count()
+    en_espera = Reservacion.objects.filter(estado=1).count()
+    aprobadas = Reservacion.objects.filter(estado=2).count()
+    canceladas = Reservacion.objects.filter(estado=3).count()
+
+    ingreso_total = Reservacion.objects.filter(estado=2).aggregate(Sum('total_pago'))['total_pago__sum'] or 0
+
+    ventas_por_dia_qs = (
+        Reservacion.objects
+        .filter(created_at__gte=hace_7_dias, estado=2)
+        .annotate(day=TruncDate('created_at'))
+        .values('day')
+        .annotate(total=Count('id'), ingreso=Sum('total_pago'))
+        .order_by('day')
+    )
+
+    data_dict = {r['day']: r for r in ventas_por_dia_qs}
+
+    fechas = []
+    ventas_por_dia = []
+    ingresos_por_dia = []
+
+    for i in range(6, -1, -1):
+        fecha_actual = hoy - timedelta(days=i)
+        dia_semana = (fecha_actual.weekday() + 1) % 7  # 0 = Domingo, 6 = Sábado
+        fechas.append(dia_semana)
+        datos = data_dict.get(fecha_actual)
+        ventas_por_dia.append(datos['total'] if datos else 0)
+        ingresos_por_dia.append(float(datos['ingreso']) if datos else 0.0)
+
+    context = {
+        'total_reservas': total_reservas,
+        'en_espera': en_espera,
+        'aprobadas': aprobadas,
+        'canceladas': canceladas,
+        'ingreso_total': ingreso_total,
+        'fechas': fechas, 
+        'ventas_por_dia': ventas_por_dia,
+        'ingresos_por_dia': ingresos_por_dia,
+    }
+    return render(request, 'admin_panel/index.html', context)
+
 
 def login(request):
     
