@@ -12,6 +12,10 @@ from django.views.decorators.csrf import csrf_protect
 from django.core.paginator import Paginator
 from django.http import JsonResponse
 from django.template.loader import render_to_string
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 def dashboard(request):
@@ -196,3 +200,52 @@ def crud_editar(request, modelo, pk):
     else:
         return JsonResponse({'error': 'Método no permitido'}, status=405)
 
+@csrf_exempt
+def subir_imagen(request):
+    if request.method == 'POST':
+        archivo = request.FILES['file']
+        titulo = request.POST.get('titulo', 'sin_titulo')
+        subida = cloudinary.uploader.upload(archivo, folder="banco/")
+        return JsonResponse({'url': subida['secure_url'], 'public_id': subida['public_id'], 'titulo': titulo})
+
+@csrf_exempt
+def eliminar_imagen(request):
+    if request.method == 'POST':
+        public_id = request.POST.get('public_id')
+        cloudinary.uploader.destroy(public_id)
+        return JsonResponse({'status': 'ok'})
+
+@csrf_exempt
+def reemplazar_imagen(request):
+    if request.method == 'POST':
+        public_id = request.POST.get('public_id')
+        nuevo_archivo = request.FILES['file']
+        cloudinary.uploader.destroy(public_id)
+        subida = cloudinary.uploader.upload(nuevo_archivo, folder="banco/")
+        return JsonResponse({'url': subida['secure_url'], 'public_id': subida['public_id']})
+
+def listar_imagenes(request):
+    cursor = request.GET.get("cursor", None)
+
+    params = {
+        "type": "upload",
+        "prefix": "banco/",  # Ajusta si usas otro folder
+        "max_results": 12,
+    }
+
+    if cursor:
+        params["next_cursor"] = cursor
+
+    try:
+        response = cloudinary.api.resources(**params)
+        return JsonResponse({
+            "resources": [
+                {
+                    "url": img["secure_url"],
+                    "public_id": img["public_id"]
+                } for img in response["resources"]
+            ],
+            "next_cursor": response.get("next_cursor")
+        })
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)

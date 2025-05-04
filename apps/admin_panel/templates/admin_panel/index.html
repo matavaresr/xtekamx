@@ -7,6 +7,13 @@
 {% endblock %}
 
 {% block content %}
+
+<!-- Input externo donde se colocará la imagen -->
+<input type="text" id="imagenSeleccionada" placeholder="URL de la imagen" readonly>
+<button type="button" onclick="abrirModalBanco()">Seleccionar imagen</button>
+
+{% include "admin_panel/components/banco_imagenes.html" %}
+
 <main class="dashboard">
     <!-- Top Cards Section -->
     <section class="top-cards">
