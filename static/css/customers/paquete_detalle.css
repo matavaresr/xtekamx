@@ -168,6 +168,13 @@
   }
 }
 
+
+@media (max-width: 590px) {
+  .tabs{
+    flex-direction: column;
+  }
+}
+
 .tab-content {
   display: none;
   padding: 2rem;
