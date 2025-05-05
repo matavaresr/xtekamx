@@ -1,0 +1,20 @@
+{% for paquete in paquetes %}
+  <div class="paquete-card-overlay">
+    <div class="image-section" style="height: auto; background-image: url('{{ paquete.imagenpaquete_set.first.url_imagen }}');"></div>
+    <div class="overlay-content">
+      <h2>PAQUETE <span class="nombre">{{ paquete.nombre|upper }}</span></h2>
+
+      {% if paquete.duracion_dias %}
+        <p>{{ paquete.duracion_dias }} DÍAS {{ paquete.duracion_dias|add:'-1' }} NOCHES</p>
+      {% endif %}
+
+      <p><span class="verde">DESDE:</span> ${{ paquete.precio_adulto }}</p>
+
+      {% if paquete.descripcion %}
+        <p><span class="verde">DESCRIPCION:</span><br>{{ paquete.descripcion|truncatewords:30 }}</p>
+      {% endif %}
+
+      <a href="{% url 'detalle_paquete' paquete.id %}" class="btn-blanco">VER PAQUETE</a>
+    </div>
+  </div>
+{% endfor %}

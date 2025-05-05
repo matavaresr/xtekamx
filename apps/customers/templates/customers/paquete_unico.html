@@ -1,0 +1,97 @@
+{% extends 'customers/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/customers/paquete_detalle.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="paquete-detalle-container">
+  <div class="slider-container">
+    <div class="slider">
+      {% for imagen in paquete.imagenpaquete_set.all %}
+        <div class="slide">
+          <img src="{{ imagen.url_imagen }}" alt="Imagen del paquete">
+        </div>
+      {% endfor %}
+    </div>
+    <button class="prev">&#10094;</button>
+    <button class="next">&#10095;</button>
+  </div>
+
+  <div class="paquete-header">
+    <div class="paquete-titulo-box">
+      <h1 class="paquete-nombre">
+        {{ paquete.nombre }}
+      </h1>
+    </div>
+
+    <div class="paquete-info-grid">
+        <div class="info-box blue">
+            <div>
+                ${{ paquete.precio_adulto }}
+            </div>
+            <div>
+                P/ Persona
+            </div>
+        </div>
+        <div class="info-box blue">
+            <div>
+                {{ paquete.minimo_personas }}-{{ paquete.maximo_personas }}
+            </div>
+            <div>
+                Max Personas
+            </div>
+        </div>
+        <div class="info-box blue">
+            <div>
+                {{ paquete.duracion_dias }}
+            </div>
+            <div>
+                Días
+            </div>
+        </div>
+        <div class="info-box green">
+            <div id="btn-reservar" style="cursor: pointer;padding: 0.75rem !important;">
+                <button href="#" class="reservar-btn">
+                    <img src="{% static 'icons/calendar.svg'%}" alt="">
+                </button>
+            </div>
+            <div>
+                Reservar
+            </div>
+        </div>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active">Descripción</button>
+    <button class="tab">Itinerario</button>
+    <button class="tab">¿Qué incluye?</button>
+    <button class="tab">FAQs</button>
+    <button class="tab">Mapa</button>
+  </div>
+
+  <div class="tab-content">
+    <h2>Descripción</h2>
+    <p>{{ paquete.descripcion|linebreaks }}</p>
+  </div>
+</div>
+
+{% include "customers/components/modal_reservacion.html" %}
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+    const btn = document.getElementById('btn-reservar');
+    if (btn) {
+        btn.addEventListener('click', () => {
+        document.getElementById("modalReservacion").classList.remove("hidden");
+        });
+    }
+});
+</script>
+<script src="{% static 'js/customers/slider.js' %}"></script>
+{% endblock %}

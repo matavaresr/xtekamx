@@ -40,7 +40,7 @@ class Paquete(models.Model):
     precio_nino = models.DecimalField(max_digits=10, decimal_places=2)
     minimo_personas = models.SmallIntegerField()
     maximo_personas = models.SmallIntegerField()
-    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE)
+    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, null=True, blank=True)
     tipo_paquete = models.ForeignKey(TipoPaquete, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

@@ -1,0 +1,308 @@
+<!-- Modal Reservacion (templates/customers/components/modal_reservacion.html) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/material_green.css">
+
+<style>
+.modal-reserva {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 1000;
+}
+
+.modal-reserva.hidden {
+  display: none;
+}
+
+.modal-reserva-content {
+  background: #fff;
+  padding: 2rem;
+  max-width: 500px;
+  width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  position: relative;
+}
+
+.close-modal {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 24px;
+  color: #888;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.close-modal:hover {
+  color: #000;
+}
+
+.modal-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.modal-header h2 {
+  margin-bottom: 0.2rem;
+  font-size: 20px;
+}
+
+.input-group {
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.input-group label {
+  margin-bottom: 0.3rem;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.input-group input {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.input-group input[type="text"]#fecha_inicio {
+  background-image: url('data:image/svg+xml;utf8,<svg fill="gray" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10h5v5H7z"/><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1rem;
+  cursor: pointer;
+}
+
+.actions {
+  text-align: center;
+  margin-top: 1.5rem;
+}
+
+.actions button {
+  background-color: #00b894;
+  color: white;
+  border: none;
+  padding: 0.7rem 1.5rem;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.actions button:hover {
+  background-color: #019875;
+}
+
+.in-range-hover,
+.flatpickr-day.in-range-hover {
+  background-color: #c7f6e9 !important;
+  color: #000;
+  border-radius: 50%;
+}
+</style>
+
+<div id="modalReservacion" class="modal-reserva hidden">
+  <div class="modal-reserva-content">
+    <span class="close-modal" onclick="closeModal()">&times;</span>
+    <div class="modal-header">
+      <h2>Reservar Paquete: {{ paquete.nombre }}</h2>
+      <p>Duración: {{ paquete.duracion_dias }} días</p>
+    </div>
+
+    <form method="POST" id="formReservacion">
+      {% csrf_token %}
+
+      <div class="input-group">
+        <label for="nombre">Nombre:</label>
+        <input type="text" name="nombre" required>
+      </div>
+
+      <div class="input-group">
+        <label for="apellido">Apellido:</label>
+        <input type="text" name="apellido" required>
+      </div>
+
+      <div class="input-group">
+        <label for="email">Correo electrónico:</label>
+        <input type="email" name="email" required>
+      </div>
+
+      <div class="input-group">
+        <label for="telefono">Teléfono:</label>
+        <input type="text" name="telefono" required>
+      </div>
+
+      <div class="input-group">
+        <label for="fecha_inicio">Selecciona una fecha de inicio:</label>
+        <input type="text" name="fecha_inicio" id="fecha_inicio" data-duracion="{{ paquete.duracion_dias }}">
+      </div>
+
+      <div class="input-group">
+        <label for="cantidad_adultos">Adultos:</label>
+        <input type="number" name="cantidad_adultos" min="1" required>
+      </div>
+
+      <div class="input-group">
+        <label for="cantidad_ninos">Niños:</label>
+        <input type="number" name="cantidad_ninos" min="0">
+      </div>
+
+      <div class="actions">
+        <button type="submit">Confirmar Reservación</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+{{ fechas_bloqueadas|json_script:"rango-reservas" }}
+
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+function closeModal() {
+  const modal = document.getElementById("modalReservacion");
+  if (modal) {
+    modal.classList.add("hidden");
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const input = document.getElementById('fecha_inicio');
+  if (!input) return;
+
+  let bloqueadas = [];
+  try {
+    bloqueadas = JSON.parse(document.getElementById("rango-reservas").textContent);
+    if (!Array.isArray(bloqueadas)) {
+      console.error("La variable bloqueadas no es un array:", bloqueadas);
+      bloqueadas = [];
+    }
+  } catch (e) {
+    console.warn("No se pudieron leer las fechas bloqueadas o el JSON estaba vacío");
+    bloqueadas = [];
+  }
+
+  console.log(bloqueadas);
+
+  const duracion = parseInt(input.dataset.duracion || "1");
+  const hoy = new Date();
+  hoy.setDate(hoy.getDate() + 10);
+
+  flatpickr(input, {
+    minDate: hoy,
+    disable: bloqueadas,
+    onDayCreate: function(dObj, dStr, fp, dayElem) {
+      if (!dayElem.dateObj) return;
+      dayElem.addEventListener("mouseenter", () => {
+        const start = new Date(dayElem.dateObj);
+        for (let i = 0; i < duracion; i++) {
+          const target = new Date(start);
+          target.setDate(start.getDate() + i);
+          const label = target.toDateString();
+          const targetElem = fp.calendarContainer.querySelector(`.flatpickr-day[aria-label='${label}']`);
+          if (targetElem) targetElem.classList.add("in-range-hover");
+        }
+      });
+      dayElem.addEventListener("mouseleave", () => {
+        const elems = fp.calendarContainer.querySelectorAll(".in-range-hover");
+        elems.forEach(el => el.classList.remove("in-range-hover"));
+      });
+    },
+    onChange: function(selectedDates, dateStr, fp) {
+      if (!selectedDates.length) return;
+      const start = new Date(selectedDates[0]);
+      fp.calendarContainer.querySelectorAll(".in-range-hover")
+        .forEach(el => el.classList.remove("in-range-hover"));
+
+      for (let i = 0; i < duracion; i++) {
+        const target = new Date(start);
+        target.setDate(start.getDate() + i);
+        const label = target.toDateString();
+        const targetElem = fp.calendarContainer.querySelector(`.flatpickr-day[aria-label='${label}']`);
+        if (targetElem) targetElem.classList.add("in-range-hover");
+      }
+    }
+  });
+
+  const btnReservar = document.getElementById("btn-reservar");
+  if (btnReservar) {
+    btnReservar.addEventListener("click", () => {
+      const modal = document.getElementById("modalReservacion");
+      if (modal) {
+        modal.classList.remove("hidden");
+      }
+    });
+  }
+
+  document.getElementById("formReservacion").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const form = e.target;
+    const data = {
+      nombre: form.nombre.value,
+      apellido: form.apellido.value,
+      email: form.email.value,
+      telefono: form.telefono.value,
+      fecha_inicio: form.fecha_inicio.value,
+      cantidad_adultos: form.cantidad_adultos.value,
+      cantidad_ninos: form.cantidad_ninos.value,
+      paquete_id: "{{ paquete.id }}"
+    };
+
+    fetch("{% url 'guardar_reservacion_ajax' %}", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": form.querySelector('[name=csrfmiddlewaretoken]').value
+      },
+      body: JSON.stringify(data)
+    })
+    .then(res => res.json())
+    .then(response => {
+      if (response.match) {
+        const confirmacion = confirm("¿Deseas usar los datos previos asociados a este correo?");
+        if (confirmacion && response.cliente) {
+          form.nombre.value = response.cliente.nombre;
+          form.apellido.value = response.cliente.apellido;
+          form.telefono.value = response.cliente.telefono;
+
+          fetch("{% url 'guardar_reservacion_ajax' %}", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-CSRFToken": form.querySelector('[name=csrfmiddlewaretoken]').value
+            },
+            body: JSON.stringify({
+              ...data,
+              usar_datos_previos: true
+            })
+          })
+          .then(res2 => res2.json())
+          .then(r2 => {
+            if (r2.success) {
+              alert(r2.success);
+              form.reset();
+              closeModal();
+            } else {
+              alert(r2.error || "Error al confirmar con los datos previos.");
+            }
+          })
+          .catch(() => alert("Error al reenviar la solicitud."));
+        }
+      } else if (response.success) {
+        alert(response.success);
+        form.reset();
+        closeModal();
+      } else {
+        alert(response.error || "Ocurrió un error.");
+      }
+    })
+    .catch(() => alert("Error al enviar la solicitud."));
+  });
+});
+</script>

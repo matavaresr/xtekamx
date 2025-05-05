@@ -1,8 +1,8 @@
-{% extends 'customers/base.html' %} 
-{% load static %} 
-{% block title %}Paquetes - xtekamx{% endblock %} 
+{% extends 'customers/base.html' %}
+{% load static %}
+{% block title %}Paquetes - xtekamx{% endblock %}
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/customers/paquetes.css' %}?v=1" />
+<link rel="stylesheet" href="{% static 'css/customers/paquetes.css' %}" />
 {% endblock %}
 {% block content %}
 
@@ -50,4 +50,37 @@
 
 <h2 class="border-text fade-in-on-scroll">TODOS LOS PAQUETES ESTÁN DISPONIBLES A PARTIR DE 2 PERSONAS</h2>
 
+<form method="get" id="filtros-form" class="filters-form">
+    <div>
+        <label>Tipo de paquete:</label>
+        <select name="tipo_paquete">
+          <option value="">Todos</option>
+          {% for tipo in tipos %}
+            <option value="{{ tipo.id }}" {% if tipo.id|stringformat:"s" == request.GET.tipo_paquete %}selected{% endif %}>{{ tipo.nombre }}</option>
+          {% endfor %}
+        </select>
+    </div>
+
+  <div>
+    <label>Precio máximo adulto:</label>
+    <input type="number" name="precio_adulto" value="{{ request.GET.precio_adulto }}">
+  </div>
+
+  <div>
+    <label>¿Con hotel?</label>
+    <select name="hotel">
+      <option value="">Todos</option>
+      <option value="1" {% if request.GET.hotel == "1" %}selected{% endif %}>Sí</option>
+      <option value="0" {% if request.GET.hotel == "0" %}selected{% endif %}>No</option>
+    </select>
+  </div>
+  </form>
+  
+  <div id="paquetes-container">
+    {% include "customers/components/paquetes_grid.html" %}
+  </div>
+
+{% endblock %}
+{% block extra_js %}
+<script src="{% static 'js/customers/paquetes.js' %}"></script>
 {% endblock %}
