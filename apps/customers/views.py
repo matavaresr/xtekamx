@@ -1,19 +1,27 @@
 import json
-from django.http import JsonResponse
+from datetime import datetime, timedelta
+
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
+from django.template.loader import render_to_string
+from django.core.cache import cache
+from django.db.models import Prefetch, Q
+from django.utils.dateformat import format
+
 from django.contrib.auth import authenticate, login as auth_login
 from django.contrib.auth.forms import AuthenticationForm
-from .forms import CustomUserCreationForm
+
 from django.views.generic import ListView, DetailView
-from django.db.models import Prefetch, Q
-from django.template.loader import render_to_string
-from django.http import HttpResponse
-from apps.core.models import Actividad, Paquete, ImagenPaquete, TipoPaquete, Cliente, Reservacion, ClienteReservacion
-from django.core.cache import cache
-from django.views.decorators.csrf import csrf_exempt
-from datetime import datetime, timedelta
-from django.utils.dateformat import format
-from django.views.decorators.http import require_POST
+
+from .forms import CustomUserCreationForm
+
+from apps.core.models import (
+    Actividad, Paquete, ImagenPaquete, TipoPaquete,
+    Cliente, Reservacion, ClienteReservacion
+)
+
 
 # Página principal
 def home(request):

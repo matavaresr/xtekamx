@@ -16,3 +16,7 @@ def get_objeto_json(objeto, campos):
 def attr(obj, attr_name):
     """Accede dinámicamente a un atributo del objeto."""
     return getattr(obj, attr_name, '')
+
+@register.filter
+def get_field_value(obj, field_name):
+    return getattr(obj, field_name, '')

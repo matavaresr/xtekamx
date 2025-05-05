@@ -75,7 +75,7 @@ a{
     transition: .5s ease;
 }
 
-#nav-urls li:hover {
+#nav-urls li:hover:not(#li-nav-vertical){
     transform: scale(1.1);
     color: rgb(19, 163, 199);
 }
@@ -98,10 +98,32 @@ a{
     font-size: 20px;
 }
 
+#menu-expanded .user-drop{
+    position: absolute;
+    bottom: 40px;
+    right: 30px;
+}
+
+.user-drop button{
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    outline: none;
+    cursor: pointer; /* opcional */
+    color: red;
+    font-size: inherit;
+    transition: 1s;
+}
+
+.user-drop button:hover{
+    color: #772929;
+}
+
 @media (max-width: 768px) { 
     .nav-min-contact span{
         display: none;
-    }
+    }rgb(63, 52, 52)rgb(63, 52, 52)rgb(100, 24, 24)
 }
 
 @media (max-width: 1150px) { 

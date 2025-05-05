@@ -1,5 +1,5 @@
 from django import forms
-from apps.core.models import Usuario
+from apps.core.models import Usuario, Paquete, Actividad
 from django.contrib.auth import authenticate
 
 class LoginForm(forms.Form):
@@ -19,3 +19,15 @@ class LoginForm(forms.Form):
             raise forms.ValidationError("Usuario no encontrado")
 
         return cleaned_data
+    
+class PaqueteForm(forms.ModelForm):
+    class Meta:
+        model = Paquete
+        fields = ['nombre', 'descripcion', 'duracion_dias', 'precio_adulto', 
+                  'precio_nino', 'minimo_personas', 'maximo_personas', 'hotel', 'tipo_paquete']
+
+class PaqueteActividadForm(forms.Form):
+    actividades = forms.ModelMultipleChoiceField(
+        queryset=Actividad.objects.all(),
+        widget=forms.CheckboxSelectMultiple
+    )
