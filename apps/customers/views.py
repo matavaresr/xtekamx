@@ -17,6 +17,8 @@ from django.views.generic import ListView, DetailView
 
 from .forms import CustomUserCreationForm
 
+from apps.core.services.email_service import enviar_correo_reservacion
+
 from apps.core.models import (
     Actividad, Paquete, ImagenPaquete, TipoPaquete,
     Cliente, Reservacion, ClienteReservacion, Amenidad, Ubicacion
@@ -224,8 +226,8 @@ def guardar_reservacion_ajax(request):
             return JsonResponse({'error': 'Ya existe una reservación en ese rango de fechas para este paquete.'}, status=409)
 
         usar_previos = data.get('usar_datos_previos')
-
         cliente_existente = Cliente.objects.filter(email=data['email']).first()
+
         if cliente_existente:
             if cliente_existente.nombre.strip().lower() == data['nombre'].strip().lower():
                 if not usar_previos:
@@ -242,14 +244,13 @@ def guardar_reservacion_ajax(request):
             else:
                 return JsonResponse({'error': 'Este correo ya está registrado con otro nombre.'}, status=400)
         else:
-            # Crear nuevo
+            # Crear nuevo cliente
             cliente = Cliente.objects.create(
                 nombre=data['nombre'],
                 apellido=data['apellido'],
                 email=data['email'],
                 telefono=data['telefono']
             )
-
 
         total_pago = (
             paquete.precio_adulto * int(data['cantidad_adultos']) +
@@ -263,13 +264,23 @@ def guardar_reservacion_ajax(request):
             cantidad_adultos=data['cantidad_adultos'],
             cantidad_ninos=data['cantidad_ninos'],
             total_pago=total_pago,
-            estado=1
+            estado=1  # Estado: En revisión
         )
 
         ClienteReservacion.objects.create(cliente=cliente, reservacion=reservacion)
+
+        # Enviar correo de confirmación
+        enviar_correo_reservacion(cliente.email, {
+            'nombre_cliente': cliente.nombre,
+            'paquete_nombre': paquete.nombre,
+            'fecha_inicio': fecha_inicio,
+            'fecha_fin': fecha_fin,
+            'cantidad_adultos': data['cantidad_adultos'],
+            'cantidad_ninos': data['cantidad_ninos'],
+            'total_pago': total_pago,
+        })
 
         return JsonResponse({'success': 'Reservación registrada correctamente.'})
 
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
-

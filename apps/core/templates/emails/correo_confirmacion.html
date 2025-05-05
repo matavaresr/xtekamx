@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Reservación Aprobada</title>
+  <style>
+    body { font-family: Arial, sans-serif; background-color: #f8f9fa; margin: 0; padding: 0; }
+    .container {
+      max-width: 600px; background-color: #ffffff; margin: 40px auto;
+      padding: 30px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h2 { color: #28a745; }
+    p { font-size: 16px; color: #333333; }
+    .resumen { background-color: #eafaf1; padding: 15px; border-radius: 8px; margin-top: 20px; }
+    .footer { margin-top: 30px; font-size: 12px; color: #777; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>¡Tu reservación ha sido aprobada!</h2>
+    <p>Hola {{ nombre_cliente }},</p>
+    <p>Nos complace informarte que tu reservación para el paquete <strong>{{ paquete_nombre }}</strong> ha sido <strong>aprobada</strong>.</p>
+
+    <div class="resumen">
+      <p><strong>Fechas:</strong> {{ fecha_inicio }} - {{ fecha_fin }}</p>
+      <p><strong>Adultos:</strong> {{ cantidad_adultos }} &nbsp; <strong>Niños:</strong> {{ cantidad_ninos }}</p>
+      <p><strong>Total pagado:</strong> ${{ total_pago }} MXN</p>
+    </div>
+
+    <p>Te esperamos para vivir una experiencia inolvidable con Xteka Huasteca.</p>
+
+    <div class="footer">
+      Este mensaje fue enviado automáticamente. No respondas a este correo.
+    </div>
+  </div>
+</body>
+</html>
