@@ -1,0 +1,385 @@
+/* banner section */
+
+.banner{
+  position: relative;
+  width: calc(100vw - 15px);
+  height: calc(100vh - 120px);
+  background-image: url("/static/img/customers/index/header.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cursor-text-banner {
+  display: inline-block;
+  animation: blink 0.7s steps(1) infinite;
+  font-weight: 400;
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+.banner-text{
+  text-align: center;
+  color: white;
+  padding: 0px 20px 54px 20px;
+  position: absolute;
+}
+
+.banner-text p{
+  margin: 0px 0px 10px 0px;
+}
+
+.first-line{
+  font-size: var(--font-title);
+  font-weight: bold;
+}
+
+.second-line{
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.third-line{
+  font-size: var(--font-text-medium);
+}
+
+.banner-buttons{
+  position: absolute;
+  display: flex;
+  justify-content: space-between;
+  bottom: 0px;
+  width: calc(100% - 80px);
+  padding: 0px 40px 0px 40px;
+  margin: 0px 0px 40px 0px;
+  color: white;
+}
+
+.banner-buttons a{
+  width: 170px;
+  border: 1px solid white;
+  padding: 15px 20px;
+  transition: .5s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.banner-buttons a:hover{
+  background: black;
+  filter: invert(1);
+}
+
+.banner-buttons a img{
+   padding: 0px 10px 0px 0px;
+}
+
+#video-container {
+  width: 100%;
+  height: 100%; /* o cualquier altura que quieras */
+  overflow: hidden;
+  position: absolute;
+  filter: brightness(0.4);
+  display: none;
+}
+
+#video-container video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* o contain, dependiendo qué efecto quieras */
+}
+
+/* Loader */
+
+#loader {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  transition: opacity 0.8s ease, visibility 0.8s ease;
+  background-image: url("/static/img/customers/background.png");
+}
+
+/* Imagen dentro del loader */
+#loader img {
+  width: 100px;
+  height: auto;
+  margin-bottom: 20px;
+}
+
+/* Spinner animado */
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #ccc;
+  border-top: 5px solid rgb(19, 163, 199); /* Color tipo WhatsApp */
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* Animación de rotación */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Cuando loader esté oculto */
+#loader.hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+#acerca-de{
+  display: grid;
+  grid-template-columns: .5fr 1fr;
+  grid-template-rows: 1fr;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+  padding: 20px 40px;
+}
+
+#acerca-de div{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: justify;
+  padding: 20px;
+}
+
+#acerca-de div:first-of-type{
+  font-weight: bold;
+  font-size: var(--font-subtitle);
+  text-transform: uppercase;
+  border-right: 1px solid black;
+  text-align: center !important;
+}
+
+#acerca-de div:last-of-type{
+  font-size: var(--font-text-large);
+}
+
+#actividades{
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: 1fr;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+  text-transform: uppercase;
+  font-size: var(--font-text-small);
+}
+
+#actividades div{
+  display: flex;
+  color: white;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 400px;
+}
+
+#actividades div a{
+  text-align: center;
+  font-size: var(--font-text-small);
+  border: 1px solid white;
+  width: 150px;
+  padding: 10px 20px;
+}
+
+#actividades div:first-of-type{
+  background-image: url("/static/img/customers/index/actividad_index.png");
+}
+
+#actividades div:last-of-type{
+  background-image: url("/static/img/customers/index/paquete_index.png");
+}
+
+#invitacion{
+  display: grid;
+  grid-template-columns: 1.25fr .75fr;
+  grid-template-rows: 1fr;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+  text-transform: uppercase;
+  font-weight: bold;
+  margin-top: 20px;
+}
+
+#img-invitacion img{
+  width: 100%;
+}
+
+#text-invitacion{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: var(--font-subtitle);
+}
+
+#text-invitacion span{
+  padding: 0px 20px 60px 0px;
+}
+
+#instrucciones{
+  display: grid;
+  grid-template-columns: 1fr .25fr 1fr .25fr 1fr;
+  gap: 10px;
+  color: white;
+  text-transform: uppercase;
+  padding: 25px 40px 0px 50px;
+}
+
+#instrucciones > div{
+  border: 1px solid white;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: center;
+  flex-direction: column;
+  font-size: var(--font-text-medium);
+  position: relative;
+  padding: 20px;
+} 
+
+#instrucciones div img{
+  width: 70px;
+  height: auto;
+} 
+
+#instrucciones > span {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+} 
+
+#instrucciones > span > hr{
+  border: none; 
+  border-top: 2px dotted white;
+  width: 100%;
+} 
+
+#container-instrucciones{
+  background-image: url("/static/img/customers/index/cascade-horizontal.png");
+  padding: 40px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+.circle-gradient{
+  position: absolute;
+  top: -15px;
+  left: -15px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50px;
+  background: linear-gradient(to right, #72ED39, #52D0A0, #34B6FF);
+}
+
+@media (max-width: 1375px) { 
+  #text-invitacion{
+    font-size: var(--font-text-large);
+  }
+
+  #acerca-de div:last-of-type{
+    font-size: var(--font-text-small);
+  }
+
+  #acerca-de div:first-of-type{
+    font-size: var(--font-text-large);
+  }
+}
+
+@media (max-width: 1000px) { 
+  #text-invitacion{
+    font-size: var(--font-text-medium);
+  }
+
+  #text-invitacion span{
+    padding: 0px 20px 40px 0px;
+  }
+
+  #instrucciones{
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr .25fr 1fr .25fr 1fr;;
+  }
+
+  #instrucciones > span > hr{
+    border: none; 
+    border-left: 2px dotted white;
+    width: 1px;
+    height: 100%;
+  } 
+
+  #container-instrucciones{
+    padding: 20px 0px 40px 0px;
+    background-image: url("/static/img/customers/index/cascade-vertical.png");
+  }
+}
+@media (max-width: 900px) { 
+  #invitacion{
+    grid-template-columns: 1.10fr .90fr;
+  }
+}
+
+@media (max-width: 800px) { 
+  #video-container {
+    display: block;
+  }
+
+  #acerca-de{
+    display: flex;
+    flex-direction: column;
+  }
+
+  #text-invitacion{
+    font-size: var(--font-text-large);
+    padding-left: 20px;
+  }
+
+  #text-invitacion span{
+    padding: 0px 0px 10px 0px;
+  }
+
+  #invitacion{
+    display: flex;
+    flex-direction: column-reverse;
+  }
+  
+  #acerca-de div:first-of-type{
+    border-right: 0px solid black;
+    border-bottom: 1px solid black;
+  }
+
+  #actividades{
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 650px) { 
+  .banner-buttons a{
+    width: auto;
+  }
+
+  .banner-buttons a img{
+    padding: 0;
+  }
+
+  .banner-buttons span{
+    display: none;
+  }
+}
