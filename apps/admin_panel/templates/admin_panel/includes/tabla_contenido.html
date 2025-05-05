@@ -4,43 +4,62 @@
     <tr>
         {% for campo in columnas %}
             {% if campo == 'contrasena' %}
+                {# No se muestra la contraseña #}
             {% elif campo == 'tipo' %}
-                {% if objeto.tipo == 1 %}
-                    <td>
+                <td>
+                    {% if objeto.tipo == 1 %}
                         <span class="badge badge-admin">
                             <i class="fas fa-user-shield"></i> Administrador
                         </span>
-                    </td>
-                {% elif objeto.tipo == 2 %}
-                    <td>
+                    {% elif objeto.tipo == 2 %}
                         <span class="badge badge-supervisor">
                             <i class="fas fa-user-tie"></i> Supervisor
                         </span>
-                    </td>
-                {% elif objeto.tipo == 3 %}
-                    <td>
+                    {% elif objeto.tipo == 3 %}
                         <span class="badge badge-usuario">
                             <i class="fas fa-user"></i> Usuario
                         </span>
-                    </td>
-                {% else %}
-                    <td>
+                    {% else %}
                         <span class="badge badge-otro">
                             <i class="fas fa-question-circle"></i> Desconocido
                         </span>
-                    </td>
-                {% endif %}
+                    {% endif %}
+                </td>
+            {% elif campo == 'estado' %}
+                <td>
+                    {% if objeto.estado == 1 %}
+                    <span class="badge badge-pendiente">
+                        <i class="fa-solid fa-clock"></i> Pendiente
+                    </span>
+                    {% elif objeto.estado == 2 %}
+                        <span class="badge badge-confirmada">
+                            <i class="fa-solid fa-circle-check"></i> Confirmada
+                        </span>
+                    {% elif objeto.estado == 3 %}
+                        <span class="badge badge-cancelada">
+                            <i class="fa-solid fa-circle-xmark"></i> Cancelada
+                        </span>
+                    {% else %}
+                        <span class="badge badge-otro">
+                            <i class="fas fa-question-circle"></i> Desconocido
+                        </span>
+                    {% endif %} 
+                </td>               
             {% else %}
                 <td>{{ objeto|get_attr:campo }}</td>
             {% endif %}
         {% endfor %}
         <td>
-            <button type="button" class="btn warning small" onclick='openEditModal({{ objeto.id }}, {{ objeto|get_objeto_json:columnas|safe }})'>
-                <i class="fas fa-edit"></i> Editar
-            </button>
-            <button class="btn danger small" onclick="openDeleteModal({{ objeto.id }})">
-                <i class="fas fa-trash"></i> Eliminar
-            </button>
+            <div style="display: flex; justify-content: center; flex-direction: column; align-items: center;">
+                {% with columnas|join:"," as campos_json %}
+                <button type="button" class="btn warning small" onclick='openEditModal({{ objeto.id }}, {{ objeto|get_objeto_json:campos_json|safe }})'>
+                    <i class="fa-solid fa-pen-to-square"></i> Editar
+                </button>
+                {% endwith %}
+                <button class="btn danger small" onclick="openDeleteModal({{ objeto.id }})">
+                    <i class="fas fa-trash"></i> Eliminar
+                </button>
+            </div>
         </td>
     </tr>
 

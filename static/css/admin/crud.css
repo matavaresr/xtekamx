@@ -65,6 +65,11 @@ body {
     font-size: 1rem;
 }
 
+.table-responsive .btn {
+    display: flex;
+    flex-direction: row;
+}
+
 .btn.primary {
     background-color: #4cbd98;
     color: white;
@@ -346,6 +351,7 @@ i {
     border-radius: 20px;
     color: white;
     width: fit-content;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
 .badge-admin {
@@ -381,6 +387,21 @@ i {
 .badge-tour {
     color: white;
     background-color: #7e4894;
+}
+
+.badge-pendiente {
+    color: white;
+    background-color: #fdbc2d;
+}
+
+.badge-confirmada {
+    color: white;
+    background-color: #4cbd98;
+}
+
+.badge-cancelada {
+    color: white;
+    background-color: #d00238;
 }
 
 /* Cards */

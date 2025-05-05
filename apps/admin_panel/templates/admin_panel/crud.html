@@ -5,7 +5,7 @@
 {% block title %}Admin Panel - xteka{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/admin/crud.css' %}?v=8" />
+<link rel="stylesheet" href="{% static 'css/admin/crud.css' %}?v=9" />
 {% endblock %}
 
 {% block content %}
@@ -17,9 +17,11 @@
 <div class="container">
     <div class="header">
         <div class="headerbtn-container">
-            <button class="btn primary" onclick="openCreateModal()">
-                <i class="fas fa-plus"></i> Crear Nuevo
-            </button>
+            {% if modelo != 'reservaciones' %}
+                <button class="btn primary" onclick="openCreateModal()">
+                    <i class="fas fa-plus"></i> Crear Nuevo
+                </button>
+            {% endif %}
             {% if modelo == 'usuarios' %}
                 <button class="btn secondary" onclick="openEditModalUsuarioActual()">
                     <i class="fas fa-user"></i> Mi Información
@@ -108,26 +110,39 @@
         <form method="POST" id="editarForm">
             {% csrf_token %}
             <h3>Editar {{ modelo|capfirst }}</h3>
-            {% for campo in columnas %}
-            <div class="form-group">
-                <label>{{ campo|capfirst }}</label>
-                {% if campo == 'tipo' %}
-                <select name="{{ campo }}" required>
-                    {% for value, label in tipo_choices %}
-                        <option value="{{ value }}">{{ label }}</option>
-                    {% endfor %}
-                </select>
-                {% elif campo == 'contrasena' %}
-                    <input type="password" name="{{ campo }}" required>
-                {% elif campo == 'url_portada' %}
-                    <!-- Input externo donde se colocará la imagen -->
-                    <input type="text" name="{{ campo }}" id="imagenSeleccionada" placeholder="URL de la imagen"required>
-                    <button type="button" onclick="abrirModalBanco()">Seleccionar imagen</button>
-                {% else %}
-                    <input type="text" name="{{ campo }}" required>
-                {% endif %}
-            </div>
-            {% endfor %}
+
+            {% if modelo == 'reservaciones' %}
+                <div class="form-group">
+                    <label>Estado</label>
+                    <select name="estado" required>
+                        <option value="1">En espera</option>
+                        <option value="2">Aprobada</option>
+                        <option value="3">Cancelada</option>
+                        <!-- Agrega aquí más estados si los tienes definidos -->
+                    </select>
+                </div>
+            {% else %}
+                {% for campo in columnas %}
+                    <div class="form-group">
+                        <label>{{ campo|capfirst }}</label>
+                        {% if campo == 'tipo' %}
+                            <select name="{{ campo }}" required>
+                                {% for value, label in tipo_choices %}
+                                    <option value="{{ value }}">{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        {% elif campo == 'contrasena' %}
+                            <input type="password" name="{{ campo }}" required>
+                        {% elif campo == 'url_portada' %}
+                            <input type="text" name="{{ campo }}" id="imagenSeleccionada" placeholder="URL de la imagen" required>
+                            <button type="button" onclick="abrirModalBanco()">Seleccionar imagen</button>
+                        {% else %}
+                            <input type="text" name="{{ campo }}" required>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
             <div class="modal-buttons">
                 <button type="button" class="btn cancel" onclick="closeEditModal()">Cancelar</button>
                 <button type="submit" class="btn primary">Guardar Cambios</button>
@@ -135,6 +150,7 @@
         </form>
     </div>
 </div>
+
 
 <script>
 
