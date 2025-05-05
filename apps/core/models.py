@@ -50,6 +50,9 @@ class Paquete(models.Model):
     tipo_paquete = models.ForeignKey(TipoPaquete, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        return self.nombre
 
 class ImagenPaquete(models.Model):
     paquete = models.ForeignKey(Paquete, on_delete=models.CASCADE)
