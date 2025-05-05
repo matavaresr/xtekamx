@@ -1,6 +1,6 @@
 {% for paquete in paquetes %}
   <div class="paquete-card-overlay">
-    <div class="image-section" style="height: auto; background-image: url('{{ paquete.imagenpaquete_set.first.url_imagen }}');"></div>
+    <div class="image-section" style="background-image: url('{{ paquete.imagenpaquete_set.first.url_imagen }}');"></div>
     <div class="overlay-content">
       <h2>PAQUETE <span class="nombre">{{ paquete.nombre|upper }}</span></h2>
 

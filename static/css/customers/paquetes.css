@@ -123,12 +123,14 @@ h2{
   
   /* ============ CARD HORIZONTAL ============ */
   .paquete-card-overlay {
+    position: relative !important;
     display: flex;
     flex-direction: row;
     background-color: #000;
     overflow: hidden;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     transition: transform 0.3s ease;
+    z-index: 2;
   }
   
   .paquete-card-overlay:hover {
@@ -140,7 +142,7 @@ h2{
     background-size: cover;
     background-position: center;
     min-width: 300px;
-    height: 100%;
+    height: auto;
   }
   
   .paquete-card-overlay .overlay-content {
@@ -231,13 +233,19 @@ h2{
     }
   
     .paquete-card-overlay .image-section {
+      position: absolute;
       width: 100%;
-      height: 200px;
+      height: 100%;
+      z-index: 1;
+      filter: brightness(0.6);
+      z-index: 1;
     }
   
     .paquete-card-overlay .overlay-content {
       padding: 1rem;
       font-size: 13px;
+      background-color: transparent;
+      z-index: 2;
     }
   
     .overlay-content h2 {
