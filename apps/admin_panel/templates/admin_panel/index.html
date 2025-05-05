@@ -51,7 +51,8 @@
 {{ ingresos_por_dia|json_script:"ingresos-data" }}
 {{ ventas_por_dia|json_script:"ventas-data" }}
 
+{% endblock %}
+{% block extra_js %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="{% static 'js/admin/dashboard.js' %}"></script>
-</script>
 {% endblock %}
