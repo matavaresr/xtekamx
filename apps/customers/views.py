@@ -19,7 +19,7 @@ from .forms import CustomUserCreationForm
 
 from apps.core.models import (
     Actividad, Paquete, ImagenPaquete, TipoPaquete,
-    Cliente, Reservacion, ClienteReservacion
+    Cliente, Reservacion, ClienteReservacion, Amenidad, Ubicacion
 )
 
 
@@ -128,13 +128,27 @@ class PaqueteDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         paquete = self.get_object()
 
-        # Obtener los rangos bloqueados originales
+        # Fechas bloqueadas optimizadas
         rangos_originales = obtener_fechas_bloqueadas(paquete)
-
-        # Aplicar optimización para unir rangos cercanos
         rangos_optim = optimizar_rangos_bloqueados(rangos_originales, paquete.duracion_dias)
-
         context['fechas_bloqueadas'] = rangos_optim
+
+        # Amenidades activas relacionadas
+        context['amenidades'] = Amenidad.objects.filter(
+            paqueteamenidad__paquete=paquete,
+            paqueteamenidad__estado=1
+        )
+
+        # Ubicaciones relacionadas
+        context['ubicaciones'] = Ubicacion.objects.filter(
+            paqueteubicacion__paquete=paquete
+        )
+
+        # Actividades relacionadas
+        context['actividades'] = Actividad.objects.filter(
+            paqueteactividad__paquete=paquete
+        )
+
         return context
 
 

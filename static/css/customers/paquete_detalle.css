@@ -167,3 +167,25 @@
     height: 44px;
   }
 }
+
+.tab-content {
+  display: none;
+  padding: 2rem;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+.tab {
+  cursor: pointer;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  background: #eee;
+  font-weight: bold;
+}
+
+.tab.active {
+  background: #0077ff;
+  color: white;
+}
