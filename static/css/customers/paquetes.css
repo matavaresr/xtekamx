@@ -224,7 +224,7 @@ h2{
   
     .filters-form select,
     .filters-form input {
-      width: 100%;
+      width: -webkit-fill-available;
     }
   
     .paquete-card-overlay {

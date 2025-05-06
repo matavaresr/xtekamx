@@ -20,8 +20,8 @@ from .forms import CustomUserCreationForm
 from apps.core.services.email_service import enviar_correo_reservacion
 
 from apps.core.models import (
-    Actividad, Paquete, ImagenPaquete, TipoPaquete,
-    Cliente, Reservacion, ClienteReservacion, Amenidad, Ubicacion
+    Actividad, Paquete, ImagenPaquete, TipoPaquete, Itinerario,
+    Cliente, Reservacion, ClienteReservacion, Amenidad, Ubicacion, Faq
 )
 
 
@@ -33,21 +33,21 @@ def home(request):
             "descripcion": "Quiero agradecer a mis amigos de Xteka.mx por invitarme a esta aventura. Disfruté mucho de todas las atracciones, actividades y servicios que me brindaron. Les recomiendo visitar la Cascada de El Meco, pues es un lugar para salir un poco de tu zona de confort y desconectarse de todo. ¡Servicio 10/10!",
             "instagram": "@fitnessalvarezz (120,000 seguidores)",
             "ubicacion": "Monterrey, Nuevo León, México",
-            "imagen": "https://xteka.mx/wp-content/uploads/2024/12/influencer-1.png.webp"
+            "imagen": "https://res.cloudinary.com/dtzil5dwl/image/upload/v1746521206/testimonial_3_iqupsh.png"
         },
         {
             "titulo": "Un servicio inigualable",
             "descripcion": "En nuestro viaje por México, paramos en la Huasteca y nos encontramos con Olaff, un guía de Xteka.mx. Nos llevó a realizar actividades en las hermosas aguas color turquesa y a las cascadas, y fue muy atento en todo momento. Nos llevamos buenas tomas y pueden encontrar el video que realizamos en Instagram y TikTok. ¡100% recomendado tomar un tour con ellos!",
             "instagram": "viajando.conlopuesto (128,000 seguidores)",
             "ubicacion": "España",
-            "imagen": "https://xteka.mx/wp-content/uploads/2024/12/influencer-2.png.webp"
+            "imagen": "https://res.cloudinary.com/dtzil5dwl/image/upload/v1746521206/testimonial_2_zizluj.png"
         },
         {
             "titulo": "Atención espectacular",
             "descripcion": "Amigos, vivan la experiencia de la Huasteca en El Naranjo, San Luis Potosí. Hagan sus recorridos con guías capacitados siempre y recuerden traer su chaleco salvavidas en todo momento. Pero sobre todo, disfruten de estos maravillosos sitios naturales.",
             "instagram": "@aztecasanluispotosi @jorgelopez_perez (6,641 seguidores)",
             "ubicacion": "San Luis Potosí, México",
-            "imagen": "https://xteka.mx/wp-content/uploads/2024/12/influencer-3.png.webp"
+            "imagen": "https://res.cloudinary.com/dtzil5dwl/image/upload/v1746521206/testimonial_1_cx4ydj.png"
         }
     ]
 
@@ -150,6 +150,10 @@ class PaqueteDetailView(DetailView):
         context['actividades'] = Actividad.objects.filter(
             paqueteactividad__paquete=paquete
         )
+
+        context['faqs'] = Faq.objects.filter(paquete_id=paquete.id).order_by('id')
+
+        context['itinerarios'] = Itinerario.objects.filter(paquete_id=paquete.id).order_by('dia')
 
         return context
 

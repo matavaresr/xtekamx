@@ -15,21 +15,12 @@ video_movil.addEventListener('change', () => {
     controlar_video();
 });  
 
-video.addEventListener('timeupdate', function() {
-    localStorage.setItem('videoTime', video.currentTime);
-});
-
 window.addEventListener('load', function() {
     controlar_video();
 
-    const savedTime = localStorage.getItem('videoTime');
-        if (savedTime) {
-            video.currentTime = savedTime;
-        }
-
-        setTimeout(function() {
-            document.getElementById('loader').classList.add('hidden');
-        }, 500);
+    setTimeout(function() {
+        document.getElementById('loader').classList.add('hidden');
+    }, 500);
 });
 
 

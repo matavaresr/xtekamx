@@ -48,7 +48,6 @@ def dashboard(request):
     )
 
     data_dict = {r['day']: r for r in ventas_por_dia_qs}
-
     fechas = []
     ventas_por_dia = []
     ingresos_por_dia = []
@@ -61,6 +60,8 @@ def dashboard(request):
         ventas_por_dia.append(datos['total'] if datos else 0)
         ingresos_por_dia.append(float(datos['ingreso']) if datos else 0.0)
 
+
+
     context = {
         'total_reservas': total_reservas,
         'en_espera': en_espera,
@@ -70,6 +71,7 @@ def dashboard(request):
         'fechas': fechas, 
         'ventas_por_dia': ventas_por_dia,
         'ingresos_por_dia': ingresos_por_dia,
+        'data_random':ventas_por_dia_qs
     }
     return render(request, 'admin_panel/index.html', context)
 

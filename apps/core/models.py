@@ -124,6 +124,7 @@ class PaqueteAmenidad(models.Model):
 class Itinerario(models.Model):
     titulo = models.CharField(max_length=100, default='Dia sin título')
     paquete = models.ForeignKey(Paquete, on_delete=models.CASCADE)
+    titulo = models.CharField(max_length=100, default='Dia sin título')
     dia = models.SmallIntegerField()
     descripcion = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
