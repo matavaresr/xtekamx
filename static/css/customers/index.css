@@ -107,7 +107,7 @@
   justify-content: center;
   z-index: 9999;
   transition: opacity 0.8s ease, visibility 0.8s ease;
-  background-image: url("/static/img/customers/background.png");
+  background-image: url("https://res.cloudinary.com/dtzil5dwl/image/upload/v1746507098/background_a669fh.png");
 }
 
 /* Imagen dentro del loader */
