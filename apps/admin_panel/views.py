@@ -18,13 +18,21 @@ import cloudinary
 import cloudinary.uploader
 import cloudinary.api
 
+from django.db.models import Prefetch
 from .forms import LoginForm, PaqueteForm, PaqueteActividadForm
 from apps.core.models import (
     Usuario, Cliente, Paquete, Actividad, Reservacion,
-    Amenidad, Hotel, TipoPaquete, Ubicacion,
+    Amenidad, Hotel, TipoPaquete, Ubicacion, ClienteReservacion,
     PaqueteActividad, PaqueteAmenidad, PaqueteUbicacion, ImagenPaquete,
     Faq, Itinerario
 )
+
+from apps.core.services.email_service import (
+    enviar_correo_reservacion,
+    enviar_correo_aprobacion,
+    enviar_correo_cancelacion,
+)
+
 
 # Create your views here.
 def dashboard(request):
@@ -112,7 +120,6 @@ def logout_view(request):
     request.session.flush() 
     return redirect('inicio') 
 
-
 def crud(request, modelo):
     modelos = {
         'usuarios': Usuario,
@@ -134,16 +141,41 @@ def crud(request, modelo):
         return render(request, '404.html')
 
     modelo_clase = modelos[modelo]
-    objetos = modelo_clase.objects.all().order_by('-created_at')
-    objetos_count = objetos.count()
 
-    # Obtener campos útiles y choices si existen
-    campos = [campo.name for campo in modelo_clase._meta.fields if campo.name not in ('created_at', 'updated_at', 'id')]
+    # Carga optimizada
+    objetos = modelo_clase.objects.all().order_by('-created_at')
+
+    # Si es reservaciones, optimizamos la carga del cliente
+    if modelo == 'reservaciones':
+        campos = [campo.name for campo in modelo_clase._meta.fields if campo.name not in ('created_at', 'updated_at', 'id')]
+        campos.append('email_cliente')
+
+        # Prefetch del cliente desde tabla intermedia
+        objetos = objetos.prefetch_related(
+            Prefetch(
+                'clientereservacion_set',
+                queryset=ClienteReservacion.objects.select_related('cliente'),
+                to_attr='cliente_reservacion_cached'
+            )
+        )
+
+        # Inyectamos email del cliente cacheado
+        for reservacion in objetos:
+            if reservacion.cliente_reservacion_cached:
+                cliente = reservacion.cliente_reservacion_cached[0].cliente
+                reservacion.email_cliente = cliente.email
+            else:
+                reservacion.email_cliente = 'No asignado'
+    else:
+        campos = [campo.name for campo in modelo_clase._meta.fields if campo.name not in ('created_at', 'updated_at', 'id')]
+
     tipo_choices = []
     if 'tipo' in [campo.name for campo in modelo_clase._meta.fields]:
         tipo_field = modelo_clase._meta.get_field('tipo')
         if hasattr(tipo_field, 'choices'):
             tipo_choices = tipo_field.choices
+
+    objetos_count = objetos.count()
 
     # Paginación
     paginator = Paginator(objetos, 10)
@@ -167,7 +199,7 @@ def crud(request, modelo):
             'total': paginator.num_pages,
         })
 
-    # Renderizado completo
+    # Render completo
     contexto = {
         'modelo': modelo,
         'columnas': campos,
@@ -181,7 +213,9 @@ def crud(request, modelo):
         'usuario_actual': usuario_actual,
         'objetos_count': objetos_count,
     }
+
     return render(request, 'admin_panel/crud.html', contexto)
+
 
 # Eliminar 
 def crud_eliminar(request, modelo, pk):
@@ -236,6 +270,7 @@ def crud_crear(request, modelo):
     modelo_clase = modelos[modelo]
     data = json.loads(request.body)
     objeto = modelo_clase.objects.create(**data)
+
     return JsonResponse({'success': True})
 
 # Editar
@@ -260,6 +295,7 @@ def crud_editar(request, modelo, pk):
         return JsonResponse({'error': 'Modelo inválido'}, status=400)
 
     modelo_clase = modelos[modelo]
+
     try:
         objeto = modelo_clase.objects.get(pk=pk)
         data = json.loads(request.body)
@@ -268,10 +304,39 @@ def crud_editar(request, modelo, pk):
             setattr(objeto, key, value)
         objeto.save()
 
+        # Lógica especial para reservaciones
+        if modelo == "reservaciones":
+            estado = int(data.get("estado"))
+
+            try:
+                cliente_relacion = ClienteReservacion.objects.get(reservacion=objeto)
+                cliente = cliente_relacion.cliente
+            except ClienteReservacion.DoesNotExist:
+                return JsonResponse({'error': 'No hay cliente vinculado a esta reservación'}, status=400)
+
+            paquete = objeto.paquete
+
+            contexto = {
+                "nombre_cliente": f"{cliente.nombre} {cliente.apellido}",
+                "paquete_nombre": paquete.nombre,
+                "fecha_inicio": objeto.fecha_inicio.strftime('%d/%m/%Y'),
+                "fecha_fin": objeto.fecha_fin.strftime('%d/%m/%Y'),
+                "cantidad_adultos": objeto.cantidad_adultos,
+                "cantidad_ninos": objeto.cantidad_ninos,
+                "total_pago": float(objeto.total_pago),
+            }
+
+            if estado == 1:
+                enviar_correo_reservacion(cliente.email, contexto)
+            elif estado == 2:
+                enviar_correo_aprobacion(cliente.email, contexto)
+            elif estado == 3:
+                enviar_correo_cancelacion(cliente.email, contexto)
+
         return JsonResponse({'success': True})
+
     except modelo_clase.DoesNotExist:
         return JsonResponse({'error': 'No encontrado'}, status=404)
-
  
 # CRUD Paquetes
 def paquetes_list(request):
