@@ -21,7 +21,7 @@ from apps.core.services.email_service import enviar_correo_reservacion
 
 from apps.core.models import (
     Actividad, Paquete, ImagenPaquete, TipoPaquete,
-    Cliente, Reservacion, ClienteReservacion, Amenidad, Ubicacion
+    Cliente, Reservacion, ClienteReservacion, Amenidad, Ubicacion, Faq
 )
 
 
@@ -150,6 +150,8 @@ class PaqueteDetailView(DetailView):
         context['actividades'] = Actividad.objects.filter(
             paqueteactividad__paquete=paquete
         )
+
+        context['faqs'] = Faq.objects.filter(paquete_id=paquete.id).order_by('id')
 
         return context
 

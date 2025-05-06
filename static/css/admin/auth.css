@@ -89,10 +89,10 @@ input {
     justify-content: left;
     align-items: center;
     color: #fff;
-    background-image: url(" /static/img/admin/login-background.png ");
+    background-image: url("https://res.cloudinary.com/dtzil5dwl/image/upload/v1746512320/login-background_fcqms8.jpg");
     background-size: cover;
     background-position: center;
-    padding-left: 40px;
+    padding: 0px 40px;
 }
 
 .content-img h1 {
