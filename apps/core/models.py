@@ -122,6 +122,7 @@ class PaqueteAmenidad(models.Model):
         unique_together = ('paquete', 'amenidad')
 
 class Itinerario(models.Model):
+    titulo = models.CharField(max_length=100, default='Dia sin título')
     paquete = models.ForeignKey(Paquete, on_delete=models.CASCADE)
     dia = models.SmallIntegerField()
     descripcion = models.TextField()
