@@ -1,7 +1,7 @@
 import json
 from datetime import datetime, timedelta, date
 
-from django.http import JsonResponse, HttpResponseBadRequest, HttpResponseNotAllowed
+from django.http import JsonResponse, HttpResponse, HttpResponseBadRequest, HttpResponseNotAllowed
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
@@ -22,7 +22,8 @@ from .forms import LoginForm, PaqueteForm, PaqueteActividadForm
 from apps.core.models import (
     Usuario, Cliente, Paquete, Actividad, Reservacion,
     Amenidad, Hotel, TipoPaquete, Ubicacion,
-    PaqueteActividad, PaqueteAmenidad, PaqueteUbicacion, ImagenPaquete
+    PaqueteActividad, PaqueteAmenidad, PaqueteUbicacion, ImagenPaquete,
+    Faq, Itinerario
 )
 
 # Create your views here.
@@ -480,3 +481,129 @@ def guardar_imagen_paquete(request):
         })
     except Paquete.DoesNotExist:
         return JsonResponse({'error': 'Paquete no encontrado'}, status=404)
+    
+
+def obtener_imagenes_paquete(request, paquete_id):
+    imagenes = ImagenPaquete.objects.filter(paquete_id=paquete_id)
+    data = [{
+        'id': img.id,
+        'url_imagen': img.url_imagen,
+        'descripcion': img.descripcion,
+        'es_portada': img.es_portada,
+    } for img in imagenes]
+    return JsonResponse(data, safe=False)
+
+from django.views.decorators.csrf import csrf_exempt
+
+@csrf_exempt
+def eliminar_imagen_paquete(request, imagen_id):
+    if request.method == 'DELETE':
+        try:
+            ImagenPaquete.objects.get(id=imagen_id).delete()
+            return HttpResponse(status=204)
+        except ImagenPaquete.DoesNotExist:
+            return HttpResponse(status=404)
+    return HttpResponse(status=405)
+
+@csrf_exempt
+def actualizar_portada(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        imagen_id = data.get('imagen_id')
+        paquete_id = data.get('paquete_id')
+
+        # Desmarcar todas las demás como portada
+        ImagenPaquete.objects.filter(paquete_id=paquete_id).update(es_portada=False)
+
+        # Marcar esta imagen como portada
+        ImagenPaquete.objects.filter(id=imagen_id).update(es_portada=True)
+
+        return JsonResponse({'status': 'ok'})
+    return JsonResponse({'error': 'Método no permitido'}, status=405)
+
+@csrf_exempt
+def guardar_faq(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        paquete_id = data.get('paquete_id')
+        pregunta = data.get('pregunta')
+        respuesta = data.get('respuesta')
+
+        if not (paquete_id and pregunta and respuesta):
+            return JsonResponse({'success': False, 'error': 'Datos incompletos'})
+
+        try:
+            paquete = Paquete.objects.get(id=paquete_id)
+            faq = Faq.objects.create(paquete=paquete, pregunta=pregunta, respuesta=respuesta)
+            return JsonResponse({'success': True, 'faq_id': faq.id})
+        except Paquete.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Paquete no encontrado'})
+
+    return JsonResponse({'success': False, 'error': 'Método no permitido'})
+
+
+def listar_faqs(request):
+    paquete_id = request.GET.get('paquete_id')
+    faqs = Faq.objects.filter(paquete_id=paquete_id).values('id', 'pregunta', 'respuesta')
+    return JsonResponse({'faqs': list(faqs)})
+
+@csrf_exempt
+@require_http_methods(["DELETE"])
+def eliminar_faq(request, faq_id):
+    try:
+        faq = Faq.objects.get(id=faq_id)
+        faq.delete()
+        return JsonResponse({'success': True})
+    except Faq.DoesNotExist:
+        return JsonResponse({'success': False, 'error': 'FAQ no encontrada'})
+    
+@require_POST
+def guardar_itinerario(request):
+    data = json.loads(request.body)
+    paquete_id = data.get('paquete_id')
+    titulo = data.get('titulo')
+    dia = data.get('dia')
+    descripcion = data.get('descripcion')
+
+    # Validar si ya hay un itinerario con ese día
+    if Itinerario.objects.filter(paquete_id=paquete_id, dia=dia).exists():
+        return JsonResponse({'success': False, 'error': 'DIA_REPETIDO'})
+
+    Itinerario.objects.create(
+        paquete_id=paquete_id,
+        titulo=titulo,
+        dia=dia,
+        descripcion=descripcion
+    )
+    return JsonResponse({'success': True})
+
+def listar_itinerarios(request):
+    paquete_id = request.GET.get('paquete_id')
+    itinerarios = Itinerario.objects.filter(paquete_id=paquete_id).order_by('dia')
+
+    # Obtener duración del paquete
+    try:
+        paquete = Paquete.objects.get(id=paquete_id)
+        duracion = paquete.duracion_dias
+    except Paquete.DoesNotExist:
+        return JsonResponse({'error': 'Paquete no encontrado'}, status=404)
+
+    data = {
+        'itinerarios': [
+            {'id': i.id, 'dia': i.dia, 'descripcion': i.descripcion}
+            for i in itinerarios
+        ],
+        'paquete': {
+            'duracion_dias': duracion
+        }
+    }
+    return JsonResponse(data)
+
+@require_http_methods(["DELETE"])
+def eliminar_itinerario(request, itinerario_id):
+    try:
+        itinerario = Itinerario.objects.get(id=itinerario_id)
+        itinerario.delete()
+        return JsonResponse({'success': True})
+    except Itinerario.DoesNotExist:
+        return JsonResponse({'success': False, 'error': 'NO_EXISTE'})

@@ -5,7 +5,7 @@
 {% block title %}Admin Panel - Paquetes{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/admin/crud.css' %}?v=14" />
+<link rel="stylesheet" href="{% static 'css/admin/crud.css' %}?v=16" />
 {% endblock %}
 
 {% block content %}
@@ -203,81 +203,131 @@
     <div class="modal-content">
       <form id="form-paquete">
         <div class="modal-body">
+          <div class="modal-header" style="display: flex; width: 100%; justify-content: end; ">
+            <button type="button" class="btn danger small" onclick="closeVerModal()">✖</button>
+          </div>
           <div class="modal-layout">
-            <!-- Izquierda: datos del paquete -->
-            <div class="modal-left">
-              <div class="info-section">
-                <div class="card-header">
-                  <h3 id="nombre_paquete_text"></h3>
-                </div>
-  
-                <div class="form-group">
-                  <span id="descripcion_paquete_text" class="descripcion"></span>
-                </div>
-  
-                <div class="form-group">
-                  <label><strong>Duración:</strong></label>
-                  <span id="duracion_dias_text"></span>
-                </div>
-  
-                <div class="form-group">
-                  <label><strong>Precio Por Adulto:</strong></label>
-                  <span id="precio_adulto_text"></span>
-                </div>
-  
-                <div class="form-group">
-                  <label><strong>Precio Por Niño:</strong></label>
-                  <span id="precio_nino_text"></span>
-                </div>
-  
-                <div class="form-group">
-                  <label><strong>Mínimo Personas:</strong></label>
-                  <span id="minimo_personas_text"></span>
-                </div>
-  
-                <div class="form-group">
-                  <label><strong>Máximo Personas:</strong></label>
-                  <span id="maximo_personas_text"></span>
-                </div>
-  
-                <div style="width: 100%; justify-content: center; display: flex; align-items: center;">
-                  <button type="button" class="btn cancel" onclick="closeVerModal()">Cancelar</button>
-                </div>
-              </div>
-            </div>
-  
             <!-- Centro: actividades / amenidades / ubicaciones -->
             <div class="modal-center">
               <div class="actividades-section">
+                <div>
+                  <h2 id="nombre_paquete_text"></h2>
+                </div>
+                <span id="descripcion_paquete_text" class="descripcion"></span>
+                <div class="badge-container">
+                  <span class="badge badge-otro">
+                    <i class="fas fa-calendar"></i>
+                    <span id="duracion_dias_text"></span>
+                  </span>
+                  <span class="badge badge-otro">
+                    <i class="fas fa-dollar-sign"></i> 
+                    <i class="fas fa-user"></i>
+                    <span id="precio_adulto_text"></span>
+                  </span>
+                  <span class="badge badge-otro">
+                    <i class="fas fa-dollar-sign"></i> 
+                    <i class="fas fa-baby"></i>
+                    <span id="precio_nino_text"></span>
+                  </span>
+                  <span class="badge badge-otro">
+                    <i class="fas fa-users"></i>
+                    <span id="minimo_personas_text"></span> - <span id="maximo_personas_text"></span>
+                  </span>
+                </div>
+              </div>
+
+              <div class="actividades-section">
                 <h3>Actividades</h3>
-                <div class="checkboxes-grid" id="checkboxes-actividades"></div>
+                <div style="overflow: auto; width: 350px;">
+                  <div class="checkboxes-grid" id="checkboxes-actividades"></div>
+                </div>
                 <button type="button" class="btn primary" onclick="guardarActividades()">Guardar Actividades</button>
               </div>
   
               <div class="actividades-section">
                 <h3>Amenidades</h3>
-                <div class="checkboxes-grid" id="checkboxes-amenidades"></div>
+                <div style="overflow: auto; width: 350px;">
+                  <div class="checkboxes-grid" id="checkboxes-amenidades"></div>
+                </div>
                 <button type="button" class="btn primary" onclick="guardarAmenidades()">Guardar Amenidades</button>
               </div>
   
               <div class="actividades-section">
                 <h3>Ubicaciones</h3>
-                <div class="checkboxes-grid" id="checkboxes-ubicaciones"></div>
+                <div style="overflow: auto; width: 350px;">
+                  <div class="checkboxes-grid" id="checkboxes-ubicaciones"></div>
+                </div>
                 <button type="button" class="btn primary" onclick="guardarUbicaciones()">Guardar Ubicaciones</button>
               </div>
             </div>
-  
             <!-- Derecha: imágenes -->
             <div class="modal-right">
               <div class="actividades-section">
-                <h3>Subir Imagen</h3>
-                <div class="form-group">
-                  <input type="text" id="imagenSeleccionada" placeholder="URL de la imagen" required>
-                  <button type="button" class="btn secondary small" onclick="abrirModalBanco()">Seleccionar Imagen</button>
+                <h3>Galeria</h3>
+                <div class="subirImgn">
+                  <div class="form-group">
+                    <input type="text" id="imagenSeleccionada" placeholder="URL de la imagen" required>
+                    <button type="button" class="btn secondary small" onclick="abrirModalBanco()">Seleccionar Imagen</button>
+                  </div>
                 </div>
                 <button type="button" class="btn primary" onclick="guardarImagen()">Subir Imagen</button>
+                <div id="tabla-imagenes-contenedor" style="height: 560px; overflow: auto; width:100%"></div>
               </div>
             </div>
+            <!-- Derecha: imágenes -->
+            <div class="modal-right">
+              <div class="actividades-section" style="width:fit-content">
+                <h3>FAQs</h3>
+                <div style="display:flex; flex-direction:row; gap:10px">
+                  <div class="FAQs">
+                    <div class="form-group">
+                      <label>Pregunta</label>
+                      <input type="text" id="FAQPregunta" placeholder="Ingresar pregunta" required>
+                    </div>
+                    <div class="form-group">
+                      <label>Respuesta</label>
+                      <input type="text" id="FAQRespuesta" placeholder="Ingresar respuesta" required>
+                    </div>
+                    <button type="button" class="btn primary" onclick="guardarFAQ()">Guardar FAQ</button>
+                  </div>
+                  
+                  <div id="tabla-imagenes-contenedor" style="height: 150px; overflow: auto;width:330px">
+                    <table id="faqTable" style="width:100%">
+                      <tbody>
+                        <!-- Se llenará con JavaScript -->
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div class="actividades-section" style="width:fit-content">
+                <h3>Itinerario</h3>
+                <div style="display:flex; flex-direction:row; gap:10px">
+                  <div class="form-itinerario" id="form-itinerario">
+                    <div class="form-group">
+                      <label for="TituloItinerario">Titulo</label>
+                      <input type="text" id="TituloItinerario" placeholder="Ingresar titulo" required>
+                    </div>
+                    <div class="form-group">
+                      <label for="diaItinerario">Día</label>
+                      <select id="diaItinerario" required></select>
+                    </div>
+                    <div class="form-group">
+                      <label for="descripcionItinerario">Descripción</label>
+                      <textarea id="descripcionItinerario" placeholder="Describe actividades del día" required></textarea>
+                    </div>
+                    <button id="guardarItinerarioBtn" class="btn primary" onclick="guardarItinerario()">Guardar Itinerario</button>
+                  </div>
+                  
+                  <!-- Tabla para mostrar itinerarios -->
+                  <div id="tabla-imagenes-contenedor" style="height: 400px; overflow: auto;width:330px">
+                    <table id="itinerarioTable" style="width:100%;text-align:center">
+                      <tbody></tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>            
           </div>
         </div>
       </form>
@@ -360,6 +410,10 @@
           .then(response => response.json())
           .then(data => {
 
+            cargarImagenesPaquete(paqueteId);
+            cargarFAQs(paqueteId)
+            cargarItinerarios(paqueteId);
+
             // Llenar campos del paquete
             document.getElementById('nombre_paquete_text').textContent = data.paquete.nombre;
             document.getElementById('descripcion_paquete_text').textContent = data.paquete.descripcion;
@@ -424,6 +478,17 @@
                 div.appendChild(label);
                 contenedorUbicaciones.appendChild(div);
             });
+
+            
+            const duracion = data.paquete.duracion_dias;
+            console.log(duracion)
+            const selectDia = document.getElementById('diaItinerario');
+            for (let i = 1; i <= duracion; i++) {
+              const option = document.createElement('option');
+              option.value = i;
+              option.textContent = `Día ${i}`;
+              selectDia.appendChild(option);
+            }
 
             // Mostrar modal
             document.getElementById('modal-paquete').style.display = 'block';
@@ -531,10 +596,250 @@
           if (data.id) {
             alert('Imagen guardada correctamente');
             document.getElementById("imagenSeleccionada").value = ""; 
+            cargarImagenesPaquete(paqueteId);
           } else {
             alert('Error al guardar imagen');
           }
         });
+    }
+
+    function cargarImagenesPaquete(paqueteId) {
+      fetch(`/admin_panel/imagenes-paquete/${paqueteId}/`)
+        .then(response => response.json())
+        .then(data => {
+          const contenedor = document.getElementById('tabla-imagenes-contenedor');
+          contenedor.innerHTML = ''; // Limpia el contenedor
+    
+          if (data.length === 0) {
+            contenedor.innerHTML = '<p>No hay imágenes asociadas al paquete.</p>';
+            return;
+          }
+    
+          let tabla = `<table class="tabla-imagenes">
+            <tbody>`;
+    
+          data.forEach(imagen => {
+            tabla += `<tr>
+              <td><img src="${imagen.url_imagen}" alt="Imagen" style="width: 230px; height: 150px; object-fit: cover;"></td>
+              <td>
+                <input type="checkbox" name="portada" ${imagen.es_portada ? 'checked' : ''} 
+                  onchange="cambiarPortada(${imagen.id}, ${paqueteId}, this)">
+              </td>
+              <td>
+                <button class="btn danger small" onclick="eliminarImagen(${imagen.id}, ${paqueteId})">✖</button>
+              </td>
+            </tr>`;
+          });
+    
+          tabla += '</tbody></table>';
+          contenedor.innerHTML = tabla;
+        });
+    }
+
+    function cambiarPortada(imagenId, paqueteId, checkbox) {
+      fetch('/admin_panel/actualizar-portada/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': getCSRFToken(),
+        },
+        body: JSON.stringify({
+          imagen_id: imagenId,
+          paquete_id: paqueteId
+        })
+      })
+      .then(res => {
+        if (res.ok) {
+          // Recargar la tabla para reflejar solo una portada activa
+          cargarImagenesPaquete(paqueteId);
+        } else {
+          alert('Error al actualizar la portada');
+        }
+      });
+    }
+
+    function eliminarImagen(imagenId) {
+      if (!confirm('¿Estás seguro de que deseas eliminar esta imagen?')) return;
+    
+      fetch(`/admin_panel/eliminar-imagen/${imagenId}/`, {
+        method: 'DELETE',
+        headers: {
+          'X-CSRFToken': getCSRFToken() // Asegúrate de tener esto implementado
+        }
+      }).then(res => {
+        if (res.ok) {
+          // Recargar la tabla
+          const paqueteId = document.getElementById('form-paquete').dataset.paqueteId;
+          cargarImagenesPaquete(paqueteId);
+        } else {
+          alert('Error al eliminar la imagen.');
+        }
+      });
+    }
+
+      function guardarFAQ() {
+        const paqueteId = document.getElementById('form-paquete').dataset.paqueteId;
+        const pregunta = document.getElementById('FAQPregunta').value.trim();
+        const respuesta = document.getElementById('FAQRespuesta').value.trim();
+    
+        if (!pregunta || !respuesta) {
+          alert("Completa ambos campos.");
+          return;
+        }
+    
+        fetch('/admin_panel/guardar_faq/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')
+          },
+          body: JSON.stringify({
+            paquete_id: paqueteId,
+            pregunta: pregunta,
+            respuesta: respuesta
+          })
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            alert("FAQ guardado correctamente.");
+            document.getElementById('FAQPregunta').value = '';
+            document.getElementById('FAQRespuesta').value = '';
+            cargarFAQs(paqueteId)
+          } else {
+            alert("Error al guardar FAQ.");
+          }
+        });
+      }
+
+    function cargarFAQs(paqueteId) {
+      fetch(`/admin_panel/listar_faqs/?paquete_id=${paqueteId}`)
+        .then(response => response.json())
+        .then(data => {
+          const tbody = document.querySelector('#faqTable tbody');
+          tbody.innerHTML = ''; // Limpiar tabla
+    
+          if (data.faqs.length === 0) {
+            const row = document.createElement('tr');
+            row.innerHTML = `<td style="text-align:center;font-weight:bold;color:#2f9ed8" colspan="3">Aún no hay FAQs registrados.</td>`;
+            tbody.appendChild(row);
+            return;
+          }
+    
+          data.faqs.forEach(faq => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+              <td style="font-weight:bold">${faq.pregunta}</td>
+              <td>${faq.respuesta}</td>
+              <td><button class="btn danger small" onclick="eliminarFAQ(${faq.id}, ${paqueteId})">✖</button></td>
+            `;
+            tbody.appendChild(row);
+          });
+        });
+    }
+      
+    
+    function eliminarFAQ(faqId, paqueteId) {
+      fetch(`/admin_panel/eliminar_faq/${faqId}/`, {
+        method: 'DELETE',
+        headers: {
+          'X-CSRFToken': getCookie('csrftoken'),
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          alert('FAQ eliminada');
+          cargarFAQs(paqueteId);
+        } else {
+          alert('Error al eliminar FAQ');
+        }
+      });
+    }
+
+    function guardarItinerario() {
+
+      const paqueteId = document.getElementById('form-paquete').dataset.paqueteId;
+
+      const titulo = document.getElementById('TituloItinerario').value.trim();
+      const dia = parseInt(document.getElementById('diaItinerario').value);
+      const descripcion = document.getElementById('descripcionItinerario').value.trim();
+    
+      if (!descripcion) {
+        alert("Ingresa una descripción.");
+        return;
+      }
+    
+      fetch('/admin_panel/guardar_itinerario/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': getCookie('csrftoken')
+        },
+        body: JSON.stringify({
+          paquete_id: paqueteId,
+          titulo: titulo,
+          dia: dia,
+          descripcion: descripcion
+        })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          alert("Itinerario guardado correctamente.");
+          document.getElementById('descripcionItinerario').value = '';
+          cargarItinerarios(paqueteId);
+        } else if (data.error === 'DIA_REPETIDO') {
+          alert("Ya existe un itinerario para ese día.");
+        } else {
+          alert("Error al guardar el itinerario.");
+        }
+      });
+    }
+    
+    function cargarItinerarios(paqueteId) {
+      fetch(`/admin_panel/listar_itinerarios/?paquete_id=${paqueteId}`)
+        .then(response => response.json())
+        .then(data => {
+          const tbody = document.querySelector('#itinerarioTable tbody');
+          tbody.innerHTML = '';
+    
+          if (data.itinerarios.length === 0) {
+            const row = document.createElement('tr');
+            row.innerHTML = '<td colspan="3">Aún no hay itinerarios registrados.</td>';
+            tbody.appendChild(row);
+            return;
+          }
+    
+          data.itinerarios.forEach(item => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+              <td style="font-weight:bold;white-space: nowrap;padding-right:20px">Día ${item.dia}</td>
+              <td style="padding:10px; text-align:left">${item.descripcion}</td>
+              <td><button class="btn danger small" onclick="eliminarItinerario(${item.id}, ${paqueteId})">✖</button></td>
+            `;
+            tbody.appendChild(row);
+          });
+        });
+    }
+    
+    function eliminarItinerario(itinerarioId, paqueteId) {
+      if (!confirm("¿Eliminar este itinerario?")) return;
+    
+      fetch(`/admin_panel/eliminar_itinerario/${itinerarioId}/`, {
+        method: 'DELETE',
+        headers: {
+          'X-CSRFToken': getCookie('csrftoken')
+        }
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          cargarItinerarios(paqueteId);
+        } else {
+          alert("Error al eliminar el itinerario.");
+        }
+      });
     }
       
     function getCSRFToken() {

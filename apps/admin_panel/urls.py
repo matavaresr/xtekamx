@@ -21,4 +21,13 @@ urlpatterns = [
     path('imagenes/eliminar/', views.eliminar_imagen, name='eliminar_imagen'),
     path('imagenes/actualizar/', views.reemplazar_imagen, name='reemplazar_imagen'),
     path('guardar-imagen/', views.guardar_imagen_paquete, name='guardar_imagen'),
+    path('imagenes-paquete/<int:paquete_id>/', views.obtener_imagenes_paquete, name='obtener_imagenes_paquete'),
+    path('eliminar-imagen/<int:imagen_id>/', views.eliminar_imagen_paquete, name='eliminar_imagen_paquete'),
+    path('actualizar-portada/', views.actualizar_portada, name='actualizar_portada'),
+    path('guardar_faq/', views.guardar_faq, name='guardar_faq'),
+    path('listar_faqs/', views.listar_faqs, name='listar_faqs'),
+    path('eliminar_faq/<int:faq_id>/', views.eliminar_faq, name='eliminar_faq'),
+    path('guardar_itinerario/', views.guardar_itinerario, name='guardar_itinerario'),
+    path('listar_itinerarios/', views.listar_itinerarios, name='listar_itinerarios'),
+    path('eliminar_itinerario/<int:itinerario_id>/', views.eliminar_itinerario, name='eliminar_itinerario'),
 ]
