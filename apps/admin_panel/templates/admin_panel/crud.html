@@ -320,11 +320,22 @@
                 });
     
                 if (response.ok) {
-                    // Cerrar modal y recargar tabla
                     closeCreateModal();
-                    location.reload(); // Esto actualiza toda la página para ver el nuevo registro
+                    location.reload();
                 } else {
-                    alert('Error al guardar. Revisa los datos.');
+                    const result = await response.json();
+                
+                    if (result.errors) {
+                        for (const campo in result.errors) {
+                            result.errors[campo].forEach(msg => {
+                                showToast(`${campo}: ${msg}`, 'error'); // ✅ Usar toast para cada error
+                            });
+                        }
+                    } else if (result.error) {
+                        showToast(result.error, 'error'); // Error general
+                    } else {
+                        showToast('Error desconocido al guardar.', 'error');
+                    }
                 }
             } catch (error) {
                 console.error('Error:', error);
@@ -369,7 +380,20 @@
                 console.error('Error:', error);
                 alert('Error de red.');
             }
-        });    
+        });
+        
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+     
+            const container = document.getElementById('toastContainer');
+            container.appendChild(toast);
+     
+            setTimeout(() => {
+                toast.remove();
+            }, 4000);
+        }
 
         function getCookie(name) {
             let cookieValue = null;
