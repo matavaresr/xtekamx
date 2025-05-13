@@ -12,4 +12,5 @@ urlpatterns = [
     path('actividades', views.actividades, name='actividades'),  
     path('terminosycondiciones', views.terminosycondiciones, name='terminosycondiciones'), 
     path('ajax/reservar/', views.guardar_reservacion_ajax, name='guardar_reservacion_ajax'),
+    path('ajax/fechas-bloqueadas/<int:paquete_id>/', views.fechas_bloqueadas_ajax, name='fechas_bloqueadas_ajax'),
 ]

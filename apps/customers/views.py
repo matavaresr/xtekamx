@@ -155,6 +155,8 @@ def guardar_reservacion_ajax(request):
     cliente_form = ClienteForm(request.POST)
     reservacion_form = ReservacionForm(request.POST)
 
+    
+
     if cliente_form.is_valid() and reservacion_form.is_valid():
         email = cliente_form.cleaned_data['email']
         telefono = cliente_form.cleaned_data['telefono']
@@ -201,3 +203,12 @@ def guardar_reservacion_ajax(request):
         'cliente_errors': cliente_form.errors.get_json_data(),
         'reservacion_errors': reservacion_form.errors.get_json_data(),
     }, status=400)
+
+def fechas_bloqueadas_ajax(request, paquete_id):
+    try:
+        paquete = Paquete.objects.get(pk=paquete_id)
+        fechas = obtener_fechas_bloqueadas(paquete)
+        fechas_optim = optimizar_rangos_bloqueados(fechas, paquete.duracion_dias)
+        return JsonResponse({'bloqueadas': fechas_optim})
+    except Paquete.DoesNotExist:
+        return JsonResponse({'error': 'Paquete no encontrado.'}, status=404)

@@ -115,9 +115,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 showSpinner(false);
                 form.reset();
                 closeModal();
-                setTimeout(function() {
-                    window.location.reload();
-                }, 3000);
             } else {
                 // Mostrar errores del formulario Cliente
                 if (data.cliente_errors) {
@@ -143,6 +140,27 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
                 showSpinner(false);
             }
+
+            const paqueteId = formData.get('paquete_id');
+            fetch(`/ajax/fechas-bloqueadas/${paqueteId}/`)
+                .then(resp => resp.json())
+                .then(result => {
+                    if (result.bloqueadas) {
+                        bloqueadas = result.bloqueadas;  // variable global actualizada
+
+                        // Destruir y reinicializar el flatpickr con nuevas fechas
+                        if (input._flatpickr) {
+                            input._flatpickr.destroy();
+                        }
+
+                        flatpickr(input, {
+                            dateFormat: "Y-m-d",
+                            minDate: new Date(new Date().setDate(new Date().getDate() + 10)),
+                            disable: bloqueadas,
+                            maxDate: new Date(new Date().setDate(new Date().getDate() + 365))
+                        });
+                    }
+                });
         })
         .catch(error => {
             console.error("Error en la solicitud AJAX:", error);
