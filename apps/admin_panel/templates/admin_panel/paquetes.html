@@ -5,7 +5,7 @@
 {% block title %}Admin Panel - Paquetes{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/admin/crud.css' %}?v=16" />
+<link rel="stylesheet" href="{% static 'css/admin/crud.css' %}?v=9" />
 {% endblock %}
 
 {% block content %}
@@ -356,8 +356,14 @@
             if (data.id) {
                 closePaqueteModal(); 
                 setTimeout(() => location.reload(), 300); 
+            } else if (data.errors) {
+                for (const campo in data.errors) {
+                    data.errors[campo].forEach(msg => {
+                        showToast(`${campo}: ${msg}`, 'error');
+                    });
+                }
             } else {
-                alert('Error al crear el paquete.');
+                showToast('Error desconocido al crear el paquete.', 'error');
             }
         })
         .catch(error => {
@@ -842,6 +848,19 @@
         }
       });
     }
+
+    function showToast(message, type = 'info') {
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      toast.textContent = message;
+
+      const container = document.getElementById('toastContainer');
+      container.appendChild(toast);
+
+      setTimeout(() => {
+          toast.remove();
+      }, 4000);
+  }
       
     function getCSRFToken() {
         const name = 'csrftoken';

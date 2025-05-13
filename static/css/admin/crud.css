@@ -262,27 +262,30 @@ i {
 }
 
 /* Toast */
-.toast-container {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    z-index: 2000;
-}
-
 .toast {
-    background-color: #333;
-    color: #fff;
-    padding: 15px 20px;
-    border-radius: 10px;
-    margin-top: 10px;
-    min-width: 250px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-    opacity: 0;
-    transform: translateY(20px);
-    animation: fadeInUp 0.5s forwards, fadeOut 0.5s forwards 3s;
-    font-size: 1rem;
+    background-color: #323232;
+    color: white;
+    padding: 0.75rem 1rem;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    min-width: 220px;
+    animation: fadeInOut 4s forwards;
+    font-size: 14px;
 }
-
+ 
+.toast.success {
+    background-color: #2ecc71;
+}
+ 
+.toast.error {
+    background-color: #e74c3c;
+}
+ 
+.toast.info {
+    background-color: #3498db;
+}
+ 
 /* Animaciones */
 @keyframes fadeInUp {
     to {

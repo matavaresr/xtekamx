@@ -13,6 +13,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Count, Sum
 from django.db.models.functions import TruncDate
 from django.forms import modelform_factory
+from django.core.exceptions import ValidationError
 
 import cloudinary
 import cloudinary.uploader
@@ -210,7 +211,6 @@ def crud_eliminar(request, modelo, pk):
     except modelo_clase.DoesNotExist:
         return JsonResponse({'error': 'No encontrado'}, status=404)
 
-# Crear
 def crud_crear(request, modelo):
     if request.method != "POST":
         return JsonResponse({'error': 'Método no permitido'}, status=405)
@@ -232,9 +232,21 @@ def crud_crear(request, modelo):
         return JsonResponse({'error': 'Modelo inválido'}, status=400)
 
     modelo_clase = modelos[modelo]
-    data = json.loads(request.body)
-    objeto = modelo_clase.objects.create(**data)
-    return JsonResponse({'success': True})
+
+    try:
+        data = json.loads(request.body)
+        objeto = modelo_clase(**data)
+        objeto.full_clean()  # ✅ Ejecutar validaciones del modelo
+        objeto.save()
+        return JsonResponse({'success': True})
+
+    except ValidationError as e:
+        # Devuelve los errores en formato legible para el frontend
+        return JsonResponse({'success': False, 'errors': e.message_dict}, status=400)
+
+    except Exception as e:
+        # Captura otros errores inesperados (como campos mal escritos)
+        return JsonResponse({'success': False, 'error': str(e)}, status=500)
 
 # Editar
 def crud_editar(request, modelo, pk):
@@ -287,9 +299,12 @@ def crear_paquete(request):
         form = PaqueteForm(request.POST, request.FILES)
         if form.is_valid():
             paquete = form.save()
-            return JsonResponse({'id': paquete.id})  # Devuelve el ID del paquete
+            return JsonResponse({'id': paquete.id})
         else:
-            return JsonResponse({'errors': form.errors}, status=400)
+            # Transformar errores a lista plana por campo
+            error_dict = {field: [str(e) for e in errs] for field, errs in form.errors.items()}
+            return JsonResponse({'errors': error_dict}, status=400)
+
     return JsonResponse({'error': 'Método no permitido'}, status=405)
 
 @csrf_exempt
