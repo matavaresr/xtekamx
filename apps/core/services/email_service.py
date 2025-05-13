@@ -13,7 +13,7 @@ def enviar_correo_contacto(destinatario, asunto, mensaje_texto, mensaje_html_con
             subject=asunto,
             body=mensaje_texto,
             from_email=remitente,
-            to=[destinatario]
+            to=[destinatario, remitente]
         )
         correo.attach_alternative(mensaje_html, "text/html")
         correo.send()
@@ -65,7 +65,7 @@ def enviar_correo_aprobacion(destinatario, contexto_html):
             "¡Gracias por reservar con Xteka Huasteca!"
         )
 
-        mensaje_html = render_to_string('emails/correo_aprobacion.html', contexto_html)
+        mensaje_html = render_to_string('emails/correo_confirmacion.html', contexto_html)
 
         correo = EmailMultiAlternatives(
             subject=asunto,

@@ -217,6 +217,16 @@ def guardar_reservacion_ajax(request):
 
         paquete = get_object_or_404(Paquete, id=data['paquete_id'])
 
+        # ✅ Validar cantidad total de personas
+        cantidad_adultos = int(data['cantidad_adultos'])
+        cantidad_ninos = int(data['cantidad_ninos'])
+        total_personas = cantidad_adultos + cantidad_ninos
+
+        if total_personas < paquete.minimo_personas or total_personas > paquete.maximo_personas:
+            return JsonResponse({
+                'error': f'La cantidad total de personas ({total_personas}) debe estar entre {paquete.minimo_personas} y {paquete.maximo_personas}.'
+            }, status=400)
+
         fecha_inicio = datetime.strptime(data['fecha_inicio'], "%Y-%m-%d").date()
         fecha_fin = fecha_inicio + timedelta(days=paquete.duracion_dias - 1)
 
@@ -244,11 +254,10 @@ def guardar_reservacion_ajax(request):
                         }
                     })
                 else:
-                    cliente = cliente_existente  # usar el existente
+                    cliente = cliente_existente
             else:
                 return JsonResponse({'error': 'Este correo ya está registrado con otro nombre.'}, status=400)
         else:
-            # Crear nuevo cliente
             cliente = Cliente.objects.create(
                 nombre=data['nombre'],
                 apellido=data['apellido'],
@@ -257,30 +266,29 @@ def guardar_reservacion_ajax(request):
             )
 
         total_pago = (
-            paquete.precio_adulto * int(data['cantidad_adultos']) +
-            paquete.precio_nino * int(data['cantidad_ninos'])
+            paquete.precio_adulto * cantidad_adultos +
+            paquete.precio_nino * cantidad_ninos
         )
 
         reservacion = Reservacion.objects.create(
             paquete=paquete,
             fecha_inicio=fecha_inicio,
             fecha_fin=fecha_fin,
-            cantidad_adultos=data['cantidad_adultos'],
-            cantidad_ninos=data['cantidad_ninos'],
+            cantidad_adultos=cantidad_adultos,
+            cantidad_ninos=cantidad_ninos,
             total_pago=total_pago,
-            estado=1  # Estado: En revisión
+            estado=1
         )
 
         ClienteReservacion.objects.create(cliente=cliente, reservacion=reservacion)
 
-        # Enviar correo de confirmación
         enviar_correo_reservacion(cliente.email, {
             'nombre_cliente': cliente.nombre,
             'paquete_nombre': paquete.nombre,
             'fecha_inicio': fecha_inicio,
             'fecha_fin': fecha_fin,
-            'cantidad_adultos': data['cantidad_adultos'],
-            'cantidad_ninos': data['cantidad_ninos'],
+            'cantidad_adultos': cantidad_adultos,
+            'cantidad_ninos': cantidad_ninos,
             'total_pago': total_pago,
         })
 
