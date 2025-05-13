@@ -1,6 +1,7 @@
 const submitBtn = document.getElementById("submit-btn");
 const submitText = document.getElementById("submit-text");
 const spinner = document.getElementById("spinner");
+const form = document.getElementById("formReservacion");
 
 function mostrarConfirmModal(onAceptar, onCancelar) {
     const modal = document.getElementById("confirmModal");
@@ -42,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         setTimeout(() => {
             toast.remove();
-        }, 4000);
+        }, 10000);
     }
 
     const input = document.getElementById('fecha_inicio');
@@ -60,46 +61,13 @@ document.addEventListener("DOMContentLoaded", () => {
         bloqueadas = [];
     }
 
-    console.log(bloqueadas);
-
-    const duracion = parseInt(input.dataset.duracion || "1");
     const hoy = new Date();
-    hoy.setDate(hoy.getDate() + 10);
 
     flatpickr(input, {
-        minDate: hoy,
+        dateFormat: "Y-m-d",
+        minDate: new Date(hoy.setDate(hoy.getDate() + 10)),
         disable: bloqueadas,
-        onDayCreate: function (dObj, dStr, fp, dayElem) {
-            if (!dayElem.dateObj) return;
-            dayElem.addEventListener("mouseenter", () => {
-                const start = new Date(dayElem.dateObj);
-                for (let i = 0; i < duracion; i++) {
-                    const target = new Date(start);
-                    target.setDate(start.getDate() + i);
-                    const label = target.toDateString();
-                    const targetElem = fp.calendarContainer.querySelector(`.flatpickr-day[aria-label='${label}']`);
-                    if (targetElem) targetElem.classList.add("in-range-hover");
-                }
-            });
-            dayElem.addEventListener("mouseleave", () => {
-                const elems = fp.calendarContainer.querySelectorAll(".in-range-hover");
-                elems.forEach(el => el.classList.remove("in-range-hover"));
-            });
-        },
-        onChange: function (selectedDates, dateStr, fp) {
-            if (!selectedDates.length) return;
-            const start = new Date(selectedDates[0]);
-            fp.calendarContainer.querySelectorAll(".in-range-hover")
-                .forEach(el => el.classList.remove("in-range-hover"));
-
-            for (let i = 0; i < duracion; i++) {
-                const target = new Date(start);
-                target.setDate(start.getDate() + i);
-                const label = target.toDateString();
-                const targetElem = fp.calendarContainer.querySelector(`.flatpickr-day[aria-label='${label}']`);
-                if (targetElem) targetElem.classList.add("in-range-hover");
-            }
-        }
+        maxDate: new Date(hoy.setDate(hoy.getDate() + 365))
     });
 
     const btnReservar = document.getElementById("btn-reservar");
@@ -112,104 +80,75 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    document.getElementById("formReservacion").addEventListener("submit", function (e) {
-        e.preventDefault();
-        submitBtn.disabled = true;
-        submitText.style.display = "none";
-        spinner.style.display = "inline-block";
+    function showSpinner(bool){
+        if (bool)
+        {
+            submitBtn.disabled = true;
+            submitText.style.display = "none";
+            spinner.style.display = "inline-block";
+        }else{
+            submitBtn.disabled = false;
+            submitText.style.display = "inline";
+            spinner.style.display = "none";
+        }
+    }
 
-        const form = e.target;
-
-        const data = {
-            nombre: form.nombre.value,
-            apellido: form.apellido.value,
-            email: form.email.value,
-            telefono: form.telefono.value,
-            fecha_inicio: form.fecha_inicio.value,
-            cantidad_adultos: form.cantidad_adultos.value,
-            cantidad_ninos: form.cantidad_ninos.value,
-            paquete_id: PAQUETE_ID
-        };
-
-        fetch(URL_RESERVACION, {
+    form.addEventListener('submit', function (event) {
+        showSpinner(true);
+        event.preventDefault();
+    
+        const form = event.target;
+        const formData = new FormData(form);
+    
+        fetch('/ajax/reservar/', {
             method: "POST",
+            body: formData,
             headers: {
-                "Content-Type": "application/json",
-                "X-CSRFToken": form.querySelector('[name=csrfmiddlewaretoken]').value
-            },
-            body: JSON.stringify(data)
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+            }
         })
-            .then(res => res.json())
-            .then(response => {
-                if (response.match && response.cliente) {
-                    // Mostrar modal de confirmación visual
-                    mostrarConfirmModal(() => {
-                        // Si acepta usar datos previos, los aplicamos
-                        form.nombre.value = response.cliente.nombre;
-                        form.apellido.value = response.cliente.apellido;
-                        form.telefono.value = response.cliente.telefono;
-
-                        fetch(URL_RESERVACION, {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/json",
-                                "X-CSRFToken": form.querySelector('[name=csrfmiddlewaretoken]').value
-                            },
-                            body: JSON.stringify({
-                                ...data,
-                                usar_datos_previos: true
-                            })
-                        })
-                            .then(res2 => res2.json())
-                            .then(r2 => {
-                                if (r2.success) {
-                                    showToast(r2.success, 'success');
-                                    form.reset();
-                                    closeModal();
-                                } else {
-                                    showToast(r2.error || "Error al confirmar con los datos previos.", 'error');
-                                }
-                                submitBtn.disabled = false;
-                                submitText.style.display = "inline";
-                                spinner.style.display = "none";
-                            })
-                            .catch(() => {
-                                showToast("Error al reenviar la solicitud.", 'error');
-                                submitBtn.disabled = false;
-                                submitText.style.display = "inline";
-                                spinner.style.display = "none";
-                            });
-                    }, () => {
-                        // Si elige NO usar datos previos, se avisa que debe usar otro correo
-                        showToast("Este correo ya está registrado. Por favor, usa otro diferente.", 'info');
-                        submitBtn.disabled = false;
-                        submitText.style.display = "inline";
-                        spinner.style.display = "none";
-                    });
-
-                } else if (response.success) {
-                    showToast(response.success, 'success');
-                    form.reset();
-                    closeModal();
-                    submitBtn.disabled = false;
-                    submitText.style.display = "inline";
-                    spinner.style.display = "none";
-                } else {
-                    showToast(response.error || "Ocurrió un error.", 'error');
-                    submitBtn.disabled = false;
-                    submitText.style.display = "inline";
-                    spinner.style.display = "none";
+        .then(async response => {
+            const data = await response.json();
+    
+            if (response.ok) {
+                showToast(data.message || "Reservación exitosa", 'success');
+                showSpinner(false);
+                form.reset();
+                closeModal();
+                setTimeout(function() {
+                    window.location.reload();
+                }, 3000);
+            } else {
+                // Mostrar errores del formulario Cliente
+                if (data.cliente_errors) {
+                    for (let field in data.cliente_errors) {
+                        data.cliente_errors[field].forEach(errorObj => {
+                            showToast(`${errorObj.message}`, 'error');
+                        });
+                    }
                 }
-            })
-            .catch(() => {
-                showToast("Error al enviar la solicitud.", 'error');
-                submitBtn.disabled = false;
-                submitText.style.display = "inline";
-                spinner.style.display = "none";
-            });
-
-            setTimeout(() => {
-                location.reload();
-            }, 5000);
-    });
+    
+                // Mostrar errores del formulario Reservacion
+                if (data.reservacion_errors) {
+                    for (let field in data.reservacion_errors) {
+                        data.reservacion_errors[field].forEach(errorObj => {
+                            showToast(`${errorObj.message}`, 'error');
+                        });
+                    }
+                }
+    
+                // Mensaje genérico si no hay errores específicos
+                if (!data.cliente_errors && !data.reservacion_errors && data.message) {
+                    showToast(data.message, 'error');
+                }
+                showSpinner(false);
+            }
+        })
+        .catch(error => {
+            console.error("Error en la solicitud AJAX:", error);
+            showToast("Ocurrió un error al enviar el formulario.", 'error');
+            showSpinner(false);
+        });
+    });    
 });
+

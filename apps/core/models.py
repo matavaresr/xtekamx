@@ -54,7 +54,7 @@ class Usuario(models.Model):
 class Cliente(models.Model):
     nombre = models.CharField(max_length=100, validators=[validar_nombre_sin_numeros_y_mayuscula])
     apellido = models.CharField(max_length=100, validators=[validar_nombre_sin_numeros_y_mayuscula])
-    email = models.EmailField(unique=True, error_messages={'invalid': 'Por favor, ingresa un correo electrónico válido.'})
+    email = models.EmailField(error_messages={'invalid': 'Por favor, ingresa un correo electrónico válido.'})
     telefono = models.CharField(max_length=20, validators=[validar_telefono])
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -136,17 +136,6 @@ class Reservacion(models.Model):
     total_pago = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(0)])
     estado = models.SmallIntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
-
-    def clean(self):
-        if self.fecha_inicio > self.fecha_fin:
-            raise ValidationError("La fecha de inicio debe ser anterior o igual a la fecha de fin.")
-        if self.fecha_inicio < timezone.now().date():
-            raise ValidationError("La fecha de inicio no puede ser en el pasado.")
-
-    def save(self, *args, **kwargs):
-        self.full_clean()
-        super().save(*args, **kwargs)
-
 
 class ConfiguracionSitio(models.Model):
     clave = models.CharField(max_length=100, primary_key=True)

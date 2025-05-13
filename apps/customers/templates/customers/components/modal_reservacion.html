@@ -11,28 +11,28 @@
       <h2>Reservar Paquete: {{ paquete.nombre }}</h2>
       <p>Duración: {{ paquete.duracion_dias }} días</p>
     </div>
-
-    <form method="POST" id="formReservacion" data-url="{% url 'guardar_reservacion_ajax' %}">
+    <p style="text-align: justify;"><b>Nota:</b> Si reservaste anteriormente, utiliza el correo y número de teléfono que usaste por última vez, así podremos recordarte.</p>
+    <form method="POST" id="formReservacion" action="javascript:void(0);" data-url="{% url 'guardar_reservacion_ajax' %}">
       {% csrf_token %}
 
       <div class="input-group">
         <label for="nombre">Nombre:</label>
-        <input type="text" name="nombre" required>
+        <input type="text" name="nombre">
       </div>
 
       <div class="input-group">
         <label for="apellido">Apellido:</label>
-        <input type="text" name="apellido" required>
+        <input type="text" name="apellido">
       </div>
 
       <div class="input-group">
         <label for="email">Correo electrónico:</label>
-        <input type="email" name="email" required>
+        <input type="text" name="email">
       </div>
 
       <div class="input-group">
         <label for="telefono">Teléfono:</label>
-        <input type="text" name="telefono" required>
+        <input type="text" name="telefono">
       </div>
 
       <div class="input-group">
@@ -42,7 +42,7 @@
 
       <div class="input-group">
         <label for="cantidad_adultos">Adultos:</label>
-        <input type="number" name="cantidad_adultos" min="1" required>
+        <input type="number" name="cantidad_adultos" min="1">
       </div>
 
       <div class="input-group">
@@ -55,6 +55,7 @@
           <span id="submit-text">Confirmar Reservación</span>
           <span id="spinner" class="spinner" style="display: none;"></span>
       </button> 
+      <input type="hidden" name="paquete_id" value="{{ paquete.id }}">
       </div>
     </form>
   </div>

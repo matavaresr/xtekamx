@@ -30,7 +30,7 @@
         
             <div class="form-group">
                 <label for="email">Correo electrónico:</label>
-                <input type="email" name="email" id="email">
+                <input type="text" name="email" id="email">
             </div>
         
             <div class="form-group full-width">
@@ -56,9 +56,7 @@
     </div>
 </div>
 
-<div id="mensaje-flotante" style="display:none; position:fixed; top:20px; right:20px; background:#4CAF50; color:white; padding:10px 20px; border-radius:5px; box-shadow:0 0 10px rgba(0,0,0,0.2); z-index:1000;">
-    ¡Correo enviado correctamente!
-  </div>
+<div id="toastContainer" style="position: fixed; top: 20px; right: 20px; z-index: 10000;"></div>
 
 {% endblock %}
 {% block extra_js %}

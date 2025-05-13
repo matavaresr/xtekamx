@@ -15,9 +15,12 @@ from django.contrib.auth.forms import AuthenticationForm
 
 from django.views.generic import ListView, DetailView
 
-from .forms import CustomUserCreationForm
+from .forms import ReservacionForm, ClienteForm
 
 from apps.core.services.email_service import enviar_correo_reservacion
+from .utils import obtener_fechas_bloqueadas, optimizar_rangos_bloqueados
+from django_ratelimit.decorators import ratelimit
+
 
 from apps.core.models import (
     Actividad, Paquete, ImagenPaquete, TipoPaquete, Itinerario,
@@ -121,178 +124,80 @@ class PaqueteListView(ListView):
             return HttpResponse(html)
         return super().render_to_response(context, **response_kwargs)
 
-class PaqueteDetailView(DetailView):
-    model = Paquete
-    template_name = 'customers/paquete_unico.html'
-    context_object_name = 'paquete'
+def paquete_detail(request, pk):
+    paquete = get_object_or_404(Paquete, pk=pk)
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        paquete = self.get_object()
+    # Fechas bloqueadas optimizadas
+    rangos_originales = obtener_fechas_bloqueadas(paquete)
+    rangos_optim = optimizar_rangos_bloqueados(rangos_originales, paquete.duracion_dias)
 
-        # Fechas bloqueadas optimizadas
-        rangos_originales = obtener_fechas_bloqueadas(paquete)
-        rangos_optim = optimizar_rangos_bloqueados(rangos_originales, paquete.duracion_dias)
-        context['fechas_bloqueadas'] = rangos_optim
-
-        # Amenidades activas relacionadas
-        context['amenidades'] = Amenidad.objects.filter(
+    context = {
+        'paquete': paquete,
+        'fechas_bloqueadas': rangos_optim,
+        'amenidades': Amenidad.objects.filter(
             paqueteamenidad__paquete=paquete,
             paqueteamenidad__estado=1
-        )
+        ),
+        'ubicaciones': Ubicacion.objects.filter(paqueteubicacion__paquete=paquete),
+        'actividades': Actividad.objects.filter(paqueteactividad__paquete=paquete),
+        'faqs': Faq.objects.filter(paquete_id=paquete.id).order_by('id'),
+        'itinerarios': Itinerario.objects.filter(paquete_id=paquete.id).order_by('dia'),
+    }
 
-        # Ubicaciones relacionadas
-        context['ubicaciones'] = Ubicacion.objects.filter(
-            paqueteubicacion__paquete=paquete
-        )
-
-        # Actividades relacionadas
-        context['actividades'] = Actividad.objects.filter(
-            paqueteactividad__paquete=paquete
-        )
-
-        context['faqs'] = Faq.objects.filter(paquete_id=paquete.id).order_by('id')
-
-        context['itinerarios'] = Itinerario.objects.filter(paquete_id=paquete.id).order_by('dia')
-
-        return context
-
-
-def obtener_fechas_bloqueadas(paquete):
-    reservaciones = Reservacion.objects.filter(paquete=paquete)
-    return [
-        {
-            "from": r.fecha_inicio.isoformat(),
-            "to": r.fecha_fin.isoformat()
-        } for r in reservaciones
-    ]
-
-
-def optimizar_rangos_bloqueados(rangos, duracion_dias):
-    if not rangos:
-        return []
-
-    # Convertir a objetos datetime ordenados
-    parsed = sorted([
-        {
-            "from": datetime.strptime(r["from"], "%Y-%m-%d"),
-            "to": datetime.strptime(r["to"], "%Y-%m-%d")
-        }
-        for r in rangos
-    ], key=lambda r: r["from"])
-
-    resultado = [parsed[0]]
-
-    for actual in parsed[1:]:
-        previo = resultado[-1]
-        diferencia = (actual["from"] - previo["to"]).days
-
-        if diferencia <= duracion_dias:
-            # Unir los rangos
-            previo["to"] = max(previo["to"], actual["to"])
-        else:
-            resultado.append(actual)
-
-    # Convertir a formato JSON serializable
-    return [
-        {
-            "from": r["from"].strftime("%Y-%m-%d"),
-            "to": r["to"].strftime("%Y-%m-%d")
-        } for r in resultado
-    ]
-
+    return render(request, 'customers/paquete_unico.html', context)
 
 @csrf_exempt
-@require_POST
+@ratelimit(key='ip', rate='5/m', block=True)
 def guardar_reservacion_ajax(request):
-    try:
-        data = json.loads(request.body)
+    if request.method != 'POST':
+        return JsonResponse({'status': 'error', 'message': 'Método no permitido.'}, status=405)
 
-        required = [
-            'nombre', 'apellido', 'email', 'telefono',
-            'fecha_inicio', 'cantidad_adultos', 'cantidad_ninos', 'paquete_id'
-        ]
-        if not all(data.get(campo) for campo in required):
-            return JsonResponse({'error': 'Faltan campos obligatorios.'}, status=400)
+    cliente_form = ClienteForm(request.POST)
+    reservacion_form = ReservacionForm(request.POST)
 
-        paquete = get_object_or_404(Paquete, id=data['paquete_id'])
+    if cliente_form.is_valid() and reservacion_form.is_valid():
+        email = cliente_form.cleaned_data['email']
+        telefono = cliente_form.cleaned_data['telefono']
 
-        # ✅ Validar cantidad total de personas
-        cantidad_adultos = int(data['cantidad_adultos'])
-        cantidad_ninos = int(data['cantidad_ninos'])
-        total_personas = cantidad_adultos + cantidad_ninos
+        # Buscar cliente existente
+        cliente = Cliente.objects.filter(email=email).first()
 
-        if total_personas < paquete.minimo_personas or total_personas > paquete.maximo_personas:
-            return JsonResponse({
-                'error': f'La cantidad total de personas ({total_personas}) debe estar entre {paquete.minimo_personas} y {paquete.maximo_personas}.'
-            }, status=400)
-
-        fecha_inicio = datetime.strptime(data['fecha_inicio'], "%Y-%m-%d").date()
-        fecha_fin = fecha_inicio + timedelta(days=paquete.duracion_dias - 1)
-
-        # Validar solapamiento de fechas
-        conflicto = Reservacion.objects.filter(
-            paquete=paquete,
-            fecha_inicio__lte=fecha_fin,
-            fecha_fin__gte=fecha_inicio
-        ).exists()
-        if conflicto:
-            return JsonResponse({'error': 'Ya existe una reservación en ese rango de fechas para este paquete.'}, status=409)
-
-        usar_previos = data.get('usar_datos_previos')
-        cliente_existente = Cliente.objects.filter(email=data['email']).first()
-
-        if cliente_existente:
-            if cliente_existente.nombre.strip().lower() == data['nombre'].strip().lower():
-                if not usar_previos:
-                    return JsonResponse({
-                        'match': True,
-                        'cliente': {
-                            'nombre': cliente_existente.nombre,
-                            'apellido': cliente_existente.apellido,
-                            'telefono': cliente_existente.telefono
-                        }
-                    })
-                else:
-                    cliente = cliente_existente
-            else:
-                return JsonResponse({'error': 'Este correo ya está registrado con otro nombre.'}, status=400)
+        if cliente:
+            if cliente.telefono != telefono:
+                return JsonResponse({
+                    'status': 'error',
+                    'message': 'El número de teléfono no coincide con el registrado para este correo.',
+                    'cliente_errors': {
+                        'telefono': [{'message': 'Teléfono no coincide con el registrado.', 'code': 'invalid'}]
+                    }
+                }, status=400)
         else:
-            cliente = Cliente.objects.create(
-                nombre=data['nombre'],
-                apellido=data['apellido'],
-                email=data['email'],
-                telefono=data['telefono']
-            )
+            # Crear nuevo cliente si no existe
+            cliente = cliente_form.save()
 
-        total_pago = (
-            paquete.precio_adulto * cantidad_adultos +
-            paquete.precio_nino * cantidad_ninos
-        )
-
-        reservacion = Reservacion.objects.create(
-            paquete=paquete,
-            fecha_inicio=fecha_inicio,
-            fecha_fin=fecha_fin,
-            cantidad_adultos=cantidad_adultos,
-            cantidad_ninos=cantidad_ninos,
-            total_pago=total_pago,
-            estado=1
-        )
+        # Guardar la reservación
+        reservacion = reservacion_form.save(commit=False)
+        reservacion.cliente = cliente
+        reservacion.save()
 
         ClienteReservacion.objects.create(cliente=cliente, reservacion=reservacion)
 
+        # Enviar correo
         enviar_correo_reservacion(cliente.email, {
             'nombre_cliente': cliente.nombre,
-            'paquete_nombre': paquete.nombre,
-            'fecha_inicio': fecha_inicio,
-            'fecha_fin': fecha_fin,
-            'cantidad_adultos': cantidad_adultos,
-            'cantidad_ninos': cantidad_ninos,
-            'total_pago': total_pago,
+            'paquete_nombre': reservacion.paquete.nombre,
+            'fecha_inicio': reservacion.fecha_inicio,
+            'fecha_fin': reservacion.fecha_fin,
+            'cantidad_adultos': reservacion.cantidad_adultos,
+            'cantidad_ninos': reservacion.cantidad_ninos,
+            'total_pago': reservacion.total_pago,
         })
 
-        return JsonResponse({'success': 'Reservación registrada correctamente.'})
+        return JsonResponse({'status': 'success', 'message': 'Reservación creada correctamente, recibiras un correo con tu información.'})
 
-    except Exception as e:
-        return JsonResponse({'error': str(e)}, status=500)
+    return JsonResponse({
+        'status': 'error',
+        'message': 'Hubo errores en el formulario.',
+        'cliente_errors': cliente_form.errors.get_json_data(),
+        'reservacion_errors': reservacion_form.errors.get_json_data(),
+    }, status=400)

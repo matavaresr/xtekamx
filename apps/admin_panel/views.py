@@ -37,6 +37,10 @@ from apps.core.services.email_service import (
 
 # Create your views here.
 def dashboard(request):
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('login')
+        
     hoy = date.today()
     hace_7_dias = datetime.combine(hoy - timedelta(days=6), datetime.min.time())
 
@@ -122,6 +126,10 @@ def logout_view(request):
     return redirect('inicio') 
 
 def crud(request, modelo):
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('login') 
+
     modelos = {
         'usuarios': Usuario,
         'clientes': Cliente,
@@ -351,6 +359,10 @@ def crud_editar(request, modelo, pk):
  
 # CRUD Paquetes
 def paquetes_list(request):
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('login') 
+
     paquetes = Paquete.objects.all()
     hoteles = Hotel.objects.all()
     tipos_paquete = TipoPaquete.objects.all()
