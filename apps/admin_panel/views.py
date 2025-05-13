@@ -156,8 +156,9 @@ def crud(request, modelo):
 
     # Si es reservaciones, optimizamos la carga del cliente
     if modelo == 'reservaciones':
-        campos = [campo.name for campo in modelo_clase._meta.fields if campo.name not in ('created_at', 'updated_at', 'id')]
+        campos = [campo.name for campo in modelo_clase._meta.fields if campo.name not in ('created_at', 'updated_at', 'id', 'paquete')]
         campos.append('email_cliente')
+        campos.insert(0, 'nombre_paquete')
 
         # Prefetch del cliente desde tabla intermedia
         objetos = objetos.prefetch_related(
@@ -173,8 +174,9 @@ def crud(request, modelo):
             if reservacion.cliente_reservacion_cached:
                 cliente = reservacion.cliente_reservacion_cached[0].cliente
                 reservacion.email_cliente = cliente.email
+                reservacion.nombre_paquete = reservacion.paquete.nombre 
             else:
-                reservacion.email_cliente = 'No asignado'
+                reservacion.email_cliente = 'No asignado'    
     else:
         campos = [campo.name for campo in modelo_clase._meta.fields if campo.name not in ('created_at', 'updated_at', 'id')]
 
