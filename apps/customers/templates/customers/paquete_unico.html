@@ -65,11 +65,26 @@
   </div>
 
   <div class="tabs">
-    <button class="tab active">Descripción</button>
-    <button class="tab">Itinerario</button>
-    <button class="tab">¿Qué incluye?</button>
-    <button class="tab">FAQs</button>
-    <button class="tab">Ubicaciones</button>
+    <button class="tab active">
+      <img src="{% static 'icons/description.svg' %}" alt="">
+      <p>Descripción</p>
+    </button>
+    <button class="tab">
+      <img src="{% static 'icons/itinerario.svg' %}" alt="">
+      <p>Itinerario</p>
+    </button>
+    <button class="tab">
+      <img src="{% static 'icons/book.svg' %}" alt="">
+      <p>¿Qué incluye?</p>
+    </button>
+    <button class="tab">
+      <img src="{% static 'icons/faqs.svg' %}" alt="">
+      <p>FAQs</p>
+    </button>
+    <button class="tab">
+      <img src="{% static 'icons/location.svg' %}" alt="">
+      <p>Ubicaciones</p>
+    </button>
   </div>
 
   <div class="tab-content-boxes">
@@ -77,10 +92,39 @@
       <h2>Descripción</h2>
       <p>{{ paquete.descripcion|linebreaks }}</p>
     </div>
+
     <div class="tab-content">
-      <h2>Itinerario</h2>
-      <p>Itinerario, aun no se encuentra disponible.</p>
+      <div class="itinerario-header">
+        <h2>Itinerario</h2>
+        <label class="toggle-container">
+          Expandir
+          <input type="checkbox" class="grupo-toggle" data-group="itinerario">
+        </label>
+      </div>
+    
+      <div class="itinerario-linea" data-group="itinerario">
+        {% for item in itinerarios %}
+          <div class="itinerario-dia">
+            <div class="punto-dia">
+              <div class="icono-dia">
+                <img src="{% static 'icons/itinerario_location.png' %}" alt="">
+              </div>
+            </div>
+            <div class="contenido-dia">
+              <div class="titulo-dia">
+                <strong>Día {{ item.dia }}: {{ item.titulo }}</strong>
+                <button class="boton-colapsar" data-group="itinerario">&#8855;</button>
+              </div>
+              <div class="detalle-dia" data-group="itinerario">
+                {{ item.descripcion|linebreaks }}
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
     </div>
+    
+
     <div class="tab-content">
       <h2>¿Qué incluye?</h2>
       <ul>
@@ -90,26 +134,53 @@
           <li>No hay amenidades disponibles para este paquete.</li>
         {% endfor %}
       </ul>
-      <h3>Actividades</h3>
-      <ul>
-        {% for actividad in actividades %}
-          <li>{{ actividad.nombre }}</li>
+      <h2>Actividades</h2>
+      <div class="xteka-card-grid">
+        {% for actividad in actividades %}    
+          <div class="xteka-card-item">
+            <img src="{{ actividad.url_portada }}" alt="Imagen de {{ actividad.nombre }}">
+            <div class="xteka-card-text">{{ actividad.nombre }}</div>
+          </div>
         {% endfor %}
-      </ul>
-      
+      </div>
     </div>
+
     <div class="tab-content">
-      <h2>FAQs</h2>
-      <p>Preguntas frecuentes sobre el paquete, aun no se encuentra disponible.</p>
+      <div class="itinerario-header">
+        <h2>FAQs</h2>
+        <label class="toggle-container">
+          Expandir
+          <input type="checkbox" class="grupo-toggle" data-group="faq">
+        </label>
+      </div>
+    
+      <div class="xteka-faq-list" data-group="faq">
+        {% for faq in faqs %}
+          <div class="xteka-faq-item">
+            <button class="xteka-faq-question boton-colapsar" data-group="faq">
+              {{ faq.pregunta }}
+              <span class="arrow">&#9662;</span>
+            </button>
+            <div class="xteka-faq-answer detalle-dia" data-group="faq">
+              <p>{{ faq.respuesta }}</p>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
     </div>
+    
+
     <div class="tab-content">
       <h2>Ubicaciones</h2>
       <p>Tu paquete incluye acceso a las siguientes ubicaciones destacadas:</p>
-      <ul>
-        {% for ubicacion in ubicaciones %}
-          <li>{{ ubicacion.nombre }}</li>
+      <div class="xteka-card-grid">
+        {% for ubicacion in ubicaciones %} 
+          <div class="xteka-card-item">
+            <img src="{{ ubicacion.url_portada }}" alt="Imagen de {{ ubicacion.nombre }}">
+            <div class="xteka-card-text">{{ ubicacion.nombre }}</div>
+          </div>
         {% endfor %}
-      </ul>
+      </div>
       <p>A continuación, te mostramos un mapa de referencia para que puedas ubicarlas fácilmente:</p>      
       <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d472002.3568233719!2d-99.70485016493784!3d22.447145047423785!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x867f51ec0dedccaf%3A0x36d445ce8585a00b!2sEl%20Naranjo%2C%20S.L.P.!5e0!3m2!1ses-419!2smx!4v1746407939512!5m2!1ses-419!2smx" width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
     </div>
@@ -126,6 +197,60 @@
 document.addEventListener('DOMContentLoaded', () => {
     const tabs = document.querySelectorAll('.tab');
     const contents = document.querySelectorAll('.tab-content');
+    const questions = document.querySelectorAll(".xteka-faq-question");
+    const answers = document.querySelectorAll(".xteka-faq-answer");
+    const arrows = document.querySelectorAll(".arrow");
+    const toggle = document.getElementById("expandir-toggle");
+    const detalles = document.querySelectorAll(".detalle-dia");
+    const botones = document.querySelectorAll(".boton-colapsar");
+
+    const toggleGrupos = document.querySelectorAll(".grupo-toggle");
+
+    toggleGrupos.forEach(toggle => {
+      const group = toggle.dataset.group;
+      const detalles = document.querySelectorAll(`.detalle-dia[data-group="${group}"]`);
+      const botones = document.querySelectorAll(`.boton-colapsar[data-group="${group}"]`);
+      const flechas = document.querySelectorAll(`[data-group="${group}"] .arrow`);
+
+      const expandir = (el, arrow) => {
+        el.style.maxHeight = el.scrollHeight + "px";
+        if (arrow) arrow.classList.add("rotate");
+      };
+
+      const colapsar = (el, arrow) => {
+        el.style.maxHeight = "0px";
+        if (arrow) arrow.classList.remove("rotate");
+      };
+
+      // Toggle global
+      const aplicarEstadoGlobal = () => {
+        detalles.forEach((d, i) => {
+          if (toggle.checked) expandir(d, flechas[i]);
+          else colapsar(d, flechas[i]);
+        });
+      };
+
+      // Ejecutar al inicio (esperar render)
+      setTimeout(aplicarEstadoGlobal, 10);
+      toggle.addEventListener("change", aplicarEstadoGlobal);
+
+      // Botón individual (abre solo uno)
+      botones.forEach((btn, i) => {
+        btn.addEventListener("click", () => {
+          detalles.forEach((ans, j) => {
+            const arrow = flechas[j];
+            const isCurrent = i === j;
+            const isOpen = ans.style.maxHeight && ans.style.maxHeight !== "0px";
+
+            if (isCurrent) {
+              isOpen ? colapsar(ans, arrow) : expandir(ans, arrow);
+            } else {
+              colapsar(ans, arrow);
+            }
+          });
+        });
+      });
+    });   
 
     tabs.forEach((tab, index) => {
         tab.addEventListener('click', () => {

@@ -135,3 +135,20 @@
 .stat-card:hover {
   background-color: #f1f1f1;
 }
+
+@media (max-width: 580px) { 
+  .sales-summary{
+    flex-direction: column;
+    width: 100%;
+  }
+  .sales-chart{
+    width: 100%;
+    padding: 0px;
+  }
+  .sales-stats{
+    width: 100%;
+  }
+  #menu-expanded .user-drop {
+    bottom: 100px !important;
+  }
+}

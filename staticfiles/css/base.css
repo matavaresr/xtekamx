@@ -1,0 +1,76 @@
+/* 🎨 Montserrat */
+@font-face {
+  font-family: "Montserrat";
+  src: url("../font/Montserrat/Montserrat-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Montserrat";
+  src: url("../font/Montserrat/Montserrat-Bold.ttf") format("truetype");
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Montserrat";
+  src: url("../font/Montserrat/Montserrat-Italic.ttf") format("truetype");
+  font-weight: normal;
+  font-style: italic;
+}
+
+/* 🎨 Open Sans */
+@font-face {
+  font-family: "Open Sans";
+  src: url("../font/OpenSans/OpenSans-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Open Sans";
+  src: url("../font/OpenSans/OpenSans-Bold.ttf") format("truetype");
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Open Sans";
+  src: url("../font/OpenSans/OpenSans-Italic.ttf") format("truetype");
+  font-weight: normal;
+  font-style: italic;
+}
+
+body {
+  margin: 120px 0px 0px 0px;
+  font-family: "Montserrat", sans-serif;
+  background-image: url("/static/img/customers/background.png");
+}
+
+:root {
+  /* Tamaños de texto globales */
+  --font-title: 32px;         /* Títulos principales */
+  --font-subtitle: 28px;       /* Subtítulos */
+  --font-text-large: 24px;     /* Texto grande */
+  --font-text-medium: 20px;    /* Texto mediano */
+  --font-text-small: 18px;     /* Texto pequeño */
+}
+
+.fade-in-on-scroll {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 1.5s ease-out, transform 1.5s ease-out;
+}
+
+.fade-in-on-scroll.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.gradient-xteka{
+  font-weight: bold;
+  background: linear-gradient(to right, #72ED39, #52D0A0, #34B6FF);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}

@@ -27,3 +27,4 @@ urlpatterns = [
     #path('users/', include('apps.users.urls')),
     #path('notifications/', include('apps.notifications.urls', namespace='notificaciones')),
 ]  + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
